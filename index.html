@@ -1,0 +1,34 @@
+---
+layout: default
+title: Manga List
+---
+
+<h1 style="text-align:center;">Manga List</h1>
+
+<input type="text" id="search" placeholder="Cari manga..." style="display:block;margin:20px auto;padding:10px;width:50%;border-radius:5px;border:none;">
+
+<div id="manga-grid" style="display:grid;grid-template-columns:repeat(auto-fit, minmax(200px,1fr));gap:20px;padding:20px;">
+  <div class="manga">
+    <a href="/manga/onepiece/"><img src="https://placehold.co/300x400?text=One+Piece" alt="One Piece" style="width:100%;border-radius:10px;"></a>
+    <h3 style="text-align:center;color:white;">One Piece</h3>
+  </div>
+  <div class="manga">
+    <a href="/manga/naruto/"><img src="https://placehold.co/300x400?text=Naruto" alt="Naruto" style="width:100%;border-radius:10px;"></a>
+    <h3 style="text-align:center;color:white;">Naruto</h3>
+  </div>
+  <div class="manga">
+    <a href="/manga/bleach/"><img src="https://placehold.co/300x400?text=Bleach" alt="Bleach" style="width:100%;border-radius:10px;"></a>
+    <h3 style="text-align:center;color:white;">Bleach</h3>
+  </div>
+</div>
+
+<script>
+  const search = document.getElementById('search');
+  search.addEventListener('input', e => {
+    const term = e.target.value.toLowerCase();
+    document.querySelectorAll('.manga').forEach(item => {
+      const title = item.querySelector('h3').innerText.toLowerCase();
+      item.style.display = title.includes(term) ? 'block' : 'none';
+    });
+  });
+</script>
