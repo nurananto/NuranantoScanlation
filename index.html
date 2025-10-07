@@ -1,22 +1,27 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Manga Library</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Nurananto Scanlation</title>
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
-  <header>
-    <h1>Manga Library</h1>
+  <header class="site-header">
+    <div class="container">
+      <h1>Nurananto Scanlation</h1>
+      <input id="search" type="search" placeholder="Cari manga..." aria-label="Cari manga">
+    </div>
   </header>
 
-  <main class="manga-grid" id="mangaGrid">
-    <!-- Grid diisi otomatis oleh JS -->
+  <main class="container main-content">
+    <section id="grid" class="manga-grid" aria-live="polite">
+      <!-- manga items rendered here -->
+    </section>
   </main>
 
-  <footer>
-    © 2025 Manga Library | Generated with Jekyll + HTML
+  <footer class="site-footer">
+    <div class="container">© 2025 Nurananto Scanlation</div>
   </footer>
 
   <script src="script.js"></script>

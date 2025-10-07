@@ -1,100 +1,136 @@
-body {
-  background-color: #111;
-  color: white;
-  font-family: "Poppins", sans-serif;
-  margin: 0;
-  padding: 0;
+:root{
+  --bg:#0f1113;
+  --card:#18191b;
+  --muted:#bfc3c6;
+  --accent:#3db4d6;
+  --btn:#ff5a5a;
 }
-
-header {
-  text-align: center;
-  padding: 20px 0;
-  background: #1a1a1a;
-  border-bottom: 1px solid #333;
+*{box-sizing:border-box}
+body{
+  margin:0;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+  background:var(--bg);
+  color:#eef0f1;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
 }
-
-footer {
-  text-align: center;
-  padding: 10px;
-  font-size: 14px;
-  background: #1a1a1a;
-  border-top: 1px solid #333;
+.container{
+  max-width:1200px;
+  margin:0 auto;
+  padding:0 16px;
 }
+.site-header{
+  border-bottom:1px solid rgba(255,255,255,0.03);
+  background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);
+  padding:28px 0;
+  text-align:center;
+}
+.site-header h1{
+  margin:0 0 12px;
+  font-size:28px;
+  letter-spacing:0.5px;
+  color:#ffffff;
+}
+#search{
+  width:100%;
+  max-width:520px;
+  padding:10px 12px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.06);
+  background:#0b0c0d;
+  color:var(--muted);
+  outline:none;
+}
+#search::placeholder{ color: #6f7376; }
 
-.manga-grid {
-  display: grid;
-  gap: 20px;
-  padding: 40px;
-  max-width: 1200px;
-  margin: auto;
+.main-content{ padding:28px 0 60px; }
+
+.manga-grid{
+  display:grid;
+  gap:20px;
+  grid-auto-rows: 320px;
+  padding:40px;
+  max-width:1200px;
+  margin:auto;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
 }
 
-/* Desktop */
-@media (min-width: 992px) {
-  .manga-grid { grid-template-columns: repeat(4, 1fr); }
+/* desktop specific columns */
+@media(min-width:992px){
+  .manga-grid{ grid-template-columns: repeat(4, 1fr); }
+}
+@media(min-width:768px) and (max-width:991px){
+  .manga-grid{ grid-template-columns: repeat(3, 1fr); }
+}
+@media(max-width:767px){
+  .manga-grid{ grid-template-columns: repeat(2, 1fr); gap:14px; padding:20px; }
 }
 
-/* Tablet */
-@media (min-width: 768px) and (max-width: 991px) {
-  .manga-grid { grid-template-columns: repeat(3, 1fr); }
+/* Card */
+.manga-item{
+  background:var(--card);
+  border-radius:10px;
+  overflow:hidden;
+  position:relative;
+  min-height:320px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:center;
+}
+.manga-item img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
 }
 
-/* HP */
-@media (max-width: 767px) {
-  .manga-grid {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 20px;
-    gap: 15px;
-  }
+/* overlay buttons (hidden until hover) */
+.overlay{
+  position:absolute;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  background:rgba(0,0,0,0.56);
+  visibility:hidden;
+  opacity:0;
+}
+.manga-item:hover .overlay{
+  visibility:visible;
+  opacity:1;
 }
 
-.manga-item {
-  position: relative;
-  cursor: pointer;
-  overflow: hidden;
-  border-radius: 10px;
-  transition: transform 0.3s;
+/* buttons */
+.read-btn{
+  display:inline-block;
+  padding:10px 14px;
+  border-radius:8px;
+  background:var(--btn);
+  color:#fff;
+  font-weight:600;
+  text-decoration:none;
+  font-size:14px;
 }
+.read-btn.secondary{ background:#2b7f8a; }
 
-.manga-item:hover { transform: scale(1.03); }
-
-.manga-item img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 10px;
-  transition: 0.3s;
+.title-strip{
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:0;
+  padding:10px 12px;
+  background:linear-gradient(0deg, rgba(0,0,0,0.6), rgba(0,0,0,0.2));
+  font-size:14px;
+  color:var(--muted);
+  text-align:left;
 }
+.title-strip strong{ color:#fff; display:block; font-size:15px; margin-bottom:4px; }
 
-.overlay {
-  position: absolute;
-  top: 0; left: 0;
-  width: 100%; height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 10px;
-  background: rgba(0, 0, 0, 0.7);
-  opacity: 0;
-  visibility: hidden;
-  transition: 0.3s;
+.site-footer{
+  border-top:1px solid rgba(255,255,255,0.03);
+  padding:18px 0;
+  text-align:center;
+  color:var(--muted);
+  font-size:13px;
 }
-
-.manga-item.active .overlay {
-  opacity: 1;
-  visibility: visible;
-}
-
-.read-btn {
-  background: #ff4b4b;
-  padding: 12px 18px;
-  border-radius: 8px;
-  text-decoration: none;
-  color: white;
-  font-weight: bold;
-  box-shadow: 0 0 10px rgba(255,75,75,0.5);
-  transition: 0.2s;
-}
-
-.read-btn:hover { background: #ff7373; }
