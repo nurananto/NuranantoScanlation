@@ -1,28 +1,15 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Nurananto Scanlation</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <header class="site-header">
-    <div class="container">
-      <h1>Nurananto Scanlation</h1>
-      <input id="search" type="search" placeholder="Cari manga..." aria-label="Cari manga">
-    </div>
-  </header>
-
-  <main class="container main-content">
-    <section id="grid" class="manga-grid" aria-live="polite">
-      <!-- manga items rendered here -->
-    </section>
-  </main>
-
-  <footer class="site-footer">
-    <div class="container">© 2025 Nurananto Scanlation</div>
-  </footer>
+  <h1>Nurananto Scanlation</h1>
+  <input type="text" id="searchInput" placeholder="Cari manga..." />
+  <div id="mangaGrid" class="grid-container"></div>
 
   <script src="script.js"></script>
 </body>
