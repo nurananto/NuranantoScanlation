@@ -119,12 +119,17 @@ header {
   color: #fff;
   padding: 0.6rem 0.5rem 0.9rem;
   text-align: center;
-  overflow: visible;
-  text-overflow: unset;
-  display: block;
-  word-break: break-word;
+  background: transparent;
+  
+  /* Batasi maksimal 2 baris */
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
   line-height: 1.4em;
-  min-height: 2.6em;
+  height: 3.4em; /* 2 baris x 1.4em + padding */
+  word-break: break-word;
 }
 
 /* Overlay tombol - SEMBUNYIKAN secara default */
