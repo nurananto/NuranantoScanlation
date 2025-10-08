@@ -1,4 +1,5 @@
 /* === FINAL STYLE NURANANTO SCANLATION === */
+/* Versi: 3 Baris Judul + Transisi Halus + Auto-Center Vertikal */
 
 :root {
   font-size: 16px;
@@ -60,11 +61,11 @@ header {
     grid-template-columns: repeat(4, 1fr);
     padding: 0 1.5rem;
   }
-  
+
   header {
     padding: 0 1.5rem;
   }
-  
+
   .site-logo {
     height: 50px;
   }
@@ -75,11 +76,11 @@ header {
     grid-template-columns: repeat(2, 1fr);
     padding: 0 1rem;
   }
-  
+
   header {
     padding: 0 1rem;
   }
-  
+
   .site-logo {
     height: 45px;
   }
@@ -95,7 +96,7 @@ header {
 .manga-card {
   position: relative;
   overflow: hidden;
-  background-color: #222;
+  background-color: transparent;
   border-radius: 0.6rem;
   box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.4);
   transition: transform 0.3s ease;
@@ -113,26 +114,63 @@ header {
   border-radius: 0.6rem 0.6rem 0 0;
 }
 
-/* Judul manga */
+/* Judul manga (maks. 3 baris, auto-center vertikal) */
 .manga-title {
-  font-size: 1rem;
+  font-size: 0.9rem;
   color: #fff;
   padding: 0.6rem 0.5rem 0.9rem;
   text-align: center;
   background: transparent;
+
+  display: flex;
+  align-items: center;         /* posisi vertikal di tengah */
+  justify-content: center;
+  min-height: 3.9em;           /* tinggi tetap utk 3 baris */
   
-  /* Batasi maksimal 2 baris */
+  /* Batasi maksimal 3 baris */
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   text-overflow: ellipsis;
-  line-height: 1.4em;
-  height: 3.4em; /* 2 baris x 1.4em + padding */
+  line-height: 1.3em;
+  max-height: 3.9em; /* 3 baris x 1.3em */
   word-break: break-word;
+
+  /* Efek transisi halus */
+  transition: all 0.25s ease-in-out;
 }
 
-/* Overlay tombol - SEMBUNYIKAN secara default */
+/* --- Penyesuaian untuk tablet --- */
+@media (max-width: 1023px) {
+  .manga-title {
+    font-size: 0.85rem;
+    line-height: 1.25em;
+    min-height: 3.75em;
+    max-height: 3.75em;
+  }
+}
+
+/* --- Penyesuaian untuk smartphone --- */
+@media (max-width: 767px) {
+  .manga-title {
+    font-size: 0.8rem;
+    line-height: 1.2em;
+    min-height: 3.6em;
+    max-height: 3.6em;
+  }
+}
+
+@media (max-width: 480px) {
+  .manga-title {
+    font-size: 0.75rem;
+    line-height: 1.15em;
+    min-height: 3.45em;
+    max-height: 3.45em;
+  }
+}
+
+/* Overlay tombol */
 .overlay {
   position: absolute;
   top: 0;
@@ -146,14 +184,16 @@ header {
   align-items: center;
   opacity: 0;
   visibility: hidden;
-  transition: opacity 0.3s ease, visibility 0.3s ease;
+  transition: opacity 0.4s ease, visibility 0.4s ease, transform 0.4s ease;
   z-index: 10;
+  transform: scale(0.98);
 }
 
-/* Tampilkan overlay saat class 'active' ditambahkan */
+/* Animasi muncul halus */
 .overlay.active {
   opacity: 1;
   visibility: visible;
+  transform: scale(1);
 }
 
 .overlay button {
@@ -164,10 +204,15 @@ header {
   cursor: pointer;
   font-weight: 600;
   color: #fff;
-  transition: 0.3s;
+  transition: transform 0.25s ease, opacity 0.25s ease;
   width: 70%;
   text-align: center;
   font-size: 0.9rem;
+}
+
+.overlay button:hover {
+  transform: scale(1.05);
+  opacity: 0.9;
 }
 
 .btn-primary {
@@ -180,8 +225,4 @@ header {
 
 .btn-mangadex {
   background-color: #ff8f00;
-}
-
-.overlay button:hover {
-  opacity: 0.85;
 }
