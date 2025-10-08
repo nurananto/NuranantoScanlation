@@ -1,4 +1,15 @@
+// CARA PAKAI:
+// Manga yang BARU DIUPDATE → Taruh di PALING ATAS array ini
+// Urutan dari atas ke bawah = urutan tampil di website
+
 const mangaList = [
+  {
+    title: "Yuumei VTuber no Ani Dakedo, Nazeka Ore ga Yuumei ni Natteita",
+    cover: "covers/vtuber.jpg",
+    readFirst: "https://trakteer.id/NuranantoScanlation",
+    readNow: "https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9ZdXVtZWklMjBWVHViZXIlMjBubyUyMEFuaSUyMERha2VkbywlMjBOYXpla2ElMjBPcmUlMjBnYSUyMFl1dW1laSUyMG5pJTIwTmF0dGVpdGEuanNvbg/",
+    mangadex: "https://mangadex.org/title/9aebe60e-777f-4a58-a3bf-143c3096b94f/yuumei-vtuber-no-ani-dakedo-nazeka-ore-ga-yuumei-ni-natteita"
+  },
   {
     title: "Genjitsu mo Tama ni Uso wo Tsuku",
     cover: "covers/genjitsu.jpg",
@@ -33,13 +44,6 @@ const mangaList = [
     readFirst: "https://trakteer.id/NuranantoScanlation",
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
     mangadex: "https://mangadex.org/title/90d81edd-accb-4c8d-b44c-e38254d77935/kimi-no-negai-ga-kanau-made"
-  },
-  {
-    title: "Yuumei VTuber no Ani Dakedo, Nazeka Ore ga Yuumei ni Natteita",
-    cover: "covers/vtuber.jpg",
-    readFirst: "https://trakteer.id/NuranantoScanlation",
-    readNow: "https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9ZdXVtZWklMjBWVHViZXIlMjBubyUyMEFuaSUyMERha2VkbywlMjBOYXpla2ElMjBPcmUlMjBnYSUyMFl1dW1laSUyMG5pJTIwTmF0dGVpdGEuanNvbg/",
-    mangadex: "https://mangadex.org/title/9aebe60e-777f-4a58-a3bf-143c3096b94f/yuumei-vtuber-no-ani-dakedo-nazeka-ore-ga-yuumei-ni-natteita"
   }
 ];
 
