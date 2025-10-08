@@ -8,27 +8,33 @@ body {
   background-color: #111;
   color: #fff;
   font-family: "Segoe UI", Roboto, sans-serif;
-  text-align: center;
   margin: 0;
   padding: 1.25rem;
 }
 
-/* Judul dan pencarian */
-h1 {
-  font-size: 1.75rem;
-  margin-bottom: 0.5rem;
-  font-weight: 600;
+/* Header dengan logo */
+header {
+  text-align: left;
+  max-width: 1400px;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
 }
 
+.site-logo {
+  height: 60px;
+  width: auto;
+  margin-bottom: 1.5rem;
+  display: block;
+}
+
+/* Pencarian */
 #searchInput {
   padding: 0.6rem 1rem;
-  width: 80%;
+  width: 100%;
   max-width: 30rem;
-  margin-bottom: 2rem;
   border-radius: 0.4rem;
   border: none;
   outline: none;
-  text-align: center;
   background: #222;
   color: #fff;
 }
@@ -39,6 +45,8 @@ h1 {
   gap: 1.25rem;
   justify-content: center;
   padding: 0 2rem;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 @media (min-width: 1024px) {
@@ -52,12 +60,34 @@ h1 {
     grid-template-columns: repeat(4, 1fr);
     padding: 0 1.5rem;
   }
+  
+  header {
+    padding: 0 1.5rem;
+  }
+  
+  .site-logo {
+    height: 50px;
+  }
 }
 
 @media (max-width: 767px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
     padding: 0 1rem;
+  }
+  
+  header {
+    padding: 0 1rem;
+  }
+  
+  .site-logo {
+    height: 45px;
+  }
+}
+
+@media (max-width: 480px) {
+  .site-logo {
+    height: 40px;
   }
 }
 
