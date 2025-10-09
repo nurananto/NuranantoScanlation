@@ -4,6 +4,20 @@
 
 const mangaList = [
   {
+    title: "Uchi no Seiso-kei Iinchou ga Katsute Chuunibyou Idol datta Koto o Ore Dake ga Shitteiru",
+    cover: "covers/uchi.png",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9VY2hpJTIwbm8lMjBTZWlzby1rZWklMjBJaW5jaG91JTIwZ2ElMjBLYXRzdXRlJTIwQ2h1dW5pYnlvdSUyMElkb2wlMjBkYXR0YSUyMEtvdG8lMjBvJTIwT3JlJTIwRGFrZSUyMGdhJTIwU2hpdHRlaXJ1Lmpzb24/",
+    mangadex: "https://mangadex.org/title/5993c10b-c49e-4771-9a3a-8b8436b12d80/uchi-no-seiso-kei-iinchou-ga-katsute-chuunibyou-idol-datta-koto-o-ore-dake-ga-shitteiru"
+  },
+  {
+    title: "Yarikonda Renai Game no Akuyaku ni Tensei shitanode",
+    cover: "covers/yarikonda.jpg",
+    readFirst: "https://trakteer.id/NuranantoScanlation", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9ZYXJpa29uZGElMjBSZW5haSUyMEdhbWUlMjBubyUyMEFrdXlha3UlMjBuaSUyMFRlbnNlaSUyMHNoaXRhbm9kZSwlMjBHZW5zYWt1JTIwQ2hpc2hpa2klMjBkZSUyMEhlcm9pbmUlMjB3byUyMEtvdXJ5YWt1JTIwc2hpbWFzdS5qc29u/",
+    mangadex: "https://mangadex.org/title/a605a5d0-21a6-481f-a055-74735ea4f2c2/yarikonda-renai-game-no-akuyaku-ni-tensei-shitanode-gensaku-chishiki-de-heroine-wo-kouryaku-shimasu"
+  },
+  {
     title: "Yuumei VTuber no Ani Dakedo, Nazeka Ore ga Yuumei ni Natteita",
     cover: "covers/vtuber.jpg",
     readFirst: "https://trakteer.id/NuranantoScanlation", // Ada link = tombol muncul
@@ -25,26 +39,75 @@ const mangaList = [
     mangadex: "https://mangadex.org/title/16c34950-954c-4f0d-808e-d8278a546339/suufungo-no-mirai-ga-wakaru-you-ni-natta-kedo-onnagokoro-wa-wakaranai"
   },
   {
-    title: "Uchi no Seiso-kei Iinchou ga Katsute Chuunibyou Idol datta Koto o Ore Dake ga Shitteiru",
-    cover: "covers/uchi.png",
-    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
-    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9VY2hpJTIwbm8lMjBTZWlzby1rZWklMjBJaW5jaG91JTIwZ2ElMjBLYXRzdXRlJTIwQ2h1dW5pYnlvdSUyMElkb2wlMjBkYXR0YSUyMEtvdG8lMjBvJTIwT3JlJTIwRGFrZSUyMGdhJTIwU2hpdHRlaXJ1Lmpzb24/",
-    mangadex: "https://mangadex.org/title/5993c10b-c49e-4771-9a3a-8b8436b12d80/uchi-no-seiso-kei-iinchou-ga-katsute-chuunibyou-idol-datta-koto-o-ore-dake-ga-shitteiru"
-  },
-  {
-    title: "Yarikonda Renai Game no Akuyaku ni Tensei shitanode",
-    cover: "covers/yarikonda.jpg",
-    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
-    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9ZYXJpa29uZGElMjBSZW5haSUyMEdhbWUlMjBubyUyMEFrdXlha3UlMjBuaSUyMFRlbnNlaSUyMHNoaXRhbm9kZSwlMjBHZW5zYWt1JTIwQ2hpc2hpa2klMjBkZSUyMEhlcm9pbmUlMjB3byUyMEtvdXJ5YWt1JTIwc2hpbWFzdS5qc29u/",
-    mangadex: "https://mangadex.org/title/a605a5d0-21a6-481f-a055-74735ea4f2c2/yarikonda-renai-game-no-akuyaku-ni-tensei-shitanode-gensaku-chishiki-de-heroine-wo-kouryaku-shimasu"
-  },
-  {
     title: "Kimi no Negai ga Kanau made",
     cover: "covers/kiminonegai.jpg",
     readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
     mangadex: "https://mangadex.org/title/90d81edd-accb-4c8d-b44c-e38254d77935/kimi-no-negai-ga-kanau-made"
-  }
+  },
+  {
+    title: "Class de Ichiban Kawaii Gal wo Ezuke Shiteiru Hanashi",
+    cover: "covers/kawaiigal.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/acfd6902-b39c-4b7d-91a8-9825dda4ede8/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hanashi"
+  },
+    {
+    title: "Watashi ni Ai wo Oshiete",
+    cover: "covers/aiwooshiete.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/c14b2a85-ca88-4bf7-8937-87baf95491c0/watashi-ni-ai-wo-oshiete"
+  },
+  {
+    title: "Kanojo ni Shitai Joshi Ichii, no Tonari de Mitsuketa Amari-chan",
+    cover: "covers/amarichan.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/624d6ceb-768d-40a7-8412-84e083afbdb1/kanojo-ni-shitai-joshi-ichii-no-tonari-de-mitsuketa-amari-chan"
+  },
+  {
+    title: "Tensai Bishoujo Sanshimai wa Isourou ni Dake Choro Kawaii",
+    cover: "covers/tensaibishoujou.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/ee1eb629-79c9-410f-927c-dd7a4cd1d87b/tensai-bishoujo-sanshimai-wa-isourou-ni-dake-choro-kawaii"
+  },
+  {
+    title: "Negatte mo Nai Tsuihou Go kara no Slow Life?",
+    cover: "covers/negatte.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/748d2aab-cea8-4ffb-89b3-e716872cb027/negatte-mo-nai-tsuihou-go-kara-no-slow-life-intai-shita-hazu-ga-nariyuki-de-bishoujo-gal-no-shishou"
+  },
+  {
+    title: "10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita",
+    cover: "covers/10nenburi.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/26854d1a-dfd0-4e5c-b6d1-ab291035b8cc/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bishoujo-jk-ni-seichou-shiteita"
+  },
+  {
+    title: "Seishun wa Sankakukei no Loop",
+    cover: "covers/sankakukei.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/e6d70578-d6b2-4c60-a2f4-7ab16e515480/seishun-wa-sankakukei-no-loop"
+  },
+  {
+    title: "Midari ni Tsukasete wa Narimasen",
+    cover: "covers/midari.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/3076dc1f-e6f2-418c-baa9-125694eb36cc/midari-ni-tsukasete-wa-narimasen"
+  },
+  {
+    title: "Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta",
+    cover: "covers/madogiwa.jpg",
+    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
+    mangadex: "https://mangadex.org/title/a0ecce48-aa4c-48e6-8d9b-90f322a5687a/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-jk-to-doukyo-suru-koto-ni-natta"
+  },
 ];
 
 function createCard(manga) {
