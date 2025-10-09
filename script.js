@@ -1,12 +1,12 @@
 // CARA PAKAI:
-// Manga yang BARU DIUPDATE â†’ Taruh di PALING ATAS array ini
+// Manga yang BARU DIUPDATE → Taruh di PALING ATAS array ini
 // Urutan dari atas ke bawah = urutan tampil di website
 
 const mangaList = [
-  {
+   {
     title: "Uchi no Seiso-kei Iinchou ga Katsute Chuunibyou Idol datta Koto o Ore Dake ga Shitteiru",
     cover: "covers/uchi.png",
-    readFirst: "https://trakteer.id/NuranantoScanlation",
+    readFirst: "",
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9VY2hpJTIwbm8lMjBTZWlzby1rZWklMjBJaW5jaG91JTIwZ2ElMjBLYXRzdXRlJTIwQ2h1dW5pYnlvdSUyMElkb2wlMjBkYXR0YSUyMEtvdG8lMjBvJTIwT3JlJTIwRGFrZSUyMGdhJTIwU2hpdHRlaXJ1Lmpzb24/",
     mangadex: "https://mangadex.org/title/5993c10b-c49e-4771-9a3a-8b8436b12d80/uchi-no-seiso-kei-iinchou-ga-katsute-chuunibyou-idol-datta-koto-o-ore-dake-ga-shitteiru"
   },
@@ -27,32 +27,37 @@ const mangaList = [
   {
     title: "Genjitsu mo Tama ni Uso wo Tsuku",
     cover: "covers/genjitsu.jpg",
-    readFirst: "https://trakteer.id/NuranantoScanlation",
+    readFirst: "",
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9HZW5qaXRzdSUyMG1vJTIwVGFtYSUyMG5pJTIwVXNvJTIwd28lMjBUc3VrdS5qc29u/",
     mangadex: "https://mangadex.org/title/de9e3b62-eac5-4c0a-917d-ffccad694381/sometimes-even-reality-is-a-lie"
   },
   {
     title: "Suufungo no Mirai ga Wakaru You ni Natta kedo, Onnagokoro wa Wakaranai",
     cover: "covers/suufungo.jpg",
-    readFirst: "https://trakteer.id/NuranantoScanlation",
+    readFirst: "",
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9TdXVmdW5nbyUyMG5vJTIwTWlyYWklMjBnYSUyMFdha2FydSUyMFlvdSUyMG5pJTIwTmF0dGElMjBrZWRvLCUyME9ubmFnb2tvcm8lMjB3YSUyMFdha2FyYW5haS5qc29u/",
     mangadex: "https://mangadex.org/title/16c34950-954c-4f0d-808e-d8278a546339/suufungo-no-mirai-ga-wakaru-you-ni-natta-kedo-onnagokoro-wa-wakaranai"
   },
   {
     title: "Kimi no Negai ga Kanau made",
     cover: "covers/kiminonegai.jpg",
-    readFirst: "https://trakteer.id/NuranantoScanlation",
+    readFirst: "",
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
     mangadex: "https://mangadex.org/title/90d81edd-accb-4c8d-b44c-e38254d77935/kimi-no-negai-ga-kanau-made"
   }
 ];
 
 function createCard(manga) {
+  // Cek apakah ada link "Baca duluan" (readFirst)
+  const readFirstButton = manga.readFirst 
+    ? `<button class="btn-primary" onclick="event.stopPropagation(); window.open('${manga.readFirst}')">Baca duluan</button>`
+    : '';
+  
   return `
   <div class="manga-card">
     <img src="${manga.cover}" alt="${manga.title}">
     <div class="overlay">
-      <button class="btn-primary" onclick="event.stopPropagation(); window.open('${manga.readFirst}')">Baca duluan</button>
+      ${readFirstButton}
       <button class="btn-secondary" onclick="event.stopPropagation(); window.open('${manga.readNow}')">Mulai Baca</button>
       <button class="btn-mangadex" onclick="event.stopPropagation(); window.open('${manga.mangadex}')">Mangadex</button>
     </div>
