@@ -7,16 +7,17 @@
 body {
   background-color: #111;
   color: #fff;
-  font-family: "Segoe UI", Roboto, sans-serif;
+  font-family: "Rounded Mplus 1c", "M PLUS Rounded 1c", "Varela Round", "Nunito", "Comfortaa", "Quicksand", "Segoe UI", sans-serif;
   margin: 0;
   padding: 1.25rem;
+  padding-bottom: 120px; /* Extra padding untuk tombol donasi di bawah */
 }
 
 /* Header dengan logo dan Facebook */
 header {
   max-width: 1400px;
   margin: 0 auto 1rem;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
 }
 
 .header-content {
@@ -81,7 +82,7 @@ header {
 .search-section {
   max-width: 1400px;
   margin: 0 auto 2.5rem;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   display: flex;
   align-items: center;
 }
@@ -108,12 +109,36 @@ header {
 }
 
 /* Donation Box Trakteer - Pojok Kanan */
-.donation-box {
+.trakteer-button {
   position: fixed;
   top: 20px;
   right: 20px;
   z-index: 1000;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #be1e2d 0%, #d32f2f 100%);
+  padding: 0.75rem 1.25rem;
+  border-radius: 50px;
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(190, 30, 45, 0.4);
+  transition: all 0.3s ease;
   animation: slideInRight 0.5s ease-out;
+}
+
+.trakteer-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(190, 30, 45, 0.6);
+  background: linear-gradient(135deg, #d32f2f 0%, #e53935 100%);
+}
+
+.trakteer-icon {
+  width: 28px;
+  height: 28px;
+  filter: brightness(0) invert(1);
 }
 
 @keyframes slideInRight {
@@ -132,29 +157,30 @@ header {
   display: grid;
   gap: 1.25rem;
   justify-content: center;
-  padding: 0 2rem;
+  padding: 0 1.5rem;
   max-width: 1400px;
   margin: 0 auto;
 }
 
 @media (min-width: 1024px) {
   .grid-container {
-    grid-template-columns: repeat(6, 1fr);
+    grid-template-columns: repeat(5, 1fr);
   }
 }
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .grid-container {
-    grid-template-columns: repeat(4, 1fr);
-    padding: 0 1.5rem;
+    grid-template-columns: repeat(3, 1fr);
+    padding: 0 1rem;
+    gap: 1rem;
   }
   
   header {
-    padding: 0 1.5rem;
+    padding: 0 1rem;
   }
   
   .search-section {
-    padding: 0 1.5rem;
+    padding: 0 1rem;
   }
   
   .site-logo {
@@ -180,16 +206,17 @@ header {
 @media (max-width: 767px) {
   .grid-container {
     grid-template-columns: repeat(2, 1fr);
-    padding: 0 1rem;
+    padding: 0 0.625rem;
+    gap: 0.875rem;
   }
   
   header {
-    padding: 0 1rem;
+    padding: 0 0.625rem;
     margin-bottom: 0.75rem;
   }
   
   .search-section {
-    padding: 0 1rem;
+    padding: 0 0.625rem;
     margin-bottom: 2rem;
   }
   
@@ -202,10 +229,114 @@ header {
     height: 45px;
   }
   
+  /* Dynamic font sizes untuk mobile */
+  .title-large {
+    font-size: 1rem;
+    line-height: 1.3em;
+  }
+
+  .title-medium {
+    font-size: 0.875rem;
+    line-height: 1.25em;
+  }
+
+  .title-small {
+    font-size: 0.8rem;
+    line-height: 1.2em;
+  }
+
+  .title-xsmall {
+    font-size: 0.7rem;
+    line-height: 1.15em;
+  }
+  
+  /* Facebook - Hanya icon, sembunyikan text */
   .facebook-link-header {
     height: 45px;
-    padding: 0.5rem 0.875rem;
-    gap: 0.45rem;
+    width: 45px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  
+  .facebook-link-header .facebook-icon {
+    width: 26px;
+    height: 26px;
+  }
+  
+  .facebook-link-header .facebook-text {
+    display: none; /* Sembunyikan text di mobile */
+  }
+  
+  /* Tombol overlay - lebih lebar & font lebih kecil */
+  .overlay button {
+    width: 85%;
+    max-width: none;
+    padding: 0.65rem 1rem;
+    font-size: 0.875rem;
+  }
+  
+  /* Donation box pindah ke bawah */
+  .trakteer-button {
+    position: fixed;
+    top: auto;
+    bottom: 20px;
+    right: 20px;
+    left: 20px;
+    justify-content: center;
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+  
+  .trakteer-icon {
+    width: 24px;
+    height: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .grid-container {
+    padding: 0 0.5rem;
+    gap: 0.75rem;
+  }
+  
+  header {
+    padding: 0 0.5rem;
+  }
+  
+  .search-section {
+    padding: 0 0.5rem;
+  }
+  
+  .site-logo {
+    height: 40px;
+  }
+  
+  /* Dynamic font sizes untuk small mobile */
+  .title-large {
+    font-size: 0.95rem;
+    line-height: 1.25em;
+  }
+
+  .title-medium {
+    font-size: 0.825rem;
+    line-height: 1.2em;
+  }
+
+  .title-small {
+    font-size: 0.75rem;
+    line-height: 1.18em;
+  }
+
+  .title-xsmall {
+    font-size: 0.65rem;
+    line-height: 1.15em;
+  }
+  
+  /* Facebook - icon only */
+  .facebook-link-header {
+    height: 40px;
+    width: 40px;
   }
   
   .facebook-link-header .facebook-icon {
@@ -214,37 +345,7 @@ header {
   }
   
   .facebook-link-header .facebook-text {
-    font-size: 0.8rem;
-  }
-  
-  /* Donation box pindah ke bawah */
-  .donation-box {
-    position: fixed;
-    top: auto;
-    bottom: 20px;
-    right: 20px;
-    left: 20px;
-  }
-}
-
-@media (max-width: 480px) {
-  .site-logo {
-    height: 40px;
-  }
-  
-  .facebook-link-header {
-    height: 40px;
-    padding: 0.45rem 0.75rem;
-    gap: 0.4rem;
-  }
-  
-  .facebook-link-header .facebook-icon {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .facebook-link-header .facebook-text {
-    font-size: 0.75rem;
+    display: none;
   }
   
   #searchInput {
@@ -252,10 +353,27 @@ header {
     font-size: 0.9rem;
   }
   
-  .donation-box {
+  /* Tombol overlay lebih kecil */
+  .overlay button {
+    width: 90%;
+    padding: 0.6rem 0.875rem;
+    font-size: 0.8125rem;
+  }
+  
+  /* Tombol donasi di bawah */
+  .trakteer-button {
     bottom: 15px;
-    right: 15px;
-    left: 15px;
+    width: calc(100% - 1rem);
+    font-size: 0.85rem;
+  }
+  
+  .trakteer-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  body {
+    padding-bottom: 95px;
   }
 }
 
@@ -281,24 +399,46 @@ header {
   border-radius: 0.6rem 0.6rem 0 0;
 }
 
-/* Judul manga (maks. 3 baris) */
+/* Judul manga - Base style */
 .manga-title {
-  font-size: 0.9rem;
   color: #fff;
   padding: 0.6rem 0.5rem 0.9rem;
   text-align: center;
   background: transparent;
-  
-  /* Batasi maksimal 3 baris */
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  line-height: 1.3em;
-  max-height: 3.9em;
-  min-height: 3.9em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   word-break: break-word;
+  line-height: 1.3em;
+  min-height: 3.9em;
+  max-height: none;
+  overflow: visible;
+  hyphens: auto;
+}
+
+/* Dynamic font sizes berdasarkan panjang judul */
+.title-large {
+  font-size: 1.1rem;
+  font-weight: 700;
+  line-height: 1.35em;
+}
+
+.title-medium {
+  font-size: 0.95rem;
+  font-weight: 600;
+  line-height: 1.3em;
+}
+
+.title-small {
+  font-size: 0.85rem;
+  font-weight: 600;
+  line-height: 1.25em;
+}
+
+.title-xsmall {
+  font-size: 0.75rem;
+  font-weight: 500;
+  line-height: 1.2em;
 }
 
 /* Overlay tombol */

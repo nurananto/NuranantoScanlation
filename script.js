@@ -11,7 +11,7 @@ const mangaList = [
     mangadex: "https://mangadex.org/title/5993c10b-c49e-4771-9a3a-8b8436b12d80/uchi-no-seiso-kei-iinchou-ga-katsute-chuunibyou-idol-datta-koto-o-ore-dake-ga-shitteiru"
   },
   {
-    title: "Yarikonda Renai Game no Akuyaku ni Tensei shitanode",
+    title: "Yarikonda Renai Game no Akuyaku ni Tensei shitanode, Gensaku Chishiki de Heroine wo Kouryaku shimasu",
     cover: "covers/yarikonda.jpg",
     readFirst: "https://trakteer.id/NuranantoScanlation", // Kosongkan kalau tidak mau tombol "Baca duluan"
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9ZYXJpa29uZGElMjBSZW5haSUyMEdhbWUlMjBubyUyMEFrdXlha3UlMjBuaSUyMFRlbnNlaSUyMHNoaXRhbm9kZSwlMjBHZW5zYWt1JTIwQ2hpc2hpa2klMjBkZSUyMEhlcm9pbmUlMjB3byUyMEtvdXJ5YWt1JTIwc2hpbWFzdS5qc29u/",
@@ -34,7 +34,7 @@ const mangaList = [
   {
     title: "Suufungo no Mirai ga Wakaru You ni Natta kedo, Onnagokoro wa Wakaranai",
     cover: "covers/suufungo.jpg",
-    readFirst: "https://trakteer.id/NuranantoScanlation", // Ada link = tombol muncul
+    readFirst: "", // Ada link = tombol muncul
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9TdXVmdW5nbyUyMG5vJTIwTWlyYWklMjBnYSUyMFdha2FydSUyMFlvdSUyMG5pJTIwTmF0dGElMjBrZWRvLCUyME9ubmFnb2tvcm8lMjB3YSUyMFdha2FyYW5haS5qc29u/",
     mangadex: "https://mangadex.org/title/16c34950-954c-4f0d-808e-d8278a546339/suufungo-no-mirai-ga-wakaru-you-ni-natta-kedo-onnagokoro-wa-wakaranai"
   },
@@ -48,7 +48,7 @@ const mangaList = [
   {
     title: "Class de Ichiban Kawaii Gal wo Ezuke Shiteiru Hanashi",
     cover: "covers/kawaiigal.jpg",
-    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readFirst: "https://trakteer.id/NuranantoScanlation", // Kosongkan kalau tidak mau tombol "Baca duluan"
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
     mangadex: "https://mangadex.org/title/acfd6902-b39c-4b7d-91a8-9825dda4ede8/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hanashi"
   },
@@ -74,7 +74,7 @@ const mangaList = [
     mangadex: "https://mangadex.org/title/ee1eb629-79c9-410f-927c-dd7a4cd1d87b/tensai-bishoujo-sanshimai-wa-isourou-ni-dake-choro-kawaii"
   },
   {
-    title: "Negatte mo Nai Tsuihou Go kara no Slow Life?",
+    title: "Negatte mo Nai Tsuihou Go kara no Slow Life? ~Intai Shita Hazu ga Nariyuki de Bishoujo Gal no Shishou ni Nattara Naze ka Mechakucha Natsukareta~",
     cover: "covers/negatte.jpg",
     readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
@@ -83,7 +83,7 @@ const mangaList = [
   {
     title: "10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita",
     cover: "covers/10nenburi.jpg",
-    readFirst: "", // Kosongkan kalau tidak mau tombol "Baca duluan"
+    readFirst: "https://trakteer.id/NuranantoScanlation", // Kosongkan kalau tidak mau tombol "Baca duluan"
     readNow: "https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/",
     mangadex: "https://mangadex.org/title/26854d1a-dfd0-4e5c-b6d1-ab291035b8cc/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bishoujo-jk-ni-seichou-shiteita"
   },
@@ -116,6 +116,25 @@ function createCard(manga) {
     ? `<button class="btn-primary" onclick="event.stopPropagation(); window.open('${manga.readFirst}')">Baca duluan</button>`
     : '';
   
+  // Cek apakah ada link "Raw"
+  const rawButton = manga.raw 
+    ? `<button class="btn-raw" onclick="event.stopPropagation(); window.open('${manga.raw}')">Raw</button>`
+    : '';
+  
+  // Tentukan ukuran font berdasarkan panjang judul
+  let titleClass = 'manga-title';
+  const titleLength = manga.title.length;
+  
+  if (titleLength <= 30) {
+    titleClass += ' title-large';
+  } else if (titleLength <= 60) {
+    titleClass += ' title-medium';
+  } else if (titleLength <= 90) {
+    titleClass += ' title-small';
+  } else {
+    titleClass += ' title-xsmall';
+  }
+  
   return `
   <div class="manga-card">
     <img src="${manga.cover}" alt="${manga.title}">
@@ -123,8 +142,9 @@ function createCard(manga) {
       ${readFirstButton}
       <button class="btn-secondary" onclick="event.stopPropagation(); window.open('${manga.readNow}')">Mulai Baca</button>
       <button class="btn-mangadex" onclick="event.stopPropagation(); window.open('${manga.mangadex}')">Mangadex</button>
+      ${rawButton}
     </div>
-    <div class="manga-title">${manga.title}</div>
+    <div class="${titleClass}">${manga.title}</div>
   </div>`;
 }
 
