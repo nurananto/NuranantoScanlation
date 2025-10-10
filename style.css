@@ -1,4 +1,4 @@
-/* === FINAL STYLE NURANANTO SCANLATION === */
+/* === FINAL STYLE NURANANTO SCANLATION - FIXED === */
 
 :root {
   font-size: 16px;
@@ -10,7 +10,7 @@ body {
   font-family: "Rounded Mplus 1c", "M PLUS Rounded 1c", "Varela Round", "Nunito", "Comfortaa", "Quicksand", "Segoe UI", sans-serif;
   margin: 0;
   padding: 1.25rem;
-  padding-bottom: 120px; /* Extra padding untuk tombol donasi di bawah */
+  padding-bottom: 120px;
 }
 
 /* Header dengan logo dan Facebook */
@@ -32,7 +32,7 @@ header {
   display: block;
 }
 
-/* Facebook Link di Header - Sejajar dengan Logo */
+/* Facebook Link di Header */
 .facebook-link-header {
   display: flex;
   align-items: center;
@@ -78,7 +78,7 @@ header {
   color: #93c5fd;
 }
 
-/* Search Section - Melintang penuh di bawah header */
+/* Search Section */
 .search-section {
   max-width: 1400px;
   margin: 0 auto 2.5rem;
@@ -108,14 +108,21 @@ header {
   color: #888;
 }
 
-/* Donation Box Trakteer - Pojok Kanan */
+/* ========================================
+   DONATION BOX - DIPERBAIKI: SEKARANG DI BAWAH
+   ======================================== */
 .trakteer-button {
+  /* PERUBAHAN UTAMA */
   position: fixed;
-  top: 20px;
-  right: 20px;
+  bottom: 20px;        /* Pindah dari top ke bottom */
+  left: 20px;          /* Tambah left */
+  right: 20px;         /* Sekarang full width dengan margin */
+  
+  /* Styling */
   z-index: 1000;
   display: flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
   background: linear-gradient(135deg, #be1e2d 0%, #d32f2f 100%);
   padding: 0.75rem 1.25rem;
@@ -123,10 +130,11 @@ header {
   text-decoration: none;
   color: white;
   font-weight: 700;
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   box-shadow: 0 4px 15px rgba(190, 30, 45, 0.4);
   transition: all 0.3s ease;
-  animation: slideInRight 0.5s ease-out;
+  max-width: 1400px;
+  margin: 0 auto;
 }
 
 .trakteer-button:hover {
@@ -138,18 +146,7 @@ header {
 .trakteer-icon {
   width: 28px;
   height: 28px;
-  filter: brightness(0) invert(1);
-}
-
-@keyframes slideInRight {
-  from {
-    transform: translateX(100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
+  /* SVG sudah pakai fill, tidak perlu filter */
 }
 
 /* Grid responsif */
@@ -229,7 +226,6 @@ header {
     height: 45px;
   }
   
-  /* Dynamic font sizes untuk mobile */
   .title-large {
     font-size: 1rem;
     line-height: 1.3em;
@@ -250,7 +246,7 @@ header {
     line-height: 1.15em;
   }
   
-  /* Facebook - Hanya icon, sembunyikan text */
+  /* Facebook - Icon only di mobile */
   .facebook-link-header {
     height: 45px;
     width: 45px;
@@ -265,27 +261,26 @@ header {
   }
   
   .facebook-link-header .facebook-text {
-    display: none; /* Sembunyikan text di mobile */
+    display: none;
   }
   
-  /* Tombol overlay - lebih lebar & font lebih kecil */
+  /* Tombol overlay - DIPERKECIL agar tidak 2 baris */
   .overlay button {
     width: 85%;
     max-width: none;
     padding: 0.65rem 1rem;
-    font-size: 0.875rem;
+    font-size: 0.8125rem;
   }
   
-  /* Donation box pindah ke bawah */
+  /* Tombol donasi tetap di bawah */
   .trakteer-button {
     position: fixed;
-    top: auto;
     bottom: 20px;
-    right: 20px;
     left: 20px;
+    right: 20px;
     justify-content: center;
     padding: 0.7rem 1rem;
-    font-size: 0.9rem;
+    font-size: 0.8rem;
   }
   
   .trakteer-icon {
@@ -312,7 +307,6 @@ header {
     height: 40px;
   }
   
-  /* Dynamic font sizes untuk small mobile */
   .title-large {
     font-size: 0.95rem;
     line-height: 1.25em;
@@ -333,7 +327,6 @@ header {
     line-height: 1.15em;
   }
   
-  /* Facebook - icon only */
   .facebook-link-header {
     height: 40px;
     width: 40px;
@@ -353,18 +346,20 @@ header {
     font-size: 0.9rem;
   }
   
-  /* Tombol overlay lebih kecil */
+  /* Tombol overlay - LEBIH KECIL lagi */
   .overlay button {
     width: 90%;
     padding: 0.6rem 0.875rem;
-    font-size: 0.8125rem;
+    font-size: 0.75rem;
   }
   
-  /* Tombol donasi di bawah */
+  /* Tombol donasi di layar sangat kecil */
   .trakteer-button {
     bottom: 15px;
-    width: calc(100% - 1rem);
-    font-size: 0.85rem;
+    left: 0.5rem;
+    right: 0.5rem;
+    padding: 0.65rem 0.875rem;
+    font-size: 0.7rem;
   }
   
   .trakteer-icon {
@@ -399,7 +394,7 @@ header {
   border-radius: 0.6rem 0.6rem 0 0;
 }
 
-/* Judul manga - Base style */
+/* Judul manga */
 .manga-title {
   color: #fff;
   padding: 0.6rem 0.5rem 0.9rem;
@@ -416,7 +411,6 @@ header {
   hyphens: auto;
 }
 
-/* Dynamic font sizes berdasarkan panjang judul */
 .title-large {
   font-size: 1.1rem;
   font-weight: 700;
@@ -462,7 +456,6 @@ header {
   padding: 1rem;
 }
 
-/* Animasi muncul halus */
 .overlay.active {
   opacity: 1;
   visibility: visible;
@@ -499,4 +492,9 @@ header {
 
 .btn-mangadex {
   background-color: #ff8f00;
+}
+
+/* TAMBAHAN: Style untuk tombol Raw */
+.btn-raw {
+  background-color: #9b59b6;
 }
