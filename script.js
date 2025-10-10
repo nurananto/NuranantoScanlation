@@ -17,7 +17,7 @@ const mangaList = [
     readFirst: 'https://trakteer.id/NuranantoScanlation',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9ZYXJpa29uZGElMjBSZW5haSUyMEdhbWUlMjBubyUyMEFrdXlha3UlMjBuaSUyMFRlbnNlaSUyMHNoaXRhbm9kZSwlMjBHZW5zYWt1JTIwQ2hpc2hpa2klMjBkZSUyMEhlcm9pbmUlMjB3byUyMEtvdXJ5YWt1JTIwc2hpbWFzdS5qc29u/',
     mangadex: 'https://mangadex.org/title/a605a5d0-21a6-481f-a055-74735ea4f2c2/yarikonda-renai-game-no-akuyaku-ni-tensei-shitanode-gensaku-chishiki-de-heroine-wo-kouryaku-shimasu',
-	raw: 'https://www.manga-up.com/titles/1518'
+    raw: 'https://www.manga-up.com/titles/1518'
   },
   {
     title: 'Yuumei VTuber no Ani Dakedo, Nazeka Ore ga Yuumei ni Natteita',
@@ -25,7 +25,7 @@ const mangaList = [
     readFirst: 'https://trakteer.id/NuranantoScanlation',
     readNow: 'https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9ZdXVtZWklMjBWVHViZXIlMjBubyUyMEFuaSUyMERha2VkbywlMjBOYXpla2ElMjBPcmUlMjBnYSUyMFl1dW1laSUyMG5pJTIwTmF0dGVpdGEuanNvbg/',
     mangadex: 'https://mangadex.org/title/9aebe60e-777f-4a58-a3bf-143c3096b94f/yuumei-vtuber-no-ani-dakedo-nazeka-ore-ga-yuumei-ni-natteita',
-	raw: 'https://www.manga-up.com/titles/1289/chapters/266183'
+    raw: 'https://www.manga-up.com/titles/1289/chapters/266183'
   },
   {
     title: 'Genjitsu mo Tama ni Uso wo Tsuku',
@@ -33,7 +33,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9HZW5qaXRzdSUyMG1vJTIwVGFtYSUyMG5pJTIwVXNvJTIwd28lMjBUc3VrdS5qc29u/',
     mangadex: 'https://mangadex.org/title/de9e3b62-eac5-4c0a-917d-ffccad694381/sometimes-even-reality-is-a-lie',
-	raw: 'https://www.pixiv.net/user/1035047/series/60488'
+    raw: 'https://www.pixiv.net/user/1035047/series/60488'
   },
   {
     title: 'Suufungo no Mirai ga Wakaru You ni Natta kedo, Onnagokoro wa Wakaranai',
@@ -41,7 +41,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9TdXVmdW5nbyUyMG5vJTIwTWlyYWklMjBnYSUyMFdha2FydSUyMFlvdSUyMG5pJTIwTmF0dGElMjBrZWRvLCUyME9ubmFnb2tvcm8lMjB3YSUyMFdha2FyYW5haS5qc29u/',
     mangadex: 'https://mangadex.org/title/16c34950-954c-4f0d-808e-d8278a546339/suufungo-no-mirai-ga-wakaru-you-ni-natta-kedo-onnagokoro-wa-wakaranai',
-	raw: 'https://comic-walker.com/detail/KC_005690_S?episodeType=first'
+    raw: 'https://comic-walker.com/detail/KC_005690_S?episodeType=first'
   },
   {
     title: 'Kimi no Negai ga Kanau made',
@@ -49,7 +49,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/90d81edd-accb-4c8d-b44c-e38254d77935/kimi-no-negai-ga-kanau-made',
-	raw: 'https://comic-walker.com/detail/KC_006693_S/episodes/KC_0066930000200011_E?episodeType=latest'
+    raw: 'https://comic-walker.com/detail/KC_006693_S/episodes/KC_0066930000200011_E?episodeType=latest'
   },
   {
     title: 'Class de Ichiban Kawaii Gal wo Ezuke Shiteiru Hanashi',
@@ -57,7 +57,7 @@ const mangaList = [
     readFirst: 'https://trakteer.id/NuranantoScanlation',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/acfd6902-b39c-4b7d-91a8-9825dda4ede8/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hanashi',
-	raw: 'https://www.manga-up.com/titles/1540'
+    raw: 'https://www.manga-up.com/titles/1540'
   },
   {
     title: 'Watashi ni Ai wo Oshiete',
@@ -65,7 +65,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/c14b2a85-ca88-4bf7-8937-87baf95491c0/watashi-ni-ai-wo-oshiete',
-	raw: 'https://championcross.jp/episodes/312e96c6d46e6/'
+    raw: 'https://championcross.jp/episodes/312e96c6d46e6/'
   },
   {
     title: 'Kanojo ni Shitai Joshi Ichii, no Tonari de Mitsuketa Amari-chan',
@@ -73,7 +73,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/624d6ceb-768d-40a7-8412-84e083afbdb1/kanojo-ni-shitai-joshi-ichii-no-tonari-de-mitsuketa-amari-chan',
-	raw: 'https://comic-walker.com/detail/KC_006262_S?episodeType=first'
+    raw: 'https://comic-walker.com/detail/KC_006262_S?episodeType=first'
   },
   {
     title: 'Tensai Bishoujo Sanshimai wa Isourou ni Dake Choro Kawaii',
@@ -81,7 +81,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/ee1eb629-79c9-410f-927c-dd7a4cd1d87b/tensai-bishoujo-sanshimai-wa-isourou-ni-dake-choro-kawaii',
-	raw: 'https://comic-walker.com/detail/KC_006969_S/episodes/KC_0069690000200011_E?episodeType=first'
+    raw: 'https://comic-walker.com/detail/KC_006969_S/episodes/KC_0069690000200011_E?episodeType=first'
   },
   {
     title: 'Negatte mo Nai Tsuihou Go kara no Slow Life? ~Intai Shita Hazu ga Nariyuki de Bishoujo Gal no Shishou ni Nattara Naze ka Mechakucha Natsukareta~',
@@ -89,7 +89,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/748d2aab-cea8-4ffb-89b3-e716872cb027/negatte-mo-nai-tsuihou-go-kara-no-slow-life-intai-shita-hazu-ga-nariyuki-de-bishoujo-gal-no-shishou',
-	raw: 'https://comic-walker.com/detail/KC_006563_S?episodeType=first'
+    raw: 'https://comic-walker.com/detail/KC_006563_S?episodeType=first'
   },
   {
     title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
@@ -97,7 +97,7 @@ const mangaList = [
     readFirst: 'https://trakteer.id/NuranantoScanlation',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/26854d1a-dfd0-4e5c-b6d1-ab291035b8cc/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bishoujo-jk-ni-seichou-shiteita',
-	raw: 'https://comic-gardo.com/episode/2550912965031159065'
+    raw: 'https://comic-gardo.com/episode/2550912965031159065'
   },
   {
     title: 'Seishun wa Sankakukei no Loop',
@@ -105,7 +105,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/e6d70578-d6b2-4c60-a2f4-7ab16e515480/seishun-wa-sankakukei-no-loop',
-	raw: 'https://comic-walker.com/detail/KC_006586_S?episodeType=first'
+    raw: 'https://comic-walker.com/detail/KC_006586_S?episodeType=first'
   },
   {
     title: 'Midari ni Tsukasete wa Narimasen',
@@ -113,7 +113,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/3076dc1f-e6f2-418c-baa9-125694eb36cc/midari-ni-tsukasete-wa-narimasen',
-	raw: 'https://comic-walker.com/detail/KC_006109_S?episodeType=first'
+    raw: 'https://comic-walker.com/detail/KC_006109_S?episodeType=first'
   },
   {
     title: 'Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta',
@@ -121,7 +121,7 @@ const mangaList = [
     readFirst: '',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/a0ecce48-aa4c-48e6-8d9b-90f322a5687a/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-jk-to-doukyo-suru-koto-ni-natta',
-	raw: 'https://comic-walker.com/detail/KC_006388_S?episodeType=first'
+    raw: 'https://comic-walker.com/detail/KC_006388_S?episodeType=first'
   }
 ];
 
@@ -152,13 +152,13 @@ function createCard(manga) {
   
   return `
   <div class="manga-card">
-    <img src="${manga.cover}" alt="${manga.title}">
     <div class="overlay">
       ${readFirstButton}
       <button class="btn-secondary" onclick="event.stopPropagation(); window.open('${manga.readNow}')">Mulai Baca</button>
       <button class="btn-mangadex" onclick="event.stopPropagation(); window.open('${manga.mangadex}')">Mangadex</button>
       ${rawButton}
     </div>
+    <img src="${manga.cover}" alt="${manga.title}">
     <div class="${titleClass}">${manga.title}</div>
   </div>`;
 }
