@@ -4,6 +4,22 @@
 
 const mangaList = [
   {
+    title: 'Seishun wa Sankakukei no Loop',
+    cover: 'covers/seishun-wa-sankakukei-no-loop-4cf5a0cc-9123-43bd-bf54-c5f8c0aa9e16.jpg',
+    readFirst: '',
+    readNow: 'https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9TZWlzaHVuJTIwd2ElMjBTYW5rYWt1a2VpJTIwbm8lMjBMb29wLmpzb24/',
+    mangadex: 'https://mangadex.org/title/e6d70578-d6b2-4c60-a2f4-7ab16e515480/seishun-wa-sankakukei-no-loop',
+    raw: 'https://comic-walker.com/detail/KC_006586_S?episodeType=first'
+  },
+  {
+    title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
+    cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
+    readFirst: 'https://trakteer.id/NuranantoScanlation',
+    readNow: 'https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi8xMC1OZW4lMjBCdXJpJTIwbmklMjBTYWlrYWklMjBzaGl0YSUyMEt1c29nYWtpJTIwd2ElMjBTZWlqdW4lMjBCaXNob3VqbyUyMEpLJTIwbmklMjBTZWljaG91JTIwc2hpdGVpdGEuanNvbg/',
+    mangadex: 'https://mangadex.org/title/26854d1a-dfd0-4e5c-b6d1-ab291035b8cc/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bishoujo-jk-ni-seichou-shiteita',
+    raw: 'https://comic-gardo.com/episode/2550912965031159065'
+  },
+  {
     title: 'Uchi no Seiso-kei Iinchou ga Katsute Chuunibyou Idol datta Koto o Ore Dake ga Shitteiru',
     cover: 'covers/uchi-no-seiso-kei-iinchou-ga-katsute-chuunibyou-id-8c348f37-efdc-463c-9b5f-ce3ec9a7bb58.jpg',
     readFirst: '',
@@ -90,22 +106,6 @@ const mangaList = [
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/748d2aab-cea8-4ffb-89b3-e716872cb027/negatte-mo-nai-tsuihou-go-kara-no-slow-life-intai-shita-hazu-ga-nariyuki-de-bishoujo-gal-no-shishou',
     raw: 'https://comic-walker.com/detail/KC_006563_S?episodeType=first'
-  },
-  {
-    title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
-    cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
-    readFirst: 'https://trakteer.id/NuranantoScanlation',
-    readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
-    mangadex: 'https://mangadex.org/title/26854d1a-dfd0-4e5c-b6d1-ab291035b8cc/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bishoujo-jk-ni-seichou-shiteita',
-    raw: 'https://comic-gardo.com/episode/2550912965031159065'
-  },
-  {
-    title: 'Seishun wa Sankakukei no Loop',
-    cover: 'covers/seishun-wa-sankakukei-no-loop-4cf5a0cc-9123-43bd-bf54-c5f8c0aa9e16.jpg',
-    readFirst: '',
-    readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
-    mangadex: 'https://mangadex.org/title/e6d70578-d6b2-4c60-a2f4-7ab16e515480/seishun-wa-sankakukei-no-loop',
-    raw: 'https://comic-walker.com/detail/KC_006586_S?episodeType=first'
   },
   {
     title: 'Midari ni Tsukasete wa Narimasen',
