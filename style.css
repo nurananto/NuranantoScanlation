@@ -37,10 +37,10 @@ header {
   display: flex;
   align-items: center;
   gap: 0.625rem;
-  padding: 0.75rem 1.25rem;
-  height: 60px;
+  padding: 0.5rem 1rem;
+  height: auto;
   background: rgba(0, 0, 0, 0.8);
-  border-radius: 50px;
+  border-radius: 12px;
   text-decoration: none;
   transition: all 0.3s ease;
   backdrop-filter: blur(10px);
@@ -182,8 +182,8 @@ header {
     left: 1rem;
     right: 1rem;
     bottom: 30px;
-    /* Hapus font-size override agar sama dengan default (0.95rem) */
-    /* Atau bisa juga gunakan padding yang sama persis dengan search */
+    font-size: 1rem;
+    /* Font size sama dengan search bar (1rem) */
   }
   
   .site-logo {
@@ -191,9 +191,10 @@ header {
   }
   
   .facebook-link-header {
-    height: 50px;
-    padding: 0.625rem 1rem;
+    height: auto;
+    padding: 0.45rem 0.85rem;
     gap: 0.5rem;
+    border-radius: 10px;
   }
   
   .facebook-link-header .facebook-icon {
@@ -203,6 +204,14 @@ header {
   
   .facebook-link-header .facebook-text {
     font-size: 0.9rem;
+  }
+  
+  /* Tombol overlay untuk tablet */
+  .overlay button {
+    width: 74%;
+    max-width: 170px;
+    padding: 0.53rem 0.8rem;
+    font-size: 0.78rem;
   }
 }
 
@@ -272,11 +281,13 @@ header {
   
   /* Facebook - Hanya icon, sembunyikan text */
   .facebook-link-header {
-    height: 45px;
-    width: 45px;
-    padding: 0;
+    height: auto;
+    width: auto;
+    min-width: 45px;
+    min-height: 45px;
+    padding: 0.5rem;
     justify-content: center;
-    border-radius: 50%;
+    border-radius: 10px;
   }
   
   .facebook-link-header .facebook-icon {
@@ -290,23 +301,24 @@ header {
   
   /* Dynamic font sizes untuk tombol overlay */
   .overlay button {
-    width: 85%;
-    max-width: none;
-    padding: 0.65rem 1rem;
+    width: 80%;
+    max-width: 155px;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.75rem;
   }
   
   /* Font size tombol berdasarkan panjang teks */
   .btn-primary,
   .btn-secondary {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
   }
   
   .btn-mangadex {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
   }
   
   .btn-raw {
-    font-size: 0.875rem;
+    font-size: 0.75rem;
   }
 }
 
@@ -367,8 +379,12 @@ header {
   }
   
   .facebook-link-header {
-    height: 40px;
-    width: 40px;
+    height: auto;
+    width: auto;
+    min-width: 40px;
+    min-height: 40px;
+    padding: 0.45rem;
+    border-radius: 8px;
   }
   
   .facebook-link-header .facebook-icon {
@@ -387,22 +403,24 @@ header {
   
   /* Tombol overlay lebih kecil untuk small mobile */
   .overlay button {
-    width: 90%;
-    padding: 0.55rem 0.75rem;
+    width: 85%;
+    max-width: 145px;
+    padding: 0.48rem 0.7rem;
+    font-size: 0.7rem;
   }
   
   /* Font size tombol lebih kecil untuk small screen */
   .btn-primary,
   .btn-secondary {
-    font-size: 0.75rem;
-  }
-  
-  .btn-mangadex {
     font-size: 0.7rem;
   }
   
+  .btn-mangadex {
+    font-size: 0.65rem;
+  }
+  
   .btn-raw {
-    font-size: 0.75rem;
+    font-size: 0.7rem;
   }
 }
 
@@ -490,12 +508,12 @@ header {
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.45rem;
   opacity: 0;
   visibility: hidden;
   transition: opacity 0.3s ease, visibility 0.3s ease;
   z-index: 10;
-  padding: 1rem;
+  padding: 0.8rem;
   pointer-events: none;
 }
 
@@ -508,21 +526,22 @@ header {
 
 .overlay button {
   margin: 0;
-  padding: 0.7rem 1.2rem;
+  padding: 0.55rem 0.85rem;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.45rem;
   cursor: pointer;
   font-weight: 600;
   color: #fff;
   transition: transform 0.25s ease, opacity 0.25s ease;
   width: 75%;
-  max-width: 200px;
+  max-width: 180px;
   text-align: center;
-  font-size: 0.95rem;
+  font-size: 0.8rem;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   pointer-events: auto;
+  line-height: 1.2;
 }
 
 .overlay button:hover {
