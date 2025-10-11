@@ -4,6 +4,14 @@
 
 const mangaList = [
   {
+    title: 'Midari ni Tsukasete wa Narimasen',
+    cover: 'covers/midari-ni-tsukasete-wa-narimasen-d86648a6-77d3-4a95-a8d2-b296da206065.jpg',
+    readFirst: '',
+    readNow: 'https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9NaWRhcmklMjBuaSUyMFRzdWthc2V0ZSUyMHdhJTIwTmFyaW1hc2VuLmpzb24/',
+    mangadex: 'https://mangadex.org/title/3076dc1f-e6f2-418c-baa9-125694eb36cc/midari-ni-tsukasete-wa-narimasen',
+    raw: 'https://comic-walker.com/detail/KC_006109_S?episodeType=first'
+  },
+  {
     title: 'Seishun wa Sankakukei no Loop',
     cover: 'covers/seishun-wa-sankakukei-no-loop-4cf5a0cc-9123-43bd-bf54-c5f8c0aa9e16.jpg',
     readFirst: '',
@@ -106,14 +114,6 @@ const mangaList = [
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/748d2aab-cea8-4ffb-89b3-e716872cb027/negatte-mo-nai-tsuihou-go-kara-no-slow-life-intai-shita-hazu-ga-nariyuki-de-bishoujo-gal-no-shishou',
     raw: 'https://comic-walker.com/detail/KC_006563_S?episodeType=first'
-  },
-  {
-    title: 'Midari ni Tsukasete wa Narimasen',
-    cover: 'covers/midari-ni-tsukasete-wa-narimasen-d86648a6-77d3-4a95-a8d2-b296da206065.jpg',
-    readFirst: '',
-    readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
-    mangadex: 'https://mangadex.org/title/3076dc1f-e6f2-418c-baa9-125694eb36cc/midari-ni-tsukasete-wa-narimasen',
-    raw: 'https://comic-walker.com/detail/KC_006109_S?episodeType=first'
   },
   {
     title: 'Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta',
