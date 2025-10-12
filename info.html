@@ -32,24 +32,31 @@
       Madogiwa Henshuu to Bakani Sareta Ore ga
     </div>
 
-    <!-- Author - Class 4 -->
+    <!-- Author & Artist - Class 4 (DIGABUNG 1 BARIS) -->
     <div class="div4">
-      <strong>Author:</strong>
-      <a href="#" onclick="searchAuthor('Author Name')">Author Name</a>
+      <div class="author-section">
+        <strong>Author:</strong>
+        <span>Author Name</span>
+      </div>
+      <div class="artist-section">
+        <strong>Artist:</strong>
+        <span>Artist Name</span>
+      </div>
     </div>
 
-    <!-- Artist - Class 11 -->
+    <!-- Visitor Count - Class 11 (GANTI ARTIST) -->
     <div class="div11">
-      <strong>Artist:</strong>
-      <a href="#" onclick="searchArtist('Artist Name')">Artist Name</a>
+      <span class="visitor-icon">👥</span>
+      <span class="visitor-label">Visitor:</span>
+      <span class="visitor-count loading" id="visitor-count">...</span>
     </div>
 
     <!-- Genre - Class 12 -->
     <div class="div12">
-      <span class="genre-tag" onclick="searchGenre('Romance')">Romance</span>
-      <span class="genre-tag" onclick="searchGenre('Comedy')">Comedy</span>
-      <span class="genre-tag" onclick="searchGenre('Slice of Life')">Slice of Life</span>
-      <span class="genre-tag" onclick="searchGenre('Shounen')">Shounen</span>
+      <span class="genre-tag">Romance</span>
+      <span class="genre-tag">Comedy</span>
+      <span class="genre-tag">Slice of Life</span>
+      <span class="genre-tag">Shounen</span>
     </div>
 
     <!-- Description - Class 6 -->
@@ -86,64 +93,16 @@
     <div class="div10">
       <div class="chapter-list-title">Chapter List</div>
       
-      <div class="chapter-item locked" data-chapter="5" onclick="unlockChapter('5')">
-        <span class="chapter-title">Chapter 5</span>
-        <div class="chapter-locked-info" style="color: #ffd700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
-          <span>🔒</span>
-          <span>Coming Soon</span>
-        </div>
-      </div>
-
-      <div class="chapter-item" data-chapter="4" onclick="readChapter('4')">
-        <span class="chapter-title">Chapter 4</span>
-        <div class="chapter-views loading" id="views-4">
-          <span class="view-icon">👁️</span>
-          <span class="view-count">...</span>
-          <span class="view-label">views</span>
-        </div>
-      </div>
-
-      <div class="chapter-item" data-chapter="3" onclick="readChapter('3')">
-        <span class="chapter-title">Chapter 3</span>
-        <div class="chapter-views loading" id="views-3">
-          <span class="view-icon">👁️</span>
-          <span class="view-count">...</span>
-          <span class="view-label">views</span>
-        </div>
-      </div>
-
-      <button class="show-all-btn" onclick="toggleChapters()">
+      <!-- Chapter list akan di-generate oleh JavaScript -->
+      <div id="latest-chapters"></div>
+      
+      <!-- Button Show All hanya muncul jika chapter > 10 -->
+      <button class="show-all-btn" id="show-all-btn" onclick="toggleChapters()" style="display: none;">
         Show All Chapters
       </button>
 
-      <div id="olderChapters" style="display: none;">
-        <div class="chapter-item" data-chapter="2" onclick="readChapter('2')">
-          <span class="chapter-title">Chapter 2</span>
-          <div class="chapter-views loading" id="views-2">
-            <span class="view-icon">👁️</span>
-            <span class="view-count">...</span>
-            <span class="view-label">views</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-chapter="1" onclick="readChapter('1')">
-          <span class="chapter-title">Chapter 1</span>
-          <div class="chapter-views loading" id="views-1">
-            <span class="view-icon">👁️</span>
-            <span class="view-count">...</span>
-            <span class="view-label">views</span>
-          </div>
-        </div>
-
-        <div class="chapter-item" data-chapter="0" onclick="readChapter('0')">
-          <span class="chapter-title">Chapter 0 - Prologue</span>
-          <div class="chapter-views loading" id="views-0">
-            <span class="view-icon">👁️</span>
-            <span class="view-count">...</span>
-            <span class="view-label">views</span>
-          </div>
-        </div>
-      </div>
+      <!-- Older chapters (11 dan seterusnya) -->
+      <div id="olderChapters" style="display: none;"></div>
     </div>
   </div>
 

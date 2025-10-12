@@ -34,6 +34,20 @@ async function loadStatsFromGitHub() {
   }
 }
 
+// Update tampilan visitor count
+async function displayVisitorCount() {
+  const stats = await loadStatsFromGitHub();
+  const visitorElement = document.getElementById('visitor-count');
+  
+  if (visitorElement) {
+    const mangaStats = stats.mangas?.[mangaId] || {};
+    const visitorCount = mangaStats.info_views || 0;
+    
+    visitorElement.textContent = visitorCount.toLocaleString();
+    visitorElement.classList.remove('loading');
+  }
+}
+
 // Update tampilan view count di halaman
 async function displayAllViewCounts() {
   const stats = await loadStatsFromGitHub();
@@ -41,8 +55,8 @@ async function displayAllViewCounts() {
   // Cek apakah ada stats untuk manga ini
   const mangaStats = stats.mangas?.[mangaId] || { chapters: {} };
   
-  // Update view count untuk setiap chapter yang ada di halaman
-  const chapterItems = document.querySelectorAll('.chapter-item[data-chapter]:not(.locked)');
+  // Update view count untuk setiap chapter yang ada di halaman (termasuk locked)
+  const chapterItems = document.querySelectorAll('.chapter-item[data-chapter]');
   
   chapterItems.forEach(item => {
     const chapterId = item.getAttribute('data-chapter');
@@ -150,15 +164,15 @@ async function populatePageData() {
   }
   
   // Update author
-  const authorLink = document.querySelector('.div4 a');
-  if (authorLink && mangaConfig.author) {
-    authorLink.textContent = mangaConfig.author;
+  const authorSpan = document.querySelector('.author-section span');
+  if (authorSpan && mangaConfig.author) {
+    authorSpan.textContent = mangaConfig.author;
   }
   
   // Update artist
-  const artistLink = document.querySelector('.div11 a');
-  if (artistLink && mangaConfig.artist) {
-    artistLink.textContent = mangaConfig.artist;
+  const artistSpan = document.querySelector('.artist-section span');
+  if (artistSpan && mangaConfig.artist) {
+    artistSpan.textContent = mangaConfig.artist;
   }
   
   // Update genres
@@ -169,7 +183,6 @@ async function populatePageData() {
       const tag = document.createElement('span');
       tag.className = 'genre-tag';
       tag.textContent = genre;
-      tag.onclick = () => searchGenre(genre);
       genreContainer.appendChild(tag);
     });
   }
@@ -196,17 +209,17 @@ async function populatePageData() {
 function generateChapterList() {
   if (!mangaConfig || !mangaConfig.chapters) return;
   
-  const chapterListContainer = document.querySelector('.div10');
-  if (!chapterListContainer) return;
+  const latestChaptersContainer = document.getElementById('latest-chapters');
+  const olderChaptersContainer = document.getElementById('olderChapters');
+  const showAllBtn = document.getElementById('show-all-btn');
   
-  // Simpan title dan show all button
-  const title = chapterListContainer.querySelector('.chapter-list-title');
-  const showAllBtn = chapterListContainer.querySelector('.show-all-btn');
-  const olderChapters = document.getElementById('olderChapters');
+  if (!latestChaptersContainer) return;
   
-  // Clear existing chapters (except title, button, olderChapters)
-  const existingChapters = chapterListContainer.querySelectorAll('.chapter-item');
-  existingChapters.forEach(ch => ch.remove());
+  // Clear existing chapters
+  latestChaptersContainer.innerHTML = '';
+  if (olderChaptersContainer) {
+    olderChaptersContainer.innerHTML = '';
+  }
   
   // Convert chapters object to sorted array
   const chapterArray = Object.keys(mangaConfig.chapters).map(num => ({
@@ -214,23 +227,32 @@ function generateChapterList() {
     ...mangaConfig.chapters[num]
   })).sort((a, b) => parseFloat(b.num) - parseFloat(a.num)); // Descending order
   
-  // Show latest 3 chapters
-  const latestChapters = chapterArray.slice(0, 3);
-  const olderChaptersList = chapterArray.slice(3);
+  // Show latest 10 chapters
+  const latestChapters = chapterArray.slice(0, 10);
+  const olderChaptersList = chapterArray.slice(10);
   
-  // Insert latest chapters
+  // Insert latest 10 chapters
   latestChapters.forEach(chapter => {
     const chapterElement = createChapterElement(chapter);
-    chapterListContainer.insertBefore(chapterElement, showAllBtn);
+    latestChaptersContainer.appendChild(chapterElement);
   });
   
-  // Clear and populate older chapters
-  if (olderChapters) {
-    olderChapters.innerHTML = '';
-    olderChaptersList.forEach(chapter => {
-      const chapterElement = createChapterElement(chapter);
-      olderChapters.appendChild(chapterElement);
-    });
+  // Show "Show All Chapters" button jika ada chapter lebih dari 10
+  if (olderChaptersList.length > 0 && showAllBtn) {
+    showAllBtn.style.display = 'block';
+    
+    // Populate older chapters
+    if (olderChaptersContainer) {
+      olderChaptersList.forEach(chapter => {
+        const chapterElement = createChapterElement(chapter);
+        olderChaptersContainer.appendChild(chapterElement);
+      });
+    }
+  } else {
+    // Sembunyikan button jika chapter <= 10
+    if (showAllBtn) {
+      showAllBtn.style.display = 'none';
+    }
   }
 }
 
@@ -250,13 +272,18 @@ function createChapterElement(chapter) {
     title.className = 'chapter-title';
     title.textContent = `Chapter ${chapter.num}`;
     
-    const lockInfo = document.createElement('div');
-    lockInfo.className = 'chapter-locked-info';
-    lockInfo.style.cssText = 'color: #ffd700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;';
-    lockInfo.innerHTML = '<span>🔒</span><span>Support di Trakteer</span>';
+    // Locked chapter juga punya view counter dengan angka
+    const views = document.createElement('div');
+    views.className = 'chapter-views loading';
+    views.id = `views-${chapter.num}`;
+    views.innerHTML = `
+      <span class="view-icon">👁️</span>
+      <span class="view-count">...</span>
+      <span class="view-label">views</span>
+    `;
     
     div.appendChild(title);
-    div.appendChild(lockInfo);
+    div.appendChild(views);
   } else {
     div.onclick = () => readChapter(chapter.num);
     
@@ -310,7 +337,9 @@ function unlockChapter(chapterNum) {
 // Fungsi untuk show/hide chapter list
 function toggleChapters() {
   const olderChapters = document.getElementById('olderChapters');
-  const btn = event.target;
+  const btn = document.getElementById('show-all-btn');
+  
+  if (!olderChapters || !btn) return;
   
   if (olderChapters.style.display === 'none' || !olderChapters.style.display) {
     olderChapters.style.display = 'flex';
@@ -330,21 +359,7 @@ function toggleChapters() {
 // ===========================
 // SEARCH FUNCTIONS
 // ===========================
-
-function searchAuthor(authorName) {
-  alert('Search by author: ' + authorName);
-  // TODO: Implement your search logic here
-}
-
-function searchArtist(artistName) {
-  alert('Search by artist: ' + artistName);
-  // TODO: Implement your search logic here
-}
-
-function searchGenre(genreName) {
-  alert('Search by genre: ' + genreName);
-  // TODO: Implement your search logic here
-}
+// Functions removed - Author, Artist, Genre are now plain text
 
 // ===========================
 // INITIALIZATION
@@ -364,6 +379,9 @@ window.addEventListener('DOMContentLoaded', async function() {
     // Populate page with manga data
     await populatePageData();
     
+    // Load visitor count
+    await displayVisitorCount();
+    
     // Load view counts dari GitHub
     await displayAllViewCounts();
     
@@ -371,7 +389,10 @@ window.addEventListener('DOMContentLoaded', async function() {
     incrementViewCount('info');
     
     // Refresh view counts setiap 30 detik untuk update real-time
-    setInterval(displayAllViewCounts, 30000);
+    setInterval(() => {
+      displayVisitorCount();
+      displayAllViewCounts();
+    }, 30000);
     
   } catch (error) {
     console.error('Error loading page:', error);

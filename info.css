@@ -111,8 +111,7 @@ header {
    =========================== */
 .div1 {
   grid-area: div1;
-  position: sticky;
-  top: 20px;
+  position: relative;
   height: fit-content;
 }
 
@@ -134,49 +133,69 @@ header {
 }
 
 /* ===========================
-   AUTHOR (Class 4)
+   AUTHOR & ARTIST (Class 4) - DIGABUNG 1 BARIS
    =========================== */
 .div4 {
   grid-area: div4;
   display: flex;
-  gap: 10px;
+  gap: 20px;
   align-items: center;
   color: #aaa;
   font-size: 1rem;
+  flex-wrap: wrap;
 }
 
-.div4 strong {
+.author-section,
+.artist-section {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.author-section strong,
+.artist-section strong {
   color: #888;
 }
 
-.div4 a {
-  color: #3498db;
-  text-decoration: none;
-}
-
-.div4 a:hover {
-  text-decoration: underline;
+.author-section span,
+.artist-section span {
+  color: #aaa;
 }
 
 /* ===========================
-   ARTIST (Class 11)
+   VISITOR COUNT (Class 11) - GANTI ARTIST
    =========================== */
 .div11 {
   grid-area: div11;
   display: flex;
-  gap: 10px;
+  gap: 12px;
   align-items: center;
-  color: #aaa;
-  font-size: 1rem;
+  padding: 15px 20px;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2a2a2a 100%);
+  border-radius: 12px;
+  border: 2px solid rgba(52, 152, 219, 0.3);
+  font-size: 1.1rem;
 }
 
-.div11 strong {
-  color: #888;
-}
-
-.div11 a {
+.visitor-icon {
+  font-size: 1.5rem;
   color: #3498db;
-  text-decoration: none;
+}
+
+.visitor-label {
+  color: #888;
+  font-weight: 600;
+}
+
+.visitor-count {
+  color: #3498db;
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.visitor-count.loading {
+  color: #666;
+  font-style: italic;
 }
 
 /* ===========================
@@ -191,19 +210,14 @@ header {
 }
 
 .genre-tag {
-  background: #2a2a2a;
-  padding: 6px 14px;
-  border-radius: 20px;
-  font-size: 0.85rem;
-  color: #3498db;
-  border: 1px solid #3498db;
-  cursor: pointer;
+  background: transparent;
+  padding: 8px 16px;
+  border-radius: 12px;
+  font-size: 0.9rem;
+  color: #aaa;
+  border: 2px solid #aaa;
+  cursor: default;
   transition: all 0.3s;
-}
-
-.genre-tag:hover {
-  background: #3498db;
-  color: white;
 }
 
 /* ===========================
@@ -346,17 +360,14 @@ header {
 
 /* Chapter yang terkunci */
 .chapter-item.locked {
-  background: linear-gradient(135deg, #434343 0%, #1a1a1a 100%);
-  border: 2px solid #ffd700;
-  cursor: not-allowed;
+  background: #1a1a1a;
+  cursor: pointer;
   position: relative;
 }
 
-.chapter-item.locked .chapter-title::after {
-  content: "🔒";
-  font-size: 1rem;
-  margin-left: 8px;
-  opacity: 0.8;
+.chapter-item.locked:hover {
+  background: #2a2a2a;
+  transform: translateX(5px);
 }
 
 /* Judul Chapter */
@@ -513,9 +524,13 @@ header {
     text-align: center;
   }
 
-  .div4, .div11 {
+  .div4 {
     justify-content: center;
     flex-wrap: wrap;
+  }
+
+  .div11 {
+    justify-content: center;
   }
 
   .div12 {
@@ -534,5 +549,18 @@ header {
 
   .chapter-views .view-label {
     display: none;
+  }
+
+  /* Visitor count di mobile */
+  .div11 {
+    font-size: 1rem;
+  }
+
+  .visitor-icon {
+    font-size: 1.3rem;
+  }
+
+  .visitor-count {
+    font-size: 1.1rem;
   }
 }
