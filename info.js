@@ -227,17 +227,49 @@ function generateChapterList() {
     ...mangaConfig.chapters[num]
   })).sort((a, b) => parseFloat(b.num) - parseFloat(a.num)); // Descending order
   
-  // Show latest 10 chapters
-  const latestChapters = chapterArray.slice(0, 10);
-  const olderChaptersList = chapterArray.slice(10);
+  // Tentukan jumlah chapter yang ditampilkan berdasarkan tinggi layar dan lebar
+  let visibleChapterCount = 10; // Default desktop (dikembalikan ke 10)
   
-  // Insert latest 10 chapters
+  const screenWidth = window.innerWidth;
+  const screenHeight = window.innerHeight;
+  
+  if (screenWidth <= 480) {
+    // Small mobile (iPhone SE, etc): 3 chapter
+    visibleChapterCount = 3;
+  } else if (screenWidth <= 768) {
+    // Mobile biasa
+    if (screenHeight <= 740) {
+      // Short screen (iPhone SE, Pixel 7): 3 chapter
+      visibleChapterCount = 3;
+    } else if (screenHeight <= 900) {
+      // Medium height (iPhone 12 Pro, XR): 4 chapter
+      visibleChapterCount = 4;
+    } else {
+      // Tall phones (iPhone 14 Pro Max, S20 Ultra): 5 chapter
+      visibleChapterCount = 5;
+    }
+  } else if (screenWidth <= 1024) {
+    // Tablet (iPad Mini, iPad Air, Z Fold 5)
+    if (screenHeight <= 820) {
+      // iPad Mini portrait: 5 chapter
+      visibleChapterCount = 5;
+    } else {
+      // iPad Air, Z Fold unfolded: 6 chapter
+      visibleChapterCount = 6;
+    }
+  }
+  
+  // Show latest chapters based on device
+  const latestChapters = chapterArray.slice(0, visibleChapterCount);
+  const olderChaptersList = chapterArray.slice(visibleChapterCount);
+  
+  // Insert latest chapters
   latestChapters.forEach(chapter => {
     const chapterElement = createChapterElement(chapter);
     latestChaptersContainer.appendChild(chapterElement);
   });
   
-  // Show "Show All Chapters" button jika ada chapter lebih dari 10
+  // Show "Show All Chapters" button jika ada chapter lebih dari visible count
   if (olderChaptersList.length > 0 && showAllBtn) {
     showAllBtn.style.display = 'block';
     
@@ -249,7 +281,7 @@ function generateChapterList() {
       });
     }
   } else {
-    // Sembunyikan button jika chapter <= 10
+    // Sembunyikan button jika chapter <= visible count
     if (showAllBtn) {
       showAllBtn.style.display = 'none';
     }
@@ -398,4 +430,16 @@ window.addEventListener('DOMContentLoaded', async function() {
     console.error('Error loading page:', error);
     alert('Gagal memuat data manga: ' + error.message);
   }
+});
+
+// Re-generate chapter list saat resize window (untuk responsive)
+let resizeTimer;
+window.addEventListener('resize', function() {
+  clearTimeout(resizeTimer);
+  resizeTimer = setTimeout(function() {
+    if (mangaConfig) {
+      generateChapterList();
+      displayAllViewCounts();
+    }
+  }, 250);
 });

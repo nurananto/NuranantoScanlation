@@ -93,10 +93,10 @@ header {
   padding: 0 20px 20px;
   display: grid;
   grid-template-columns: 350px 1fr;
-  grid-template-rows: auto auto auto auto auto auto 1fr;
+  grid-template-rows: auto auto auto auto auto auto auto;
   gap: 20px;
   grid-template-areas:
-    "div1 div2"
+    "div2 div2"
     "div1 div4"
     "div1 div11"
     "div1 div12"
@@ -106,6 +106,11 @@ header {
     "div10 div10";
 }
 
+/* Desktop: Baca Sekarang tinggi 2x */
+.div7 {
+  grid-row: span 2;
+}
+
 /* ===========================
    COVER IMAGE (Class 1)
    =========================== */
@@ -113,6 +118,7 @@ header {
   grid-area: div1;
   position: relative;
   height: fit-content;
+  align-self: end;
 }
 
 .cover-img {
@@ -141,7 +147,7 @@ header {
   gap: 20px;
   align-items: center;
   color: #aaa;
-  font-size: 1rem;
+  font-size: 1.1rem;
   flex-wrap: wrap;
 }
 
@@ -163,10 +169,16 @@ header {
 }
 
 /* ===========================
-   VISITOR COUNT (Class 11) - GANTI ARTIST
+   VISITOR COUNT & TRAKTEER (Class 11)
    =========================== */
-.div11 {
+.views-trakteer-container {
   grid-area: div11;
+  display: flex;
+  gap: 12px;
+  align-items: stretch;
+}
+
+.div11 {
   display: flex;
   gap: 12px;
   align-items: center;
@@ -175,7 +187,8 @@ header {
   border-radius: 12px;
   border: 2px solid rgba(52, 152, 219, 0.3);
   font-size: 1.1rem;
-  max-width: 350px;
+  flex: 1;
+  min-width: 0;
 }
 
 .visitor-label {
@@ -192,6 +205,39 @@ header {
 .visitor-count.loading {
   color: #666;
   font-style: italic;
+}
+
+/* Tombol Trakteer Mini - Sebelah kanan Views */
+.trakteer-button-mini {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #be1e2d 0%, #d32f2f 100%);
+  padding: 15px 20px;
+  border-radius: 12px;
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  box-shadow: 0 4px 15px rgba(190, 30, 45, 0.4);
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.trakteer-button-mini:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(190, 30, 45, 0.6);
+  background: linear-gradient(135deg, #d32f2f 0%, #e53935 100%);
+}
+
+.trakteer-icon-mini {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  flex-shrink: 0;
 }
 
 /* ===========================
@@ -224,7 +270,7 @@ header {
   background: #1a1a1a;
   padding: 20px;
   border-radius: 8px;
-  max-height: 200px;
+  max-height: 400px;
   overflow-y: auto;
   line-height: 1.6;
   color: #ddd;
@@ -263,13 +309,13 @@ header {
   cursor: pointer;
   transition: all 0.3s;
   text-align: center;
-  height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  min-height: 54px;
 }
 
-/* Button Baca Sekarang (Biru) */
+/* Button Baca Sekarang (Biru) - Tinggi 2x lipat */
 .div7 {
   grid-area: div7;
   background: linear-gradient(135deg, #3498db 0%, #2980b9 100%);
@@ -313,6 +359,7 @@ header {
   display: flex;
   flex-direction: column;
   gap: 8px;
+  padding-bottom: 20px;
 }
 
 .chapter-list-title {
@@ -429,10 +476,39 @@ header {
    RESPONSIVE - TABLET
    =========================== */
 @media (max-width: 1024px) {
+  body {
+    padding-bottom: 110px;
+  }
+
   .parent {
     padding: 0 15px 15px;
     grid-template-columns: 280px 1fr;
+    grid-template-rows: auto auto auto auto auto auto auto auto;
     gap: 15px;
+    grid-template-areas:
+      "div2 div2"
+      "div1 div4"
+      "div1 div11"
+      "div1 div12"
+      "div1 div6"
+      "div1 ."
+      "div7 div7"
+      "div8 div9"
+      "div10 div10";
+  }
+
+  .div1 {
+    align-self: start;
+  }
+
+  .div4 {
+    font-size: 1.05rem;
+  }
+
+  /* Tablet: Kurangi tinggi description agar cover bisa turun */
+  .div6 {
+    max-height: 200px;
+    overflow-y: auto;
   }
 
   .site-logo {
@@ -456,6 +532,17 @@ header {
 
   .div2 {
     font-size: 2rem;
+  }
+
+  .trakteer-button {
+    left: 15px;
+    right: 15px;
+    bottom: 30px;
+    font-size: 1rem;
+  }
+
+  .div10 {
+    padding-bottom: 25px;
   }
 }
 
@@ -520,6 +607,7 @@ header {
     top: 0;
     max-width: 250px;
     margin: 0 auto;
+    align-self: auto;
   }
 
   .div2 {
@@ -530,6 +618,7 @@ header {
   .div4 {
     justify-content: center;
     flex-wrap: wrap;
+    font-size: 1rem;
   }
 
   .div11 {
@@ -564,3 +653,7 @@ header {
     font-size: 1.1rem;
   }
 }
+
+/* ===========================
+   TRAKTEER BUTTON - REMOVED (moved to mini version next to Views)
+   =========================== */
