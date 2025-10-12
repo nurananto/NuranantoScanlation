@@ -15,23 +15,21 @@ const firebaseConfig = {
 let db;
 let storage;
 
+// ===========================
+// INITIALIZE FIREBASE
+// ===========================
 async function initFirebase() {
   try {
-    // Import Firebase modules
     const { initializeApp } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js');
-    const { getDatabase, ref, get, child } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
-    const { getStorage, ref: storageRef, getDownloadURL } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
-    
-    // Initialize Firebase
+    const { getDatabase, ref, get, child, set, increment, update } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+
     const app = initializeApp(firebaseConfig);
     db = getDatabase(app);
-    storage = getStorage(app);
-    
+
     console.log('Firebase initialized successfully');
     return true;
   } catch (error) {
     console.error('Firebase initialization error:', error);
-    alert('Gagal menghubungkan ke server. Silakan refresh halaman.');
     return false;
   }
 }
@@ -51,52 +49,39 @@ let mangaId = '';
 // PAGE INITIALIZATION
 // ===========================
 window.addEventListener('DOMContentLoaded', async function() {
-  // Initialize Firebase first
   const firebaseReady = await initFirebase();
-  
-  if (!firebaseReady) {
-    return;
-  }
-  
-  // Get manga ID from URL or use default
+  if (!firebaseReady) return;
+
   const urlParams = new URLSearchParams(window.location.search);
   mangaId = urlParams.get('manga') || 'madogiwa';
   const chapterFromUrl = urlParams.get('chapter');
-  
-  // Load manga data from Firebase
+
   await loadMangaData();
-  
+
   if (chapterFromUrl && chapters.find(ch => ch.num === chapterFromUrl)) {
     currentChapterNum = chapterFromUrl;
   }
-  
+
   await loadChapter(currentChapterNum);
   generateChapterList();
+
+  // Tambahkan pencatatan view
+  recordViewer();
 });
 
 // ===========================
-// LOAD MANGA DATA FROM FIREBASE
+// LOAD MANGA DATA FROM GITHUB
 // ===========================
 async function loadMangaData() {
   try {
     showLoading();
-    
-    const { ref: dbRef, get, child } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
-    
-    // Get manga metadata
-    const mangaRef = dbRef(db, `mangas/${mangaId}`);
-    const snapshot = await get(mangaRef);
-    
-    if (!snapshot.exists()) {
-      throw new Error('Manga tidak ditemukan');
-    }
-    
-    const mangaData = snapshot.val();
-    
-    // Set manga title
+
+    const response = await fetch(`https://raw.githubusercontent.com/nurananto/NuranantoScanlation/main/manga/${mangaId}/data.json`);
+    if (!response.ok) throw new Error('Gagal mengambil data dari GitHub');
+
+    const mangaData = await response.json();
     document.title = mangaData.title || 'Manga Reader';
-    
-    // Load chapters
+
     chapters = [];
     if (mangaData.chapters) {
       Object.keys(mangaData.chapters).forEach(chapterNum => {
@@ -109,92 +94,64 @@ async function loadMangaData() {
         });
       });
     }
-    
-    // Sort chapters by number
-    chapters.sort((a, b) => {
-      const numA = parseFloat(a.num);
-      const numB = parseFloat(b.num);
-      return numA - numB;
-    });
-    
-    console.log(`Loaded ${chapters.length} chapters:`, chapters);
-    
-    if (chapters.length === 0) {
-      throw new Error('Tidak ada chapter yang tersedia');
-    }
-    
-  } catch (error) {
-    console.error('Error loading manga data:', error);
-    alert('Gagal memuat data manga: ' + error.message);
+
     hideLoading();
-  }
-}
-
-// ===========================
-// LOAD CHAPTER
-// ===========================
-async function loadChapterImages(chapterNum, pageCount) {
-  try {
-    imageUrls = [];
-
-    // Contoh lokasi gambar:
-    // https://nurananto.github.io/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/manga/madogiwa/4/1.jpg
-    for (let i = 1; i <= pageCount; i++) {
-      const imageUrl = `https://nurananto.github.io/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/manga/${mangaId}/${chapterNum}/${i}.jpg`;
-      imageUrls.push(imageUrl);
-    }
-
-    if (imageUrls.length === 0) throw new Error('Tidak ada gambar yang ditemukan di GitHub');
-
-    console.log(`Loaded ${imageUrls.length} pages for chapter ${chapterNum}`);
-
+    console.log('Manga data loaded successfully');
   } catch (error) {
-    console.error('Error loading images:', error);
-    throw error;
+    hideLoading();
+    console.error('Error loading manga data:', error);
   }
 }
 
-
-// ===========================
-// LOAD CHAPTER IMAGES FROM FIREBASE STORAGE
-// ===========================
 // ===========================
 // LOAD CHAPTER IMAGES FROM GITHUB
 // ===========================
-async function loadChapterImages(chapterNum, pageCount) {
+async function loadChapter(chapterNum) {
   try {
-    imageUrls = [];
-
-    // Loop semua halaman sesuai jumlah halaman
-    for (let i = 1; i <= pageCount; i++) {
-      const imageUrl = `https://nurananto.github.io/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/manga/madogiwa/${chapterNum}/${i}.jpg`;
-      imageUrls.push(imageUrl);
+    const chapter = chapters.find(c => c.num === chapterNum);
+    if (!chapter) {
+      console.error('Chapter not found:', chapterNum);
+      return;
     }
 
-    if (imageUrls.length === 0) {
-      throw new Error('Tidak ada gambar yang ditemukan di GitHub');
-    }
-
-    console.log(`Loaded ${imageUrls.length} pages for chapter ${chapterNum}`);
-
-    // Render ke halaman
     const container = document.getElementById('imageContainer');
     container.innerHTML = '';
 
-    imageUrls.forEach((url) => {
+    for (let i = 1; i <= chapter.pages; i++) {
       const img = document.createElement('img');
-      img.src = url;
+      img.src = `https://raw.githubusercontent.com/nurananto/NuranantoScanlation/main/manga/${mangaId}/${chapterNum}/${i}.jpg`;
+      img.alt = `Page ${i}`;
       img.loading = 'lazy';
-      img.alt = `Page ${url}`;
+      img.classList.add('manga-page');
       container.appendChild(img);
-    });
+    }
 
+    console.log(`Loaded ${chapter.pages} pages for chapter ${chapterNum}`);
   } catch (error) {
-    console.error('Error loading images:', error);
-    throw error;
+    console.error('Error loading chapter images:', error);
   }
 }
 
+// ===========================
+// RECORD VIEWER COUNT IN FIREBASE
+// ===========================
+async function recordViewer() {
+  try {
+    const { ref, get, set, update, increment } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
+    const viewerRef = ref(db, `viewers/${mangaId}`);
+
+    const snapshot = await get(viewerRef);
+    if (snapshot.exists()) {
+      await update(viewerRef, { count: increment(1) });
+    } else {
+      await set(viewerRef, { count: 1 });
+    }
+
+    console.log('Viewer count updated for:', mangaId);
+  } catch (error) {
+    console.warn('Failed to record viewer:', error);
+  }
+}
 
 // ===========================
 // LOADING INDICATOR
