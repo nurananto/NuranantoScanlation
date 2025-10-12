@@ -1,0 +1,73 @@
+name: Update Manga List
+
+on:
+  repository_dispatch:
+    types: [manga_updated]
+  workflow_dispatch:
+
+jobs:
+  update-list:
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      
+      - name: Create manga-configs folder
+        run: mkdir -p manga-configs
+      
+      - name: Download manga config
+        run: |
+          CONFIG_URL="${{ github.event.client_payload.config_url }}"
+          MANGA_ID="${{ github.event.client_payload.manga_id }}"
+          
+          echo "Downloading config from: $CONFIG_URL"
+          
+          curl -o "manga-configs/${MANGA_ID}.json" "$CONFIG_URL"
+          
+          echo "Config downloaded successfully!"
+          cat "manga-configs/${MANGA_ID}.json"
+      
+      - name: Update manga-list.json
+        run: |
+          MANGA_ID="${{ github.event.client_payload.manga_id }}"
+          MANGA_TITLE="${{ github.event.client_payload.manga_title }}"
+          REPO_NAME="${{ github.event.client_payload.repo_name }}"
+          
+          if [ ! -f "manga-list.json" ]; then
+            echo '{}' > manga-list.json
+          fi
+          
+          jq --arg id "$MANGA_ID" \
+             --arg title "$MANGA_TITLE" \
+             --arg repo "$REPO_NAME" \
+             --arg config_url "${{ github.event.client_payload.config_url }}" \
+             '.[$id] = {
+               title: $title,
+               repo: $repo,
+               config_url: $config_url,
+               last_updated: now | strftime("%Y-%m-%d %H:%M:%S")
+             }' manga-list.json > manga-list.tmp.json
+          
+          mv manga-list.tmp.json manga-list.json
+          
+          echo "Updated manga-list.json:"
+          cat manga-list.json
+      
+      - name: Commit changes
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          git add manga-list.json manga-configs/
+          
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "📚 Update manga list: ${{ github.event.client_payload.manga_title }}"
+            git push
+            echo "Manga list updated!"
+          fi
