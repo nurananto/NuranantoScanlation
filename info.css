@@ -179,7 +179,7 @@ header {
 
 .visitor-icon {
   font-size: 1.5rem;
-  color: #3498db;
+  filter: grayscale(100%) brightness(2);
 }
 
 .visitor-label {
