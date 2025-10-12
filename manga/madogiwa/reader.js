@@ -133,45 +133,27 @@ async function loadMangaData() {
 // ===========================
 // LOAD CHAPTER
 // ===========================
-async function loadChapter(chapterNum) {
-  const chapter = chapters.find(ch => ch.num === chapterNum);
-  
-  if (!chapter) {
-    alert('Chapter tidak ditemukan!');
-    return;
-  }
-  
-  if (chapter.locked) {
-    if (confirm('Chapter ini terkunci! Dukung kami di Trakteer untuk membaca lebih awal. Klik OK untuk menuju halaman Trakteer.')) {
-      window.open('https://trakteer.id/NuranantoScanlation', '_blank');
-    }
-    return;
-  }
-  
-  showLoading();
-  
+async function loadChapterImages(chapterNum, pageCount) {
   try {
-    await loadChapterImages(chapterNum, chapter.pages);
-    
-    currentChapterNum = chapterNum;
-    totalPages = imageUrls.length;
-    currentPage = 1;
-    
-    const chapterTitle = chapter.title;
-    document.getElementById('currentChapter').textContent = chapterTitle;
-    document.getElementById('currentChapter2').textContent = chapterTitle;
-    
-    updatePageIndicator();
-    loadMangaPages();
-    updateNavigationButtons();
-    
+    imageUrls = [];
+
+    // Contoh lokasi gambar:
+    // https://nurananto.github.io/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/manga/madogiwa/4/1.jpg
+    for (let i = 1; i <= pageCount; i++) {
+      const imageUrl = `https://nurananto.github.io/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/manga/${mangaId}/${chapterNum}/${i}.jpg`;
+      imageUrls.push(imageUrl);
+    }
+
+    if (imageUrls.length === 0) throw new Error('Tidak ada gambar yang ditemukan di GitHub');
+
+    console.log(`Loaded ${imageUrls.length} pages for chapter ${chapterNum}`);
+
   } catch (error) {
-    console.error('Error loading chapter:', error);
-    alert('Gagal memuat chapter: ' + error.message);
-  } finally {
-    hideLoading();
+    console.error('Error loading images:', error);
+    throw error;
   }
 }
+
 
 // ===========================
 // LOAD CHAPTER IMAGES FROM FIREBASE STORAGE
