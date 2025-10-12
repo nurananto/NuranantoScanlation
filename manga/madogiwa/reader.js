@@ -158,55 +158,43 @@ async function loadChapterImages(chapterNum, pageCount) {
 // ===========================
 // LOAD CHAPTER IMAGES FROM FIREBASE STORAGE
 // ===========================
+// ===========================
+// LOAD CHAPTER IMAGES FROM GITHUB
+// ===========================
 async function loadChapterImages(chapterNum, pageCount) {
   try {
-    const { ref: storageReference, getDownloadURL } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-storage.js');
-    
     imageUrls = [];
-    
-    // Load all pages
+
+    // Loop semua halaman sesuai jumlah halaman
     for (let i = 1; i <= pageCount; i++) {
-      const imagePath = `mangas/${mangaId}/${chapterNum}/${i}.jpg`;
-      const imageRef = storageReference(storage, imagePath);
-      
-      try {
-        const url = await getDownloadURL(imageRef);
-        imageUrls.push(url);
-      } catch (error) {
-        // Try alternative extensions
-        const extensions = ['png', 'jpeg', 'webp'];
-        let found = false;
-        
-        for (const ext of extensions) {
-          try {
-            const altPath = `mangas/${mangaId}/${chapterNum}/${i}.${ext}`;
-            const altRef = storageReference(storage, altPath);
-            const url = await getDownloadURL(altRef);
-            imageUrls.push(url);
-            found = true;
-            break;
-          } catch (e) {
-            continue;
-          }
-        }
-        
-        if (!found) {
-          console.warn(`Could not load page ${i}`);
-        }
-      }
+      const imageUrl = `https://nurananto.github.io/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/manga/madogiwa/${chapterNum}/${i}.jpg`;
+      imageUrls.push(imageUrl);
     }
-    
+
     if (imageUrls.length === 0) {
-      throw new Error('Tidak ada gambar yang berhasil dimuat');
+      throw new Error('Tidak ada gambar yang ditemukan di GitHub');
     }
-    
+
     console.log(`Loaded ${imageUrls.length} pages for chapter ${chapterNum}`);
-    
+
+    // Render ke halaman
+    const container = document.getElementById('imageContainer');
+    container.innerHTML = '';
+
+    imageUrls.forEach((url) => {
+      const img = document.createElement('img');
+      img.src = url;
+      img.loading = 'lazy';
+      img.alt = `Page ${url}`;
+      container.appendChild(img);
+    });
+
   } catch (error) {
     console.error('Error loading images:', error);
     throw error;
   }
 }
+
 
 // ===========================
 // LOADING INDICATOR
