@@ -175,11 +175,7 @@ header {
   border-radius: 12px;
   border: 2px solid rgba(52, 152, 219, 0.3);
   font-size: 1.1rem;
-}
-
-.visitor-icon {
-  font-size: 1.5rem;
-  filter: grayscale(100%) brightness(2);
+  max-width: 350px;
 }
 
 .visitor-label {
@@ -554,10 +550,7 @@ header {
   /* Visitor count di mobile */
   .div11 {
     font-size: 1rem;
-  }
-
-  .visitor-icon {
-    font-size: 1.3rem;
+    max-width: 100%;
   }
 
   .visitor-count {
