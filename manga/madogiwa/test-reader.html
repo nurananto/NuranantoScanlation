@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test Reader - Offline</title>
+  <link rel="stylesheet" href="reader.css">
+</head>
+<body>
+  <div class="parent">
+    <div class="div1">
+      <button class="btn-title" onclick="backToInfo()">
+        <span class="back-icon">←</span>
+        <span class="manga-title">TEST MODE</span>
+      </button>
+    </div>
+
+    <div class="div2">
+      <button class="btn-chapter" onclick="showChapterList()" id="currentChapter">
+        Chapter 1
+      </button>
+    </div>
+
+    <div class="div3">
+      <button class="btn-mode" onclick="toggleReadMode()" id="modeBtn">
+        <span class="mode-icon">⬇</span>
+        <span class="mode-text">Webtoon</span>
+      </button>
+    </div>
+
+    <div class="div4">
+      <button class="btn-nav" onclick="prevChapter()">
+        ⬅️ <span class="nav-text">Previous</span>
+      </button>
+    </div>
+
+    <div class="div5">
+      <button class="btn-nav" onclick="nextChapter()">
+        <span class="nav-text">Next</span> ➡️
+      </button>
+    </div>
+
+    <div class="div6">
+      <div class="manga-container" id="mangaContainer"></div>
+      <div class="page-indicator">
+        <span id="pageInfo">01/28</span>
+      </div>
+    </div>
+
+    <div class="div7">
+      <button class="btn-chapter" onclick="showChapterList()" id="currentChapter2">
+        Chapter 1
+      </button>
+    </div>
+
+    <div class="div8">
+      <button class="btn-mode" onclick="toggleReadMode()" id="modeBtn2">
+        <span class="mode-icon">⬇</span>
+        <span class="mode-text">Webtoon</span>
+      </button>
+    </div>
+
+    <div class="div9">
+      <button class="btn-nav" onclick="prevChapter()">
+        ⬅️ <span class="nav-text">Previous</span>
+      </button>
+    </div>
+
+    <div class="div10">
+      <button class="btn-nav" onclick="nextChapter()">
+        <span class="nav-text">Next</span> ➡️
+      </button>
+    </div>
+  </div>
+
+  <div id="chapterModal" class="modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2>Pilih Chapter (TEST)</h2>
+        <button class="close-btn" onclick="closeChapterList()">&times;</button>
+      </div>
+      <div class="modal-body" id="chapterListContainer"></div>
+    </div>
+  </div>
+
+  <script src="test-reader.js"></script>
+</body>
+</html>

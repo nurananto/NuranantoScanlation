@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Madogiwa Henshuu - Nurananto Scanlation (TEST)</title>
+  <link rel="stylesheet" href="info.css">
+  <style>
+    /* Test Mode Indicator */
+    body::before {
+      content: "🧪 TEST MODE";
+      position: fixed;
+      top: 10px;
+      right: 10px;
+      background: #ff9800;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-weight: bold;
+      font-size: 14px;
+      z-index: 9999;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <img src="../../logo.png" alt="Nurananto Scanlation" class="site-logo">
+      
+      <a href="https://web.facebook.com/NuranantoScanlation" target="_blank" class="facebook-link-header">
+        <svg class="facebook-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        <span class="facebook-text">Nurananto Scanlation</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="parent">
+    <!-- Cover - Class 1 -->
+    <div class="div1">
+      <img src="../../covers/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-j-ce74d132-81f0-491a-bb19-83de73746c8e.jpg" alt="Madogiwa Cover" class="cover-img">
+    </div>
+
+    <!-- Title - Class 2 -->
+    <div class="div2">
+      Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta
+    </div>
+
+    <!-- Author - Class 4 -->
+    <div class="div4">
+      <strong>Author:</strong>
+      <a href="#" onclick="searchAuthor('Ibarakino')">Ibarakino</a>
+    </div>
+
+    <!-- Artist - Class 11 -->
+    <div class="div11">
+      <strong>Artist:</strong>
+      <a href="#" onclick="searchArtist('Usaotomo')">Usaotomo</a>
+    </div>
+
+    <!-- Genre - Class 12 -->
+    <div class="div12">
+      <span class="genre-tag" onclick="searchGenre('Romance')">Romance</span>
+      <span class="genre-tag" onclick="searchGenre('Comedy')">Comedy</span>
+      <span class="genre-tag" onclick="searchGenre('Drama')">Drama</span>
+      <span class="genre-tag" onclick="searchGenre('Slice of Life')">Slice of Life</span>
+      <span class="genre-tag" onclick="searchGenre('School Life')">School Life</span>
+    </div>
+
+    <!-- Description - Class 6 -->
+    <div class="div6">
+      <h3>Description</h3>
+      <p>
+        "Kalau kamu membiarkan kami menginap... kamu boleh melakukan hal apapun ke kita."
+      </p>
+      <br>
+      <p>
+        Mitsuhiko Okaya, seorang pria biasa, dikhianati oleh istrinya dan kouhainya di kantor. 
+        Di tempat kerja, dia dihina sebagai editor tak berguna dan tenggelam dalam keputusasaan, 
+        sampai suatu hari di hadapannya muncul sepasang gadis kembar berseragam SMA yang seharusnya asing, 
+        tapi entah kenapa terasa familiar.
+      </p>
+      <br>
+      <p>
+        Si adik, Akari, ceria, aktif, dan suka menggoda dengan santai, sedangkan kakaknya, Nanako, 
+        pemalu dan canggung, tapi diam-diam mesum.
+      </p>
+      <br>
+      <p>
+        ...Mereka ternyata adalah mantan murid bimbelnya saat masa kuliah dulu.
+      </p>
+    </div>
+
+    <!-- Button Baca Sekarang - Class 7 -->
+    <button class="div7" onclick="readChapter(1)">
+      📖 Baca Sekarang
+    </button>
+
+    <!-- Button Mangadex - Class 8 -->
+    <button class="div8" onclick="openMangadex()">
+      🔶 Baca di Mangadex
+    </button>
+
+    <!-- Button Raw - Class 9 -->
+    <button class="div9" onclick="openRaw()">
+      🌐 Baca Raw
+    </button>
+
+    <!-- Chapter List - Class 10 -->
+    <div class="div10">
+      <div class="chapter-list-title">Loading chapters...</div>
+      <!-- Chapter list akan di-generate oleh JavaScript dari GitHub -->
+    </div>
+  </div>
+
+  <!-- Firebase SDK -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-database-compat.js"></script>
+  
+  <!-- Custom Script - TEST MODE -->
+  <script src="test-info.js"></script>
+</body>
+</html>
