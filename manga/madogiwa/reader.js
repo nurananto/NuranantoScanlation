@@ -80,36 +80,40 @@ window.addEventListener('DOMContentLoaded', async function() {
 async function loadMangaData() {
   try {
     showLoading();
-    
-    const { ref: dbRef, get, child } = await import('https://www.gstatic.com/firebasejs/10.7.1/firebase-database.js');
-    
-    // Get manga metadata
-    const mangaRef = dbRef(db, `mangas/${mangaId}`);
-    const snapshot = await get(mangaRef);
-    
-    if (!snapshot.exists()) {
-      throw new Error('Manga tidak ditemukan');
-    }
-    
-    const mangaData = snapshot.val();
-    
-    // Set manga title
-    document.title = mangaData.title || 'Manga Reader';
-    
-    // Load chapters
-    chapters = [];
-    if (mangaData.chapters) {
-      Object.keys(mangaData.chapters).forEach(chapterNum => {
-        const chapterData = mangaData.chapters[chapterNum];
-        chapters.push({
-          num: chapterNum,
-          title: chapterData.title || `Chapter ${chapterNum}`,
-          pages: chapterData.pages || 0,
-          locked: chapterData.locked || false
-        });
-      });
-    }
-    
+
+    // 🔹 Ganti URL berikut dengan URL raw dari file kamu di GitHub
+    const response = await fetch(
+      "https://raw.githubusercontent.com/nurananto/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/main/chapters.json"
+    );
+
+    if (!response.ok) throw new Error("Gagal mengambil data JSON dari GitHub");
+
+    const mangaData = await response.json();
+
+    // Judul tab
+    document.title = mangaData.title || "Manga Reader";
+
+    // Parsing daftar chapter
+    chapters = Object.entries(mangaData.chapters || {}).map(([num, data]) => ({
+      num,
+      title: data.title || `Chapter ${num}`,
+      pages: data.pages || 0,
+      locked: data.locked || false,
+    }));
+
+    // Urutkan berdasarkan nomor
+    chapters.sort((a, b) => parseFloat(a.num) - parseFloat(b.num));
+
+    console.log(`Loaded ${chapters.length} chapters`, chapters);
+
+    hideLoading();
+  } catch (error) {
+    console.error("Error loading manga data:", error);
+    alert("Gagal memuat data manga: " + error.message);
+    hideLoading();
+  }
+}
+
     // Sort chapters by number
     chapters.sort((a, b) => {
       const numA = parseFloat(a.num);
