@@ -1,0 +1,52 @@
+{
+  "manga_id": "madogiwa",
+  "title": "Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta",
+  "locked_chapters_ahead": 2,
+  "chapters": {
+    "1": {
+      "pages": 32,
+      "locked": false
+    },
+    "2.1": {
+      "pages": 15,
+      "locked": false
+    },
+    "2.2": {
+      "pages": 16,
+      "locked": false
+    },
+    "3.1": {
+      "pages": 13,
+      "locked": false
+    },
+    "3.2": {
+      "pages": 15,
+      "locked": false
+    },
+    "4.1": {
+      "pages": 13,
+      "locked": false
+    },
+    "4.2": {
+      "pages": 21,
+      "locked": false
+    },
+    "5.1": {
+      "pages": 14,
+      "locked": false
+    },
+    "5.2": {
+      "pages": 14,
+      "locked": false
+    },
+    "6.2": {
+      "pages": 0,
+      "locked": true
+    },
+    "7.2": {
+      "pages": 0,
+      "locked": true
+    }
+  },
+  "last_updated": "2025-10-12 12:41:53"
+}
