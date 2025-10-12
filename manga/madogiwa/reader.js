@@ -81,7 +81,6 @@ async function loadMangaData() {
   try {
     showLoading();
 
-    // 🔹 Ganti URL berikut dengan URL raw dari file kamu di GitHub
     const response = await fetch(
       "https://raw.githubusercontent.com/nurananto/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/main/chapters.json"
     );
@@ -90,10 +89,8 @@ async function loadMangaData() {
 
     const mangaData = await response.json();
 
-    // Judul tab
     document.title = mangaData.title || "Manga Reader";
 
-    // Parsing daftar chapter
     chapters = Object.entries(mangaData.chapters || {}).map(([num, data]) => ({
       num,
       title: data.title || `Chapter ${num}`,
@@ -101,18 +98,18 @@ async function loadMangaData() {
       locked: data.locked || false,
     }));
 
-    // Urutkan berdasarkan nomor
     chapters.sort((a, b) => parseFloat(a.num) - parseFloat(b.num));
 
     console.log(`Loaded ${chapters.length} chapters`, chapters);
-
     hideLoading();
+
   } catch (error) {
     console.error("Error loading manga data:", error);
     alert("Gagal memuat data manga: " + error.message);
     hideLoading();
   }
 }
+
 
     // Sort chapters by number
     chapters.sort((a, b) => {
