@@ -366,6 +366,13 @@ header {
   transform: translateX(5px);
 }
 
+.chapter-item.locked .chapter-title::after {
+  content: "🔒";
+  font-size: 1rem;
+  margin-left: 8px;
+  opacity: 0.8;
+}
+
 /* Judul Chapter */
 .chapter-title {
   font-weight: 600;
