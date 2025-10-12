@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Manga Title - Manga Reader</title>
+  <link rel="stylesheet" href="info.css">
+</head>
+<body>
+  <!-- Header -->
+  <header>
+    <div class="header-content">
+      <img src="logo.png" alt="Your Scanlation Group" class="site-logo">
+      
+      <a href="https://web.facebook.com/your-page" target="_blank" class="facebook-link-header">
+        <svg class="facebook-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+          <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+        </svg>
+        <span class="facebook-text">Your Scanlation Group</span>
+      </a>
+    </div>
+  </header>
+
+  <div class="parent">
+    <!-- Cover - Class 1 -->
+    <div class="div1">
+      <img src="https://via.placeholder.com/350x480/2c3e50/ffffff?text=Manga+Cover" alt="Manga Cover" class="cover-img">
+    </div>
+
+    <!-- Title - Class 2 -->
+    <div class="div2">
+      Madogiwa Henshuu to Bakani Sareta Ore ga
+    </div>
+
+    <!-- Author - Class 4 -->
+    <div class="div4">
+      <strong>Author:</strong>
+      <a href="#" onclick="searchAuthor('Author Name')">Author Name</a>
+    </div>
+
+    <!-- Artist - Class 11 -->
+    <div class="div11">
+      <strong>Artist:</strong>
+      <a href="#" onclick="searchArtist('Artist Name')">Artist Name</a>
+    </div>
+
+    <!-- Genre - Class 12 -->
+    <div class="div12">
+      <span class="genre-tag" onclick="searchGenre('Romance')">Romance</span>
+      <span class="genre-tag" onclick="searchGenre('Comedy')">Comedy</span>
+      <span class="genre-tag" onclick="searchGenre('Slice of Life')">Slice of Life</span>
+      <span class="genre-tag" onclick="searchGenre('Shounen')">Shounen</span>
+    </div>
+
+    <!-- Description - Class 6 -->
+    <div class="div6">
+      <h3>Description</h3>
+      <p>
+        Write your manga description here. This is a placeholder text that describes the story, 
+        plot, and main characters. You can add multiple paragraphs to provide more details about 
+        the manga series.
+      </p>
+      <br>
+      <p>
+        Add more information about the manga's themes, setting, and what makes it unique. 
+        This section can contain spoiler-free details to attract readers.
+      </p>
+    </div>
+
+    <!-- Button Baca Sekarang - Class 7 -->
+    <button class="div7" onclick="readChapter('1')">
+      📖 Baca Sekarang
+    </button>
+
+    <!-- Button Mangadex - Class 8 -->
+    <button class="div8" onclick="openMangadex()">
+      🔶 Baca di Mangadex
+    </button>
+
+    <!-- Button Raw - Class 9 -->
+    <button class="div9" onclick="openRaw()">
+      🌐 Baca Raw
+    </button>
+
+    <!-- Chapter List - Class 10 -->
+    <div class="div10">
+      <div class="chapter-list-title">Chapter List</div>
+      
+      <div class="chapter-item locked" data-chapter="5" onclick="unlockChapter('5')">
+        <span class="chapter-title">Chapter 5</span>
+        <div class="chapter-locked-info" style="color: #ffd700; font-size: 0.85rem; display: flex; align-items: center; gap: 6px;">
+          <span>🔒</span>
+          <span>Coming Soon</span>
+        </div>
+      </div>
+
+      <div class="chapter-item" data-chapter="4" onclick="readChapter('4')">
+        <span class="chapter-title">Chapter 4</span>
+        <div class="chapter-views loading" id="views-4">
+          <span class="view-icon">👁️</span>
+          <span class="view-count">...</span>
+          <span class="view-label">views</span>
+        </div>
+      </div>
+
+      <div class="chapter-item" data-chapter="3" onclick="readChapter('3')">
+        <span class="chapter-title">Chapter 3</span>
+        <div class="chapter-views loading" id="views-3">
+          <span class="view-icon">👁️</span>
+          <span class="view-count">...</span>
+          <span class="view-label">views</span>
+        </div>
+      </div>
+
+      <button class="show-all-btn" onclick="toggleChapters()">
+        Show All Chapters
+      </button>
+
+      <div id="olderChapters" style="display: none;">
+        <div class="chapter-item" data-chapter="2" onclick="readChapter('2')">
+          <span class="chapter-title">Chapter 2</span>
+          <div class="chapter-views loading" id="views-2">
+            <span class="view-icon">👁️</span>
+            <span class="view-count">...</span>
+            <span class="view-label">views</span>
+          </div>
+        </div>
+
+        <div class="chapter-item" data-chapter="1" onclick="readChapter('1')">
+          <span class="chapter-title">Chapter 1</span>
+          <div class="chapter-views loading" id="views-1">
+            <span class="view-icon">👁️</span>
+            <span class="view-count">...</span>
+            <span class="view-label">views</span>
+          </div>
+        </div>
+
+        <div class="chapter-item" data-chapter="0" onclick="readChapter('0')">
+          <span class="chapter-title">Chapter 0 - Prologue</span>
+          <div class="chapter-views loading" id="views-0">
+            <span class="view-icon">👁️</span>
+            <span class="view-count">...</span>
+            <span class="view-label">views</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Custom Script - NO FIREBASE! -->
+  <script src="info.js"></script>
+</body>
+</html>
