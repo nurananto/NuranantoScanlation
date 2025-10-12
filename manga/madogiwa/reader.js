@@ -110,8 +110,7 @@ async function loadMangaData() {
   }
 }
 
-
-    // Sort chapters by number
+// Sort chapters by number
     chapters.sort((a, b) => {
       const numA = parseFloat(a.num);
       const numB = parseFloat(b.num);
