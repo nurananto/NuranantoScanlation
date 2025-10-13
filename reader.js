@@ -19,6 +19,7 @@ let totalPages = 0;
 let readMode = 'vertical';
 let imageUrls = [];
 let mangaId = '';
+let loadedImages = 0;
 
 // ===========================
 // VIEW COUNTER
@@ -176,6 +177,7 @@ async function loadChapter(chapterNum) {
     currentChapterNum = chapterNum;
     totalPages = imageUrls.length;
     currentPage = 1;
+    loadedImages = 0;
     
     const chapterTitle = `Chapter ${chapterNum}`;
     document.getElementById('currentChapter').textContent = chapterTitle;
@@ -242,7 +244,7 @@ function hideLoading() {
 }
 
 // ===========================
-// LOAD MANGA PAGES
+// LOAD MANGA PAGES (LAZY LOADING)
 // ===========================
 function loadMangaPages() {
   const container = document.getElementById('mangaContainer');
@@ -251,9 +253,32 @@ function loadMangaPages() {
   imageUrls.forEach((url, index) => {
     const img = document.createElement('img');
     img.className = 'manga-page';
-    img.src = url;
     img.alt = `Page ${index + 1}`;
-    img.loading = 'lazy';
+    
+    // LAZY LOADING: Load hanya 3 gambar pertama, sisanya lazy
+    if (index < 3) {
+      img.src = url;
+      img.loading = 'eager';
+    } else {
+      img.setAttribute('data-src', url);
+      img.loading = 'lazy';
+      
+      // Intersection Observer untuk lazy loading
+      const observer = new IntersectionObserver((entries, obs) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const lazyImage = entry.target;
+            lazyImage.src = lazyImage.getAttribute('data-src');
+            lazyImage.removeAttribute('data-src');
+            obs.unobserve(lazyImage);
+          }
+        });
+      }, {
+        rootMargin: '200px'
+      });
+      
+      observer.observe(img);
+    }
     
     img.onerror = function() {
       console.error(`Failed to load image: ${url}`);
@@ -265,9 +290,15 @@ function loadMangaPages() {
       this.alt = `Failed to load page ${index + 1}`;
     };
     
+    img.onload = function() {
+      loadedImages++;
+      console.log(`Loaded ${loadedImages}/${totalPages} images`);
+    };
+    
     container.appendChild(img);
   });
   
+  // Scroll ke atas setelah load chapter baru
   container.scrollTop = 0;
   container.scrollLeft = 0;
   
@@ -288,13 +319,24 @@ function setupHorizontalNavigation() {
   container.removeEventListener('touchstart', handleTouchStart);
   container.removeEventListener('touchend', handleTouchEnd);
   
-  container.addEventListener('click', handleContainerClick);
-  container.addEventListener('touchstart', handleTouchStart);
-  container.addEventListener('touchend', handleTouchEnd);
+  // Deteksi apakah device menggunakan touch
+  const isTouchDevice = 'ontouchstart' in window || navigator.maxTouchPoints > 0;
+  
+  if (isTouchDevice) {
+    // Untuk touch device, hanya gunakan touch events
+    container.addEventListener('touchstart', handleTouchStart, { passive: true });
+    container.addEventListener('touchend', handleTouchEnd, { passive: true });
+  } else {
+    // Untuk non-touch device (desktop), gunakan click events
+    container.addEventListener('click', handleContainerClick);
+  }
 }
 
 let touchStartX = 0;
 let touchEndX = 0;
+let touchStartY = 0;
+let touchEndY = 0;
+let touchStartTime = 0;
 
 function handleContainerClick(e) {
   if (readMode !== 'horizontal') return;
@@ -303,80 +345,143 @@ function handleContainerClick(e) {
   const containerWidth = container.clientWidth;
   const clickX = e.clientX;
   
-  if (clickX < containerWidth * 0.3) {
+  // Area klik: 40% kiri untuk previous, 40% kanan untuk next, 20% tengah tidak ada aksi
+  if (clickX < containerWidth * 0.4) {
     scrollToPreviousPage();
-  } else if (clickX > containerWidth * 0.7) {
+  } else if (clickX > containerWidth * 0.6) {
     scrollToNextPage();
   }
 }
 
 function handleTouchStart(e) {
   touchStartX = e.changedTouches[0].screenX;
+  touchStartY = e.changedTouches[0].screenY;
+  touchStartTime = Date.now();
 }
 
 function handleTouchEnd(e) {
   if (readMode !== 'horizontal') return;
   
   touchEndX = e.changedTouches[0].screenX;
-  handleSwipe();
+  touchEndY = e.changedTouches[0].screenY;
+  const touchDuration = Date.now() - touchStartTime;
+  
+  handleGesture(touchDuration);
 }
 
-function handleSwipe() {
-  if (touchEndX > touchStartX + 50) {
+function handleGesture(duration) {
+  const deltaX = touchEndX - touchStartX;
+  const deltaY = touchEndY - touchStartY;
+  const absDeltaX = Math.abs(deltaX);
+  const absDeltaY = Math.abs(deltaY);
+  
+  // Threshold untuk swipe dan tap
+  const SWIPE_THRESHOLD = 50;
+  const TAP_THRESHOLD = 10;
+  const TAP_DURATION = 200; // ms
+  
+  // Deteksi TAP (sentuhan singkat tanpa gerakan)
+  if (absDeltaX < TAP_THRESHOLD && absDeltaY < TAP_THRESHOLD && duration < TAP_DURATION) {
+    handleTap(touchStartX);
+    return;
+  }
+  
+  // Deteksi SWIPE (gerakan horizontal yang jelas)
+  // Hanya proses jika gerakan lebih horizontal daripada vertical
+  if (absDeltaX > absDeltaY && absDeltaX > SWIPE_THRESHOLD) {
+    if (deltaX > 0) {
+      // Swipe ke kanan = Previous
+      scrollToPreviousPage();
+    } else {
+      // Swipe ke kiri = Next
+      scrollToNextPage();
+    }
+  }
+}
+
+function handleTap(tapX) {
+  const container = document.getElementById('mangaContainer');
+  const containerRect = container.getBoundingClientRect();
+  const containerWidth = containerRect.width;
+  const relativeX = tapX - containerRect.left;
+  
+  // Area tap: 40% kiri untuk previous, 40% kanan untuk next, 20% tengah tidak ada aksi
+  if (relativeX < containerWidth * 0.4) {
     scrollToPreviousPage();
-  } else if (touchEndX < touchStartX - 50) {
+  } else if (relativeX > containerWidth * 0.6) {
     scrollToNextPage();
   }
 }
 
-function scrollToNextPage() {
-  const container = document.getElementById('mangaContainer');
-  const images = container.querySelectorAll('.manga-page');
+function handleSwipe() {
+  // Hitung delta X dan Y
+  const deltaX = Math.abs(touchEndX - touchStartX);
+  const deltaY = Math.abs(touchEndY - touchStartY);
   
-  let currentVisibleIndex = 0;
-  images.forEach((img, index) => {
-    const rect = img.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    
-    if (rect.left >= containerRect.left - 50 && rect.left <= containerRect.left + 50) {
-      currentVisibleIndex = index;
+  // Hanya proses jika gerakan lebih horizontal daripada vertical
+  // Dan minimal swipe 50px
+  if (deltaX > deltaY && deltaX > 50) {
+    if (touchEndX > touchStartX) {
+      // Swipe ke kanan = Previous
+      scrollToPreviousPage();
+    } else {
+      // Swipe ke kiri = Next
+      scrollToNextPage();
     }
-  });
+  }
+}
+
+function scrollToNextPage() {
+  // Gunakan currentPage untuk tracking
+  const currentVisibleIndex = currentPage - 1;
   
-  if (currentVisibleIndex < images.length - 1) {
-    images[currentVisibleIndex + 1].scrollIntoView({ 
-      behavior: 'smooth', 
-      block: 'center', 
-      inline: 'center' 
-    });
-    currentPage = currentVisibleIndex + 2;
+  // Pindah ke halaman berikutnya
+  if (currentVisibleIndex < totalPages - 1) {
+    const nextIndex = currentVisibleIndex + 1;
+    currentPage = nextIndex + 1;
+    
+    // Update display untuk mode manga
+    updateMangaPageDisplay(nextIndex);
+    
     updatePageIndicator();
   }
 }
 
 function scrollToPreviousPage() {
+  // Gunakan currentPage untuk tracking
+  const currentVisibleIndex = currentPage - 1;
+  
+  // Pindah ke halaman sebelumnya
+  if (currentVisibleIndex > 0) {
+    const prevIndex = currentVisibleIndex - 1;
+    currentPage = prevIndex + 1;
+    
+    // Update display untuk mode manga
+    updateMangaPageDisplay(prevIndex);
+    
+    updatePageIndicator();
+  }
+}
+
+// ===========================
+// UPDATE MANGA PAGE DISPLAY
+// ===========================
+function updateMangaPageDisplay(pageIndex) {
   const container = document.getElementById('mangaContainer');
   const images = container.querySelectorAll('.manga-page');
   
-  let currentVisibleIndex = 0;
+  // Sembunyikan semua gambar
   images.forEach((img, index) => {
-    const rect = img.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    
-    if (rect.left >= containerRect.left - 50 && rect.left <= containerRect.left + 50) {
-      currentVisibleIndex = index;
+    if (index === pageIndex) {
+      img.style.display = 'block';
+    } else {
+      img.style.display = 'none';
     }
   });
   
-  if (currentVisibleIndex > 0) {
-    images[currentVisibleIndex - 1].scrollIntoView({ 
-      behavior: 'smooth', 
-      block: 'center', 
-      inline: 'center' 
-    });
-    currentPage = currentVisibleIndex;
-    updatePageIndicator();
-  }
+  // Reset scroll ke atas
+  container.scrollTop = 0;
+  container.scrollLeft = 0;
 }
 
 // ===========================
@@ -391,15 +496,26 @@ function trackScrollPosition() {
   
   indicator.classList.remove('hidden');
   
-  images.forEach((img, index) => {
-    const rect = img.getBoundingClientRect();
-    const containerRect = container.getBoundingClientRect();
-    
-    if (rect.top >= containerRect.top && rect.top <= containerRect.bottom) {
-      currentPage = index + 1;
-      updatePageIndicator();
-    }
-  });
+  const scrollTop = container.scrollTop;
+  const scrollHeight = container.scrollHeight;
+  const clientHeight = container.clientHeight;
+  
+  // Cek jika sudah di bottom (halaman terakhir)
+  if (scrollTop + clientHeight >= scrollHeight - 10) {
+    currentPage = totalPages;
+    updatePageIndicator();
+  } else {
+    // Track halaman berdasarkan posisi gambar
+    images.forEach((img, index) => {
+      const rect = img.getBoundingClientRect();
+      const containerRect = container.getBoundingClientRect();
+      
+      if (rect.top >= containerRect.top && rect.top <= containerRect.bottom) {
+        currentPage = index + 1;
+        updatePageIndicator();
+      }
+    });
+  }
   
   clearTimeout(scrollTimeout);
   scrollTimeout = setTimeout(() => {
@@ -436,6 +552,11 @@ function toggleReadMode() {
     
     container.removeEventListener('scroll', trackScrollPosition);
     
+    // Tampilkan hanya halaman pertama di mode manga
+    updateMangaPageDisplay(0);
+    currentPage = 1;
+    updatePageIndicator();
+    
   } else {
     readMode = 'vertical';
     container.classList.remove('horizontal');
@@ -445,7 +566,16 @@ function toggleReadMode() {
     modeBtn2.querySelector('.mode-icon').textContent = '⬇';
     modeBtn2.querySelector('.mode-text').textContent = 'Webtoon';
     
+    // Tampilkan semua gambar di mode webtoon
+    const images = container.querySelectorAll('.manga-page');
+    images.forEach(img => {
+      img.style.display = 'block';
+    });
+    
     container.addEventListener('scroll', trackScrollPosition);
+    
+    // Scroll ke atas saat ganti mode
+    container.scrollTop = 0;
   }
 }
 
@@ -593,10 +723,22 @@ function backToInfo() {
 document.addEventListener('keydown', function(event) {
   switch(event.key) {
     case 'ArrowLeft':
-      prevChapter();
+      if (readMode === 'horizontal') {
+        // Mode manga: navigasi halaman
+        handleArrowNavigation('left');
+      } else {
+        // Mode webtoon: navigasi chapter
+        prevChapter();
+      }
       break;
     case 'ArrowRight':
-      nextChapter();
+      if (readMode === 'horizontal') {
+        // Mode manga: navigasi halaman
+        handleArrowNavigation('right');
+      } else {
+        // Mode webtoon: navigasi chapter
+        nextChapter();
+      }
       break;
     case 'm':
     case 'M':
@@ -611,6 +753,41 @@ document.addEventListener('keydown', function(event) {
       break;
   }
 });
+
+// ===========================
+// ARROW NAVIGATION HANDLER
+// ===========================
+function handleArrowNavigation(direction) {
+  const container = document.getElementById('mangaContainer');
+  const images = container.querySelectorAll('.manga-page');
+  
+  // Gunakan currentPage untuk menentukan halaman aktif
+  const currentVisibleIndex = currentPage - 1;
+  
+  if (direction === 'right') {
+    // Arrow Right: Next page
+    if (currentVisibleIndex < images.length - 1) {
+      const nextIndex = currentVisibleIndex + 1;
+      currentPage = nextIndex + 1;
+      updateMangaPageDisplay(nextIndex);
+      updatePageIndicator();
+    } else {
+      // Sudah di halaman terakhir, pindah ke chapter berikutnya
+      nextChapter();
+    }
+  } else if (direction === 'left') {
+    // Arrow Left: Previous page
+    if (currentVisibleIndex > 0) {
+      const prevIndex = currentVisibleIndex - 1;
+      currentPage = prevIndex + 1;
+      updateMangaPageDisplay(prevIndex);
+      updatePageIndicator();
+    } else {
+      // Sudah di halaman pertama, pindah ke chapter sebelumnya
+      prevChapter();
+    }
+  }
+}
 
 // ===========================
 // IMAGE PROTECTION
