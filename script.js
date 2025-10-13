@@ -10,7 +10,7 @@ const mangaList = [
     readNow: 'https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9NYWRvZ2l3YSUyMEhlbnNodXUlMjB0byUyMEJha2ElMjBuaSUyMFNhcmV0YSUyME9yZSUyMGdhLCUyMEZ1dGFnbyUyMEpLJTIwdG8lMjBEb3VreW8lMjBzdXJ1JTIwS290byUyMG5pJTIwTmF0dGEuanNvbg/',
     mangadex: 'https://mangadex.org/title/a0ecce48-aa4c-48e6-8d9b-90f322a5687a/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-jk-to-doukyo-suru-koto-ni-natta',
     raw: 'https://comic-walker.com/detail/KC_006388_S?episodeType=first'
-  }
+  },
   {
     title: 'Midari ni Tsukasete wa Narimasen',
     cover: 'covers/midari-ni-tsukasete-wa-narimasen-d86648a6-77d3-4a95-a8d2-b296da206065.jpg',
