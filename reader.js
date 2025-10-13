@@ -4,8 +4,9 @@
 const MAIN_REPO = 'nurananto/NuranantoScanlation';
 const MANGA_LIST_URL = `https://raw.githubusercontent.com/${MAIN_REPO}/main/manga-list.json`;
 const STATS_URL = `https://raw.githubusercontent.com/${MAIN_REPO}/main/stats.json`;
-const GITHUB_API_URL = `https://api.github.com/repos/${MAIN_REPO}/dispatches`;
-const GITHUB_TOKEN = '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'; // GANTI INI!
+
+// Google Apps Script Web App URL
+const VIEW_COUNTER_API = 'https://script.google.com/macros/s/AKfycbwd6-DwlpwSy3wgJS5muIi0BTD9N3guq-9zSSHpqkfnnHpvkAiHSK4efJv9643-Z_n9/exec';
 
 // ===========================
 // GLOBAL VARIABLES
@@ -28,32 +29,41 @@ async function incrementChapterView(chapterId) {
   try {
     const sessionKey = `viewed_${mangaId}_${chapterId}`;
     
+    // Cek apakah chapter sudah pernah dilihat di session ini
     if (sessionStorage.getItem(sessionKey)) {
+      console.log('Chapter already viewed in this session');
       return;
     }
     
+    // Tandai sebagai sudah dilihat
     sessionStorage.setItem(sessionKey, 'true');
     
-    await fetch(GITHUB_API_URL, {
+    // Prepare data
+    const viewData = {
+      manga_id: mangaId,
+      chapter: chapterId,
+      timestamp: new Date().toISOString()
+    };
+    
+    console.log('Sending view data:', viewData);
+    
+    // Kirim ke Google Apps Script API dengan redirect: 'follow'
+    const response = await fetch(VIEW_COUNTER_API, {
       method: 'POST',
       headers: {
-        'Accept': 'application/vnd.github.v3+json',
-        'Authorization': `token ${GITHUB_TOKEN}`,
-        'Content-Type': 'application/json'
+        'Content-Type': 'text/plain;charset=utf-8'
       },
-      body: JSON.stringify({
-        event_type: 'chapter_view',
-        client_payload: {
-          manga_id: mangaId,
-          chapter: chapterId,
-          timestamp: new Date().toISOString()
-        }
-      })
+      body: JSON.stringify(viewData),
+      redirect: 'follow',
+      mode: 'no-cors'
     });
     
-    console.log('View counted for chapter:', chapterId);
+    // Karena mode no-cors, kita tidak bisa baca response
+    // Tapi request tetap terkirim ke server
+    console.log('✅ View counting request sent for chapter:', chapterId);
+    
   } catch (error) {
-    console.error('Error incrementing view:', error);
+    console.error('❌ Error incrementing view:', error);
   }
 }
 
@@ -303,7 +313,8 @@ function loadMangaPages() {
   container.scrollLeft = 0;
   
   if (readMode === 'vertical') {
-    container.addEventListener('scroll', trackScrollPosition);
+    container.removeEventListener('scroll', handleWebtoonScroll);
+    container.addEventListener('scroll', handleWebtoonScroll);
   }
   
   setupHorizontalNavigation();
@@ -444,6 +455,9 @@ function scrollToNextPage() {
     updateMangaPageDisplay(nextIndex);
     
     updatePageIndicator();
+  } else {
+    // Sudah di halaman terakhir, pindah ke chapter berikutnya
+    nextChapter();
   }
 }
 
@@ -460,6 +474,9 @@ function scrollToPreviousPage() {
     updateMangaPageDisplay(prevIndex);
     
     updatePageIndicator();
+  } else {
+    // Sudah di halaman pertama, pindah ke chapter sebelumnya
+    prevChapter();
   }
 }
 
@@ -488,6 +505,8 @@ function updateMangaPageDisplay(pageIndex) {
 // TRACK SCROLL POSITION
 // ===========================
 let scrollTimeout;
+let isAtBottom = false;
+let isAtTop = false;
 
 function trackScrollPosition() {
   const container = document.getElementById('mangaContainer');
@@ -504,8 +523,35 @@ function trackScrollPosition() {
   if (scrollTop + clientHeight >= scrollHeight - 10) {
     currentPage = totalPages;
     updatePageIndicator();
+    
+    // Auto next chapter jika sudah di bottom
+    if (!isAtBottom) {
+      isAtBottom = true;
+      setTimeout(() => {
+        if (isAtBottom && scrollTop + clientHeight >= scrollHeight - 10) {
+          nextChapter();
+        }
+      }, 500);
+    }
   } else {
-    // Track halaman berdasarkan posisi gambar
+    isAtBottom = false;
+  }
+  
+  // Cek jika sudah di top (halaman pertama)
+  if (scrollTop <= 10) {
+    currentPage = 1;
+    updatePageIndicator();
+    
+    // Auto previous chapter jika sudah di top dan scroll ke atas
+    if (!isAtTop) {
+      isAtTop = true;
+    }
+  } else {
+    isAtTop = false;
+  }
+  
+  // Track halaman berdasarkan posisi gambar (untuk halaman tengah)
+  if (scrollTop > 10 && scrollTop + clientHeight < scrollHeight - 10) {
     images.forEach((img, index) => {
       const rect = img.getBoundingClientRect();
       const containerRect = container.getBoundingClientRect();
@@ -521,6 +567,24 @@ function trackScrollPosition() {
   scrollTimeout = setTimeout(() => {
     indicator.classList.add('hidden');
   }, 2000);
+}
+
+// Detect scroll up at top for previous chapter
+let lastScrollTop = 0;
+function handleWebtoonScroll() {
+  const container = document.getElementById('mangaContainer');
+  const scrollTop = container.scrollTop;
+  
+  // Detect scroll up
+  if (scrollTop < lastScrollTop && scrollTop <= 10) {
+    // User scrolling up at top, go to previous chapter
+    if (isAtTop) {
+      prevChapter();
+    }
+  }
+  
+  lastScrollTop = scrollTop;
+  trackScrollPosition();
 }
 
 // ===========================
@@ -550,7 +614,7 @@ function toggleReadMode() {
     modeBtn2.querySelector('.mode-icon').textContent = '⬌';
     modeBtn2.querySelector('.mode-text').textContent = 'Manga';
     
-    container.removeEventListener('scroll', trackScrollPosition);
+    container.removeEventListener('scroll', handleWebtoonScroll);
     
     // Tampilkan hanya halaman pertama di mode manga
     updateMangaPageDisplay(0);
@@ -572,7 +636,8 @@ function toggleReadMode() {
       img.style.display = 'block';
     });
     
-    container.addEventListener('scroll', trackScrollPosition);
+    container.removeEventListener('scroll', handleWebtoonScroll);
+    container.addEventListener('scroll', handleWebtoonScroll);
     
     // Scroll ke atas saat ganti mode
     container.scrollTop = 0;
