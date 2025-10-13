@@ -312,6 +312,10 @@ function loadMangaPages() {
   container.scrollTop = 0;
   container.scrollLeft = 0;
   
+  // Reset tracking
+  lastTrackedPage = 0;
+  lastScrollTop = 0;
+  
   if (readMode === 'vertical') {
     container.removeEventListener('scroll', handleWebtoonScroll);
     container.addEventListener('scroll', handleWebtoonScroll);
@@ -507,6 +511,7 @@ function updateMangaPageDisplay(pageIndex) {
 let scrollTimeout;
 let isAtBottom = false;
 let isAtTop = false;
+let lastTrackedPage = 0;
 
 function trackScrollPosition() {
   const container = document.getElementById('mangaContainer');
@@ -519,10 +524,41 @@ function trackScrollPosition() {
   const scrollHeight = container.scrollHeight;
   const clientHeight = container.clientHeight;
   
+  let pageDetected = false;
+  
+  // Track halaman berdasarkan posisi gambar yang paling terlihat
+  images.forEach((img, index) => {
+    const rect = img.getBoundingClientRect();
+    const containerRect = container.getBoundingClientRect();
+    
+    // Hitung berapa persen gambar yang terlihat
+    const visibleTop = Math.max(rect.top, containerRect.top);
+    const visibleBottom = Math.min(rect.bottom, containerRect.bottom);
+    const visibleHeight = Math.max(0, visibleBottom - visibleTop);
+    const imageHeight = rect.height;
+    const visibilityPercent = (visibleHeight / imageHeight) * 100;
+    
+    // Jika gambar terlihat lebih dari 30%, anggap ini halaman aktif
+    if (visibilityPercent > 30) {
+      const newPage = index + 1;
+      
+      // Update hanya jika halaman berubah
+      if (newPage !== lastTrackedPage) {
+        currentPage = newPage;
+        lastTrackedPage = newPage;
+        updatePageIndicator();
+        pageDetected = true;
+      }
+    }
+  });
+  
   // Cek jika sudah di bottom (halaman terakhir)
   if (scrollTop + clientHeight >= scrollHeight - 10) {
-    currentPage = totalPages;
-    updatePageIndicator();
+    if (currentPage !== totalPages) {
+      currentPage = totalPages;
+      lastTrackedPage = totalPages;
+      updatePageIndicator();
+    }
     
     // Auto next chapter jika sudah di bottom
     if (!isAtBottom) {
@@ -539,28 +575,17 @@ function trackScrollPosition() {
   
   // Cek jika sudah di top (halaman pertama)
   if (scrollTop <= 10) {
-    currentPage = 1;
-    updatePageIndicator();
+    if (currentPage !== 1) {
+      currentPage = 1;
+      lastTrackedPage = 1;
+      updatePageIndicator();
+    }
     
-    // Auto previous chapter jika sudah di top dan scroll ke atas
     if (!isAtTop) {
       isAtTop = true;
     }
   } else {
     isAtTop = false;
-  }
-  
-  // Track halaman berdasarkan posisi gambar (untuk halaman tengah)
-  if (scrollTop > 10 && scrollTop + clientHeight < scrollHeight - 10) {
-    images.forEach((img, index) => {
-      const rect = img.getBoundingClientRect();
-      const containerRect = container.getBoundingClientRect();
-      
-      if (rect.top >= containerRect.top && rect.top <= containerRect.bottom) {
-        currentPage = index + 1;
-        updatePageIndicator();
-      }
-    });
   }
   
   clearTimeout(scrollTimeout);
