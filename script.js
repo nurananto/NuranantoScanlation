@@ -4,6 +4,14 @@
 
 const mangaList = [
   {
+    title: 'Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta',
+    cover: 'covers/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-j-ce74d132-81f0-491a-bb19-83de73746c8e.jpg',
+    readFirst: '',
+    readNow: 'https://cubari.moe/read/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9NYWRvZ2l3YSUyMEhlbnNodXUlMjB0byUyMEJha2ElMjBuaSUyMFNhcmV0YSUyME9yZSUyMGdhLCUyMEZ1dGFnbyUyMEpLJTIwdG8lMjBEb3VreW8lMjBzdXJ1JTIwS290byUyMG5pJTIwTmF0dGEuanNvbg/',
+    mangadex: 'https://mangadex.org/title/a0ecce48-aa4c-48e6-8d9b-90f322a5687a/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-jk-to-doukyo-suru-koto-ni-natta',
+    raw: 'https://comic-walker.com/detail/KC_006388_S?episodeType=first'
+  }
+  {
     title: 'Midari ni Tsukasete wa Narimasen',
     cover: 'covers/midari-ni-tsukasete-wa-narimasen-d86648a6-77d3-4a95-a8d2-b296da206065.jpg',
     readFirst: '',
@@ -115,14 +123,6 @@ const mangaList = [
     mangadex: 'https://mangadex.org/title/748d2aab-cea8-4ffb-89b3-e716872cb027/negatte-mo-nai-tsuihou-go-kara-no-slow-life-intai-shita-hazu-ga-nariyuki-de-bishoujo-gal-no-shishou',
     raw: 'https://comic-walker.com/detail/KC_006563_S?episodeType=first'
   },
-  {
-    title: 'Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta',
-    cover: 'covers/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-j-ce74d132-81f0-491a-bb19-83de73746c8e.jpg',
-    readFirst: '',
-    readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
-    mangadex: 'https://mangadex.org/title/a0ecce48-aa4c-48e6-8d9b-90f322a5687a/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-jk-to-doukyo-suru-koto-ni-natta',
-    raw: 'https://comic-walker.com/detail/KC_006388_S?episodeType=first'
-  }
 ];
 
 function createCard(manga) {
