@@ -13,7 +13,7 @@ const MANGA_REPOS = {
 };
 
 // UPDATED: Link Trakteer untuk chapter terkunci
-const TRAKTEER_LINK = 'https://trakteer.id/nurananto';
+const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
 
 let mangaData = null;
 
@@ -124,6 +124,12 @@ function displayMangaInfo() {
     
     // Update Description
     document.getElementById('descriptionContent').textContent = manga.description;
+    
+    // UPDATED: Also update mobile sinopsis in details container
+    const synopsisMobile = document.getElementById('synopsisMobile');
+    if (synopsisMobile) {
+        synopsisMobile.textContent = manga.description;
+    }
     
     // Update Author & Artist
     document.getElementById('authorName').textContent = manga.author;

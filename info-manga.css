@@ -26,6 +26,12 @@ header {
     align-items: center;
 }
 
+.header-buttons {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
 .logo-link {
     display: block;
     text-decoration: none;
@@ -35,6 +41,52 @@ header {
     height: 60px;
     width: auto;
     display: block;
+}
+
+/* GitHub Link di Header - Abu-abu Putih */
+.github-link-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 1rem;
+    height: auto;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(200, 200, 200, 0.5);
+}
+
+.github-link-header:hover {
+    background: rgba(255, 255, 255, 0.1);
+    border-color: #d0d0d0;
+    transform: scale(1.03);
+    box-shadow: 0 4px 20px rgba(200, 200, 200, 0.3);
+}
+
+.github-link-header .github-icon {
+    width: 32px;
+    height: 32px;
+    color: #d0d0d0;
+    transition: color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.github-link-header:hover .github-icon {
+    color: #ffffff;
+}
+
+.github-link-header .github-text {
+    color: #d0d0d0;
+    font-weight: 600;
+    font-size: 1rem;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+}
+
+.github-link-header:hover .github-text {
+    color: #ffffff;
 }
 
 /* Facebook Link di Header - Sejajar dengan Logo */
@@ -122,6 +174,38 @@ header {
     display: flex;
     flex-direction: column;
     gap: 8px;
+}
+
+/* Sinopsis box in mobile details */
+.sinopsis-box-mobile {
+    display: none; /* Hidden by default on desktop */
+}
+
+.sinopsis-text {
+    line-height: 1.8;
+    text-align: justify;
+    white-space: pre-line;
+    max-height: 200px;
+    overflow-y: auto;
+    padding-right: 5px;
+}
+
+.sinopsis-text::-webkit-scrollbar {
+    width: 6px;
+}
+
+.sinopsis-text::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 3px;
+}
+
+.sinopsis-text::-webkit-scrollbar-thumb {
+    background: #555555;
+    border-radius: 3px;
+}
+
+.sinopsis-text::-webkit-scrollbar-thumb:hover {
+    background: #666666;
 }
 
 .info-label {
@@ -516,7 +600,12 @@ header {
         height: 45px;
     }
 
-    /* Facebook - Hanya icon pada mobile */
+    /* GitHub & Facebook - Hanya icon pada mobile */
+    .header-buttons {
+        gap: 8px;
+    }
+
+    .github-link-header,
     .facebook-link-header {
         height: auto;
         width: auto;
@@ -527,11 +616,13 @@ header {
         border-radius: 10px;
     }
 
+    .github-link-header .github-icon,
     .facebook-link-header .facebook-icon {
         width: 26px;
         height: 26px;
     }
 
+    .github-link-header .github-text,
     .facebook-link-header .facebook-text {
         display: none;
     }
@@ -549,6 +640,16 @@ header {
     /* Show Details Button visible on mobile */
     .btn-show-details {
         display: flex;
+    }
+
+    /* Show sinopsis in mobile details container */
+    .sinopsis-box-mobile {
+        display: flex !important;
+    }
+
+    /* Hide desktop description box on mobile */
+    .description-box {
+        display: none;
     }
 
     /* Details Container hidden by default on mobile */
@@ -594,14 +695,26 @@ header {
         display: flex;
     }
     
+    /* UPDATED: Keep chapter items in row layout on mobile */
     .chapter-item {
-        flex-direction: column;
-        align-items: flex-start;
+        flex-direction: row;
+        align-items: center;
         gap: 10px;
+        padding: 12px 15px;
     }
-
-    .description-box {
-        padding: 20px;
+    
+    .chapter-info {
+        flex: 1;
+        min-width: 0; /* Allow text truncation if needed */
+    }
+    
+    .chapter-title-text {
+        font-size: 15px;
+        word-wrap: break-word;
+    }
+    
+    .chapter-views {
+        flex-shrink: 0; /* Prevent views from shrinking */
     }
 
     .chapters-box {
