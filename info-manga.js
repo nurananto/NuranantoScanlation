@@ -1,11 +1,19 @@
 /**
  * INFO-MANGA.JS
- * Load manga data dari repo chapter (remote)
+ * Load manga data dari repo chapter (support multiple manga)
+ * 
+ * CARA PAKAI:
+ * info-manga.html?repo=10nenburi
+ * info-manga.html?repo=MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta
  */
 
-// URL manga.json dari repo chapter
-// Ganti dengan URL manga.json dari repo yang ingin ditampilkan
-const MANGA_JSON_URL = 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/main/manga.json';
+// Mapping repo ke URL manga.json
+const MANGA_REPOS = {
+    '10nenburi': 'https://raw.githubusercontent.com/nurananto/10nenburi/main/manga.json',
+    'madogiwa': 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/main/manga.json',
+    // Tambahkan manga lain di sini
+    // 'nama-pendek': 'URL manga.json'
+};
 
 let mangaData = null;
 
@@ -16,11 +24,40 @@ document.addEventListener('DOMContentLoaded', async () => {
 });
 
 /**
+ * Get manga.json URL from URL parameter
+ */
+function getMangaJsonUrl() {
+    // Ambil parameter ?repo=xxx dari URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoParam = urlParams.get('repo');
+    
+    if (!repoParam) {
+        console.error('❌ Parameter "repo" tidak ditemukan di URL');
+        alert('Error: Parameter repo tidak ditemukan.\n\nContoh: info-manga.html?repo=10nenburi');
+        return null;
+    }
+    
+    const mangaUrl = MANGA_REPOS[repoParam];
+    
+    if (!mangaUrl) {
+        console.error(`❌ Repo "${repoParam}" tidak ditemukan di mapping`);
+        alert(`Error: Repo "${repoParam}" tidak terdaftar.\n\nRepo tersedia: ${Object.keys(MANGA_REPOS).join(', ')}`);
+        return null;
+    }
+    
+    console.log(`📚 Loading manga: ${repoParam}`);
+    return mangaUrl;
+}
+
+/**
  * Load manga.json dari repo chapter
  */
 async function loadMangaFromRepo() {
     try {
-        const response = await fetch(MANGA_JSON_URL);
+        const mangaJsonUrl = getMangaJsonUrl();
+        if (!mangaJsonUrl) return;
+        
+        const response = await fetch(mangaJsonUrl);
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
         }
@@ -32,6 +69,9 @@ async function loadMangaFromRepo() {
         
         // Display chapters
         displayChapters();
+        
+        // Update page title
+        document.title = `${mangaData.manga.title} - Info`;
         
         console.log('✅ Manga data loaded from repo');
         
