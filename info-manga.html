@@ -28,7 +28,11 @@
         <!-- Left Section: Cover & Buttons -->
         <div class="left-section">
             <div class="cover-container">
-                <img id="mangaCover" src="cover.jpg" alt="Manga Cover" class="manga-cover">
+                <!-- FIXED: Loading placeholder instead of hardcoded cover.jpg -->
+                <img id="mangaCover" 
+                     src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='450'%3E%3Crect width='300' height='450' fill='%23f5f5f5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-size='16' font-family='Arial'%3ELoading...%3C/text%3E%3C/svg%3E" 
+                     alt="Manga Cover" 
+                     class="manga-cover">
             </div>
 
             <!-- Title Section untuk Mobile (hidden di desktop) -->
