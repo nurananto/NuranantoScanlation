@@ -26,6 +26,11 @@ header {
     align-items: center;
 }
 
+.logo-link {
+    display: block;
+    text-decoration: none;
+}
+
 .site-logo {
     height: 60px;
     width: auto;
@@ -252,20 +257,34 @@ header {
     gap: 15px;
 }
 
+/* UPDATED: Dynamic font sizes for titles */
 .main-title {
-    font-size: 42px;
+    font-size: clamp(28px, 5vw, 42px); /* Responsive: min 28px, max 42px */
     font-weight: 700;
     color: #ffffff;
     margin-bottom: 10px;
     line-height: 1.2;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .subtitle {
-    font-size: 20px;
+    font-size: clamp(16px, 3vw, 20px); /* Responsive: min 16px, max 20px */
     font-weight: 300;
     color: #b0b0b0;
     line-height: 1.4;
     margin-bottom: 15px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+}
+
+/* Auto-adjust untuk judul yang sangat panjang */
+.main-title.long-title {
+    font-size: clamp(24px, 4vw, 32px);
+}
+
+.subtitle.long-subtitle {
+    font-size: clamp(14px, 2.5vw, 18px);
 }
 
 /* Views Badge - seperti Subscribe button */
@@ -314,7 +333,6 @@ header {
     border-radius: 8px;
     padding: 30px;
     margin-top: 10px;
-    /* Tidak ada max-height dan min-height */
 }
 
 .section-title {
@@ -365,10 +383,7 @@ header {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    /* Tidak ada max-height dan overflow */
 }
-
-/* Hapus custom scrollbar untuk chapter list */
 
 /* Chapter Item - TOMBOL */
 .chapter-item {
@@ -393,17 +408,19 @@ header {
     transform: translateX(3px);
 }
 
-/* Locked Chapter */
+/* Locked Chapter - UPDATED: Tambah visual yang lebih jelas */
 .chapter-locked {
     background-color: #2a2a2a;
     border-color: #dc143c;
     opacity: 0.7;
+    cursor: pointer; /* Tetap clickable */
 }
 
 .chapter-locked:hover {
     background-color: #2f2f2f;
     border-color: #ff1744;
     opacity: 0.85;
+    transform: translateX(5px);
 }
 
 /* Hidden chapters */
@@ -547,7 +564,6 @@ header {
         margin-bottom: 5px;
     }
 
-    /* Kurangi jarak setelah details ke deskripsi pada mobile */
     .left-section {
         margin-bottom: 5px;
     }
@@ -556,15 +572,23 @@ header {
         margin-top: 0;
     }
 
+    /* Mobile font sizes */
     .main-title {
-        font-size: 28px;
+        font-size: clamp(22px, 6vw, 28px);
     }
 
     .subtitle {
-        font-size: 16px;
+        font-size: clamp(14px, 4vw, 16px);
     }
 
-    /* Views badge sudah centered di mobile section */
+    .main-title.long-title {
+        font-size: clamp(18px, 5vw, 24px);
+    }
+
+    .subtitle.long-subtitle {
+        font-size: clamp(12px, 3.5vw, 14px);
+    }
+
     .views-badge {
         margin: 15px auto;
         display: flex;

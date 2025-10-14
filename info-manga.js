@@ -12,6 +12,9 @@ const MANGA_REPOS = {
     'madogiwa': 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/main/manga.json',
 };
 
+// UPDATED: Link Trakteer untuk chapter terkunci
+const TRAKTEER_LINK = 'https://trakteer.id/nurananto';
+
 let mangaData = null;
 
 // Load data saat halaman dimuat
@@ -89,19 +92,30 @@ function displayMangaInfo() {
     const manga = mangaData.manga;
     
     // Update Title - Desktop
-    document.getElementById('mainTitle').textContent = manga.title;
-    document.getElementById('subtitle').textContent = manga.alternativeTitle || '';
+    const mainTitle = document.getElementById('mainTitle');
+    const subtitle = document.getElementById('subtitle');
+    mainTitle.textContent = manga.title;
+    subtitle.textContent = manga.alternativeTitle || '';
+    
+    // UPDATED: Add class untuk judul panjang
+    adjustTitleSize(mainTitle, manga.title);
+    adjustTitleSize(subtitle, manga.alternativeTitle, true);
     
     // Update Title - Mobile
-    document.getElementById('mainTitleMobile').textContent = manga.title;
-    document.getElementById('subtitleMobile').textContent = manga.alternativeTitle || '';
+    const mainTitleMobile = document.getElementById('mainTitleMobile');
+    const subtitleMobile = document.getElementById('subtitleMobile');
+    mainTitleMobile.textContent = manga.title;
+    subtitleMobile.textContent = manga.alternativeTitle || '';
     
-    // Update Cover - FIX: Pakai manga.cover langsung
+    adjustTitleSize(mainTitleMobile, manga.title);
+    adjustTitleSize(subtitleMobile, manga.alternativeTitle, true);
+    
+    // Update Cover
     const coverImg = document.getElementById('mangaCover');
     coverImg.src = manga.cover;
     coverImg.onerror = function() {
         console.error('❌ Failed to load cover:', manga.cover);
-        this.src = 'assets/placeholder.jpg';
+        this.src = 'data:image/svg+xml,%3Csvg xmlns="http://www.w3.org/2000/svg" width="300" height="450"%3E%3Crect width="300" height="450" fill="%23333"/%3E%3Ctext x="50%25" y="50%25" text-anchor="middle" fill="%23999"%3ENo Cover%3C/text%3E%3C/svg%3E';
     };
     
     // Update Views
@@ -120,6 +134,27 @@ function displayMangaInfo() {
     
     // Setup Buttons
     setupButtons(manga.links);
+}
+
+/**
+ * UPDATED: Adjust title size based on length
+ */
+function adjustTitleSize(element, text, isSubtitle = false) {
+    if (!element || !text) return;
+    
+    const length = text.length;
+    
+    if (isSubtitle) {
+        // Subtitle threshold
+        if (length > 80) {
+            element.classList.add('long-subtitle');
+        }
+    } else {
+        // Main title threshold
+        if (length > 50) {
+            element.classList.add('long-title');
+        }
+    }
 }
 
 /**
@@ -192,7 +227,8 @@ function createChapterElement(chapter) {
     // Check if locked
     if (chapter.locked) {
         div.classList.add('chapter-locked');
-        div.onclick = () => showLockedMessage();
+        // UPDATED: Langsung buka Trakteer untuk chapter terkunci
+        div.onclick = () => openTrakteer();
     } else {
         div.onclick = () => openChapter(chapter);
     }
@@ -212,17 +248,17 @@ function createChapterElement(chapter) {
 }
 
 /**
- * Show locked message
+ * UPDATED: Open Trakteer link for locked chapters
  */
-function showLockedMessage() {
-    alert('Chapter ini masih terkunci. 🔒\n\nDukung kami di Trakteer untuk unlock chapter lebih cepat!');
+function openTrakteer() {
+    window.open(TRAKTEER_LINK, '_blank');
 }
 
 /**
  * Open chapter
  */
 function openChapter(chapter) {
-    // FIX: Ambil dari mangaData.manga
+    // Ambil dari mangaData.manga
     const repoUrl = mangaData.manga.repoUrl;
     const imagePrefix = mangaData.manga.imagePrefix;
     const imageFormat = mangaData.manga.imageFormat;
