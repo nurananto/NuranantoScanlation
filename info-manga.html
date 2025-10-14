@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Info Manga</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="info-manga.css">
+</head>
+<body>
+    <header>
+        <div class="header-content">
+            <img src="assets/logo.png" alt="Nurananto Scanlation" class="site-logo">
+            
+            <!-- Tombol Facebook di kanan atas, sejajar dengan logo -->
+            <a href="https://web.facebook.com/profile.php?id=61556658895013" target="_blank" class="facebook-link-header">
+                <svg class="facebook-icon" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+                </svg>
+                <span class="facebook-text">Nurananto Scanlation</span>
+            </a>
+        </div>
+    </header>
+
+    <div class="container">
+        <!-- Left Section: Cover & Buttons -->
+        <div class="left-section">
+            <div class="cover-container">
+                <img id="mangaCover" src="cover.jpg" alt="Manga Cover" class="manga-cover">
+            </div>
+
+            <!-- Title Section untuk Mobile (hidden di desktop) -->
+            <div class="title-section-mobile">
+                <h1 id="mainTitleMobile" class="main-title">Judul Asli di tulis disini</h1>
+                <p id="subtitleMobile" class="subtitle">Judul Alternatif disini dengan font yang lebih tipis dan ukuran yang lebih kecil</p>
+                
+                <!-- Views Badge Mobile -->
+                <div class="views-badge" id="viewsBadgeMobile">
+                    <span id="viewsCountMobile" class="views-number">100</span>
+                    <span class="views-text">Views</span>
+                </div>
+
+                <!-- Show Details Button (Mobile Only) -->
+                <button class="btn-show-details" id="btnShowDetails">
+                    <span class="info-icon">ⓘ</span>
+                    <span id="detailsButtonText">Show Details</span>
+                </button>
+            </div>
+
+            <!-- Details Container (collapsible on mobile) -->
+            <div class="details-container" id="detailsContainer">
+                <!-- Author - Area Info -->
+                <div class="info-box">
+                    <div class="info-label">AUTHOR</div>
+                    <div id="authorName" class="info-value">Nama Author</div>
+                </div>
+
+                <!-- Artist - Area Info -->
+                <div class="info-box">
+                    <div class="info-label">ARTIST</div>
+                    <div id="artistName" class="info-value">Nama Artist</div>
+                </div>
+
+                <!-- Genre - Area Info (bisa expand) -->
+                <div class="info-box">
+                    <div class="info-label">GENRE DISINI SEMUA</div>
+                    <div id="genreList" class="genre-tags"></div>
+                </div>
+
+                <!-- Link Buttons -->
+                <button class="sidebar-btn" id="btnMangadex">MANGADEX</button>
+                <button class="sidebar-btn" id="btnRaw">RAW</button>
+            </div>
+        </div>
+
+        <!-- Right Section: Content -->
+        <div class="right-section">
+            <!-- Title Section untuk Desktop (hidden di mobile) -->
+            <div class="title-section-desktop">
+                <h1 id="mainTitle" class="main-title">Judul Asli di tulis disini</h1>
+                <p id="subtitle" class="subtitle">Judul Alternatif disini dengan font yang lebih tipis dan ukuran yang lebih kecil</p>
+                
+                <!-- Views Badge Desktop -->
+                <div class="views-badge" id="viewsBadgeDesktop">
+                    <span id="viewsCount" class="views-number">100</span>
+                    <span class="views-text">Views</span>
+                </div>
+            </div>
+
+            <div class="description-box">
+                <h2 class="section-title">DESKRIPSI MANGA DISINI</h2>
+                <div id="descriptionContent" class="content-text"></div>
+            </div>
+
+            <div class="chapters-box">
+                <h2 class="section-title">CHAPTER LIST DISINI</h2>
+                <div id="chapterList" class="chapter-list"></div>
+            </div>
+        </div>
+    </div>
+
+    <script src="info-manga.js"></script>
+</body>
+</html>

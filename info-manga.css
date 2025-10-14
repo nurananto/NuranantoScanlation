@@ -1,0 +1,586 @@
+/* Reset & Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    padding: 20px;
+    line-height: 1.6;
+}
+
+/* Header dengan logo dan Facebook */
+header {
+    max-width: 1400px;
+    margin: 0 auto 1.5rem;
+    padding: 0 0;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.site-logo {
+    height: 60px;
+    width: auto;
+    display: block;
+}
+
+/* Facebook Link di Header - Sejajar dengan Logo */
+.facebook-link-header {
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+    padding: 0.5rem 1rem;
+    height: auto;
+    background: rgba(0, 0, 0, 0.8);
+    border-radius: 12px;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 2px solid rgba(59, 130, 246, 0.5);
+}
+
+.facebook-link-header:hover {
+    background: rgba(59, 130, 246, 0.15);
+    border-color: #3b82f6;
+    transform: scale(1.03);
+    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+}
+
+.facebook-link-header .facebook-icon {
+    width: 32px;
+    height: 32px;
+    color: #60a5fa;
+    transition: color 0.3s ease;
+    flex-shrink: 0;
+}
+
+.facebook-link-header:hover .facebook-icon {
+    color: #93c5fd;
+}
+
+.facebook-link-header .facebook-text {
+    color: #60a5fa;
+    font-weight: 600;
+    font-size: 1rem;
+    white-space: nowrap;
+    transition: color 0.3s ease;
+}
+
+.facebook-link-header:hover .facebook-text {
+    color: #93c5fd;
+}
+
+/* Main Container */
+.container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 320px 1fr;
+    gap: 20px;
+}
+
+/* ==================== LEFT SECTION ==================== */
+
+.left-section {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* Cover Container */
+.cover-container {
+    position: relative;
+    width: 100%;
+}
+
+.manga-cover {
+    width: 100%;
+    height: auto;
+    display: block;
+    border-radius: 4px;
+}
+
+/* Info Box - AREA PEMBATAS untuk Author, Artist, Genre */
+.info-box {
+    background-color: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 4px;
+    padding: 12px 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.info-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #999999;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.info-value {
+    font-size: 14px;
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+/* Genre Tags - bisa expand sesuai jumlah genre */
+.genre-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.genre-tag {
+    background-color: #333333;
+    border: 1px solid #444444;
+    padding: 6px 12px;
+    border-radius: 15px;
+    font-size: 12px;
+    font-weight: 600;
+    color: #e0e0e0;
+    text-transform: capitalize;
+}
+
+/* Sidebar Buttons - TOMBOL hanya untuk link eksternal */
+.sidebar-btn {
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.sidebar-btn:hover {
+    background-color: #333333;
+    border-color: #444444;
+    transform: translateY(-2px);
+}
+
+/* Mangadex Button - Orange khas Mangadex */
+#btnMangadex {
+    background-color: #ff6740;
+    color: #ffffff;
+    border: 1px solid #ff6740;
+}
+
+#btnMangadex:hover {
+    background-color: #ff5530;
+    border-color: #ff5530;
+}
+
+/* Raw Button - Biru Muda */
+#btnRaw {
+    background-color: #5dade2;
+    color: #ffffff;
+    border: 1px solid #5dade2;
+}
+
+#btnRaw:hover {
+    background-color: #4a9fd5;
+    border-color: #4a9fd5;
+}
+
+/* ==================== RIGHT SECTION ==================== */
+
+.right-section {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+/* Title Section */
+.title-section-desktop {
+    margin-bottom: 0;
+}
+
+.title-section-mobile {
+    display: none;
+    margin-bottom: 0;
+}
+
+/* Show Details Button (Mobile Only) */
+.btn-show-details {
+    width: 100%;
+    background-color: #5865F2;
+    color: #ffffff;
+    border: none;
+    padding: 12px 20px;
+    font-size: 15px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    margin-top: 10px;
+    margin-bottom: 5px;
+}
+
+.btn-show-details:hover {
+    background-color: #4752C4;
+}
+
+.btn-show-details .info-icon {
+    font-size: 18px;
+    font-weight: bold;
+}
+
+/* Details Container */
+.details-container {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.main-title {
+    font-size: 42px;
+    font-weight: 700;
+    color: #ffffff;
+    margin-bottom: 10px;
+    line-height: 1.2;
+}
+
+.subtitle {
+    font-size: 20px;
+    font-weight: 300;
+    color: #b0b0b0;
+    line-height: 1.4;
+    margin-bottom: 15px;
+}
+
+/* Views Badge - seperti Subscribe button */
+.views-badge {
+    background-color: #dc143c;
+    border: none;
+    border-radius: 4px;
+    padding: 10px 24px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: fit-content;
+    margin-bottom: 5px;
+}
+
+.views-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ffffff;
+    text-align: center;
+}
+
+.views-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ffffff;
+    text-transform: capitalize;
+    text-align: center;
+}
+
+/* Content Boxes - AREA PEMBATAS */
+.description-box {
+    background-color: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 30px;
+    min-height: 250px;
+    max-height: 400px;
+    margin-top: 10px;
+}
+
+.chapters-box {
+    background-color: #2a2a2a;
+    border: 1px solid #3a3a3a;
+    border-radius: 8px;
+    padding: 30px;
+    margin-top: 10px;
+    /* Tidak ada max-height dan min-height */
+}
+
+.section-title {
+    font-size: 16px;
+    font-weight: 700;
+    color: #e0e0e0;
+    text-align: center;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    margin-bottom: 20px;
+}
+
+/* Content Text - BISA SCROLL */
+.content-text {
+    color: #b0b0b0;
+    line-height: 1.8;
+    font-size: 15px;
+    white-space: pre-line;
+    max-height: 300px;
+    overflow-y: auto;
+    padding-right: 10px;
+    text-align: justify;
+}
+
+/* Custom Scrollbar untuk deskripsi */
+.content-text::-webkit-scrollbar {
+    width: 8px;
+}
+
+.content-text::-webkit-scrollbar-track {
+    background: #1a1a1a;
+    border-radius: 4px;
+}
+
+.content-text::-webkit-scrollbar-thumb {
+    background: #555555;
+    border-radius: 4px;
+}
+
+.content-text::-webkit-scrollbar-thumb:hover {
+    background: #666666;
+}
+
+/* ==================== CHAPTER LIST ==================== */
+
+/* Chapter List Container - AREA saja */
+.chapter-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    /* Tidak ada max-height dan overflow */
+}
+
+/* Hapus custom scrollbar untuk chapter list */
+
+/* Chapter Item - TOMBOL */
+.chapter-item {
+    background-color: #333333;
+    border: 1px solid #444444;
+    border-radius: 4px;
+    padding: 15px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.chapter-item:hover {
+    background-color: #3a3a3a;
+    border-color: #555555;
+    transform: translateX(5px);
+}
+
+.chapter-item:active {
+    transform: translateX(3px);
+}
+
+/* Locked Chapter */
+.chapter-locked {
+    background-color: #2a2a2a;
+    border-color: #dc143c;
+    opacity: 0.7;
+}
+
+.chapter-locked:hover {
+    background-color: #2f2f2f;
+    border-color: #ff1744;
+    opacity: 0.85;
+}
+
+/* Hidden chapters */
+.chapter-hidden {
+    display: none;
+}
+
+.chapter-show {
+    display: flex;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Show More Button */
+.btn-show-more {
+    width: 100%;
+    background-color: #2a2a2a;
+    color: #e0e0e0;
+    border: 1px solid #3a3a3a;
+    padding: 12px 20px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    cursor: pointer;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+    margin-top: 12px;
+}
+
+.btn-show-more:hover {
+    background-color: #333333;
+    border-color: #444444;
+}
+
+.chapter-info {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.chapter-title-text {
+    font-size: 16px;
+    font-weight: 600;
+    color: #e0e0e0;
+}
+
+.chapter-meta {
+    display: flex;
+    gap: 15px;
+    font-size: 13px;
+    color: #888888;
+}
+
+.chapter-views {
+    font-size: 13px;
+    color: #888888;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.chapter-stats {
+    display: flex;
+    gap: 15px;
+    font-size: 13px;
+    color: #888888;
+}
+
+/* ==================== RESPONSIVE ==================== */
+
+@media (max-width: 768px) {
+    .container {
+        grid-template-columns: 1fr;
+        gap: 5px;
+    }
+
+    /* Header responsive */
+    header {
+        margin-bottom: 1rem;
+    }
+
+    .site-logo {
+        height: 45px;
+    }
+
+    /* Facebook - Hanya icon pada mobile */
+    .facebook-link-header {
+        height: auto;
+        width: auto;
+        min-width: 45px;
+        min-height: 45px;
+        padding: 0.5rem;
+        justify-content: center;
+        border-radius: 10px;
+    }
+
+    .facebook-link-header .facebook-icon {
+        width: 26px;
+        height: 26px;
+    }
+
+    .facebook-link-header .facebook-text {
+        display: none;
+    }
+
+    /* Hide desktop title, show mobile title */
+    .title-section-desktop {
+        display: none;
+    }
+
+    .title-section-mobile {
+        display: block;
+        text-align: center;
+    }
+
+    /* Show Details Button visible on mobile */
+    .btn-show-details {
+        display: flex;
+    }
+
+    /* Details Container hidden by default on mobile */
+    .details-container {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+    }
+
+    .details-container.show {
+        max-height: 2000px;
+        margin-top: 10px;
+        margin-bottom: 5px;
+    }
+
+    /* Kurangi jarak setelah details ke deskripsi pada mobile */
+    .left-section {
+        margin-bottom: 5px;
+    }
+
+    .right-section {
+        margin-top: 0;
+    }
+
+    .main-title {
+        font-size: 28px;
+    }
+
+    .subtitle {
+        font-size: 16px;
+    }
+
+    /* Views badge sudah centered di mobile section */
+    .views-badge {
+        margin: 15px auto;
+        display: flex;
+    }
+    
+    .chapter-item {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .description-box {
+        padding: 20px;
+    }
+
+    .chapters-box {
+        padding: 20px;
+    }
+}
