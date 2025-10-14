@@ -67,12 +67,6 @@
 
             <!-- Details Container (collapsible on mobile) -->
             <div class="details-container" id="detailsContainer">
-                <!-- Sinopsis - MOVED HERE for mobile -->
-                <div class="info-box sinopsis-box-mobile">
-                    <div class="info-label">SINOPSIS</div>
-                    <div id="synopsisMobile" class="info-value sinopsis-text"></div>
-                </div>
-
                 <!-- Author - Area Info -->
                 <div class="info-box">
                     <div class="info-label">AUTHOR</div>
@@ -87,8 +81,14 @@
 
                 <!-- Genre - Area Info (bisa expand) -->
                 <div class="info-box">
-                    <div class="info-label">GENRE DISINI SEMUA</div>
+                    <div class="info-label">GENRE</div>
                     <div id="genreList" class="genre-tags"></div>
+                </div>
+
+                <!-- Sinopsis - MOVED HERE (after genre) for mobile -->
+                <div class="info-box sinopsis-box-mobile">
+                    <div class="info-label info-label-center">SINOPSIS</div>
+                    <div id="synopsisMobile" class="info-value sinopsis-text"></div>
                 </div>
 
                 <!-- Link Buttons -->

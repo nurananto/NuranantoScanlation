@@ -216,6 +216,10 @@ header {
     letter-spacing: 0.5px;
 }
 
+.info-label-center {
+    text-align: center;
+}
+
 .info-value {
     font-size: 14px;
     font-weight: 600;
