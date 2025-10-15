@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manga Reader</title>
+    <link rel="stylesheet" href="reader.css">
+</head>
+<body>
+    <div class="loading" id="loading">
+        <div class="spinner"></div>
+        <div>Loading...</div>
+    </div>
+
+    <header class="header" id="header">
+        <a href="#" class="header-title" id="mangaTitle">Manga Reader</a>
+        <div class="header-controls">
+            <button class="btn btn-nav" id="prevChapterBtn">← Prev</button>
+            <button class="btn btn-chapter" id="chapterBtn">Chapter 1</button>
+            <button class="btn btn-nav" id="nextChapterBtn">Next →</button>
+        </div>
+    </header>
+
+    <!-- Chapter Selection Modal -->
+    <div class="modal" id="chapterModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Select Chapter</h2>
+            </div>
+            <div class="modal-body" id="chapterGrid">
+                <!-- Chapters will be loaded here -->
+            </div>
+            <button class="btn btn-close" id="closeModal">Close</button>
+        </div>
+    </div>
+
+    <div class="reader-container">
+        <div class="page-container" id="pageContainer">
+            <!-- Pages will be loaded here -->
+        </div>
+    </div>
+
+    <div class="click-zone left" id="clickLeft"></div>
+    <div class="click-zone right" id="clickRight"></div>
+
+    <script src="reader.js"></script>
+</body>
+</html>
