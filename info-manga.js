@@ -12,8 +12,11 @@ const MANGA_REPOS = {
     'madogiwa': 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuutoBakaniSaretaOrega-FutagoJKtoDoukyosuruKotoniNatta/main/manga.json',
 };
 
-// UPDATED: Link Trakteer untuk chapter terkunci
+// Link Trakteer untuk chapter terkunci
 const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
+
+// Google Apps Script URL untuk view counter
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ0-VeyloQxjvh-h65G0wtfAzxVq6VYzU5Bz9n1Rl0T4GAkGu9X7HmGh_3_0cJhCS1iA/exec';
 
 let mangaData = null;
 
@@ -21,6 +24,9 @@ let mangaData = null;
 document.addEventListener('DOMContentLoaded', async () => {
     await loadMangaFromRepo();
     setupShowDetailsButton();
+    
+    // Track page view
+    trackPageView();
 });
 
 /**
@@ -97,7 +103,7 @@ function displayMangaInfo() {
     mainTitle.textContent = manga.title;
     subtitle.textContent = manga.alternativeTitle || '';
     
-    // UPDATED: Add class untuk judul panjang
+    // Add class untuk judul panjang
     adjustTitleSize(mainTitle, manga.title);
     adjustTitleSize(subtitle, manga.alternativeTitle, true);
     
@@ -125,7 +131,7 @@ function displayMangaInfo() {
     // Update Description
     document.getElementById('descriptionContent').textContent = manga.description;
     
-    // UPDATED: Also update mobile sinopsis in details container
+    // Update mobile sinopsis in details container
     const synopsisMobile = document.getElementById('synopsisMobile');
     if (synopsisMobile) {
         synopsisMobile.textContent = manga.description;
@@ -143,7 +149,7 @@ function displayMangaInfo() {
 }
 
 /**
- * UPDATED: Adjust title size based on length
+ * Adjust title size based on length
  */
 function adjustTitleSize(element, text, isSubtitle = false) {
     if (!element || !text) return;
@@ -233,7 +239,6 @@ function createChapterElement(chapter) {
     // Check if locked
     if (chapter.locked) {
         div.classList.add('chapter-locked');
-        // UPDATED: Langsung buka Trakteer untuk chapter terkunci
         div.onclick = () => openTrakteer();
     } else {
         div.onclick = () => openChapter(chapter);
@@ -254,7 +259,7 @@ function createChapterElement(chapter) {
 }
 
 /**
- * UPDATED: Open Trakteer link for locked chapters
+ * Open Trakteer link for locked chapters
  */
 function openTrakteer() {
     window.open(TRAKTEER_LINK, '_blank');
@@ -372,4 +377,69 @@ function setupShowDetailsButton() {
             btnText.textContent = 'Show Details';
         }
     };
+}
+
+/**
+ * Track page view
+ */
+async function trackPageView() {
+    try {
+        // Get repo param
+        const urlParams = new URLSearchParams(window.location.search);
+        const repoParam = urlParams.get('repo');
+        
+        if (!repoParam) {
+            console.log('⏭️ No repo parameter, skipping view tracking');
+            return;
+        }
+        
+        // Check if already viewed in this session
+        const viewKey = `viewed_${repoParam}`;
+        const hasViewed = sessionStorage.getItem(viewKey);
+        
+        if (hasViewed) {
+            console.log('📊 Already counted in this session');
+            return;
+        }
+        
+        console.log('📤 Tracking page view for:', repoParam);
+        
+        // Increment pending views via Google Apps Script
+        await incrementPendingViews(repoParam);
+        
+        // Mark as viewed in this session
+        sessionStorage.setItem(viewKey, 'true');
+        
+        console.log('✅ View tracked successfully');
+        
+    } catch (error) {
+        console.error('❌ Error tracking view:', error);
+        // Don't throw error - continue normal operation
+    }
+}
+
+/**
+ * Increment pending views via Google Apps Script
+ */
+async function incrementPendingViews(repo) {
+    try {
+        console.log('📡 Sending view increment to Google Apps Script...');
+        
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ repo }),
+            mode: 'no-cors' // Required for Google Apps Script
+        });
+        
+        // Note: 'no-cors' mode means we can't read the response,
+        // but the request will be sent successfully
+        console.log('✅ View increment request sent');
+        
+    } catch (error) {
+        console.error('❌ Error incrementing views:', error);
+        // Don't throw - just log the error
+    }
 }
