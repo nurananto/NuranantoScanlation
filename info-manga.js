@@ -268,27 +268,20 @@ function openTrakteer() {
  * Open chapter
  */
 function openChapter(chapter) {
-    // Ambil dari mangaData.manga
-    const repoUrl = mangaData.manga.repoUrl;
-    const imagePrefix = mangaData.manga.imagePrefix;
-    const imageFormat = mangaData.manga.imageFormat;
+    // Get repo param from current URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const repoParam = urlParams.get('repo');
     
-    // Save to sessionStorage
-    const chapterData = {
-        folder: chapter.folder,
-        title: chapter.title,
-        pages: chapter.pages,
-        repoUrl: repoUrl,
-        imagePrefix: imagePrefix,
-        imageFormat: imageFormat
-    };
+    if (!repoParam) {
+        console.error('❌ Repo parameter not found');
+        alert('Error: Parameter repo tidak ditemukan.');
+        return;
+    }
     
-    sessionStorage.setItem('currentChapter', JSON.stringify(chapterData));
+    console.log('📖 Opening chapter:', chapter.folder, 'from repo:', repoParam);
     
-    console.log('📖 Opening chapter:', chapter.folder);
-    
-    // Redirect to reader
-    window.location.href = `reader.html?chapter=${chapter.folder}`;
+    // Redirect to reader with repo and chapter params
+    window.location.href = `reader.html?repo=${repoParam}&chapter=${chapter.folder}`;
 }
 
 /**
@@ -388,7 +381,7 @@ async function trackPageView() {
         const repoParam = urlParams.get('repo');
         
         if (!repoParam) {
-            console.log('⏭️ No repo parameter, skipping view tracking');
+            console.log('⚠️ No repo parameter, skipping view tracking');
             return;
         }
         
