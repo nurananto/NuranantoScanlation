@@ -85,7 +85,7 @@ const mangaList = [
   },
   {
     title: 'Class de Ichiban Kawaii Gal wo Ezuke Shiteiru Hanashi',
-    cover: 'covers/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hana-644202c9-1458-41db-8de5-b3e550919324.jpg',
+    cover: 'covers/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hana-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
     readFirst: 'https://trakteer.id/NuranantoScanlation',
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/acfd6902-b39c-4b7d-91a8-9825dda4ede8/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hanashi',
@@ -122,7 +122,7 @@ const mangaList = [
     readNow: 'https://cubari.moe/proxy/gist/cmF3L251cmFuYW50by9OdXJhbmFudG9DdWJhcmlNb2UvbWFpbi9LaW1pJTIwbm8lMjBOZWdhaSUyMGdhJTIwS2FuYXUlMjBtYWRlLmpzb24/',
     mangadex: 'https://mangadex.org/title/748d2aab-cea8-4ffb-89b3-e716872cb027/negatte-mo-nai-tsuihou-go-kara-no-slow-life-intai-shita-hazu-ga-nariyuki-de-bishoujo-gal-no-shishou',
     raw: 'https://comic-walker.com/detail/KC_006563_S?episodeType=first'
-  },
+  }
 ];
 
 function createCard(manga) {
