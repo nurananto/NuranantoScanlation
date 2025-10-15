@@ -9,7 +9,8 @@
 // Mapping repo ke URL manga.json
 const MANGA_REPOS = {
     '10nenburi': 'https://raw.githubusercontent.com/nurananto/10nenburi/main/manga.json',
-    'madogiwa' : 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuu/refs/heads/main/manga.json'
+    'madogiwa' : 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuu/refs/heads/main/manga.json',
+    'yarikonda': 'https://raw.githubusercontent.com/nurananto/YarikondaRenaiGame/refs/heads/main/manga.json'
 };
 
 // Link Trakteer untuk chapter terkunci
