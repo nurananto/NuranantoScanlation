@@ -5,6 +5,11 @@
 const mangaList = 
   [
   {
+    title: 'Kanojo ni Shitai Joshi Ichii, no Tonari de Mitsuketa Amari-chan',
+    cover: 'covers/kanojo-ni-shitai-joshi-ichii-no-tonari-de-mitsuket-6ffed041-aa59-49e2-b79f-dac40ac0ef53.jpg',
+    repo: 'amarichan'
+  },
+  {
     title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
     cover: 'covers/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hana-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
     repo: 'kawaiigal'
