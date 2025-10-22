@@ -1,7 +1,8 @@
 /**
- * READER.JS
+ * READER.JS (UPDATED)
  * Manga Reader - Support chapters dari multiple repos
  * Auto-redirect ke Trakteer untuk locked chapters
+ * UPDATED: Track chapter views to pending-chapter-views.json via Google Apps Script
  */
 
 // Mapping repo ke URL manga.json
@@ -438,7 +439,7 @@ function closeChapterListModal() {
 }
 
 /**
- * Track chapter view
+ * UPDATED: Track chapter view - increment pending views
  */
 async function trackChapterView() {
     try {
@@ -447,13 +448,15 @@ async function trackChapterView() {
         const hasViewed = sessionStorage.getItem(viewKey);
         
         if (hasViewed) {
-            console.log('📊 Already counted in this session');
+            console.log('👁️ Already counted in this session');
             return;
         }
         
         console.log('📤 Tracking chapter view...');
+        console.log(`   Repo: ${repoParam}, Chapter: ${currentChapterFolder}`);
         
         // Increment via Google Apps Script
+        // IMPORTANT: Script ini akan increment pending-chapter-views.json di repo
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             headers: {
@@ -461,7 +464,8 @@ async function trackChapterView() {
             },
             body: JSON.stringify({ 
                 repo: repoParam,
-                chapter: currentChapterFolder
+                chapter: currentChapterFolder,
+                type: 'chapter'  // Important: identify ini untuk chapter views
             }),
             mode: 'no-cors'
         });
@@ -469,10 +473,10 @@ async function trackChapterView() {
         // Mark as viewed
         sessionStorage.setItem(viewKey, 'true');
         
-        console.log('✅ View tracked successfully');
+        console.log('✅ Chapter view tracked successfully');
         
     } catch (error) {
-        console.error('❌ Error tracking view:', error);
+        console.error('❌ Error tracking chapter view:', error);
         // Don't throw - continue normal operation
     }
 }
@@ -484,7 +488,7 @@ function showLoading() {
     const overlay = document.getElementById('loadingOverlay');
     if (overlay) {
         overlay.classList.add('active');
-        console.log('🔄 Loading overlay shown');
+        console.log('📄 Loading overlay shown');
     } else {
         console.error('❌ Loading overlay element not found!');
     }
