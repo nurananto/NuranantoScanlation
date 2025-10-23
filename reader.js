@@ -1,171 +1,80 @@
 /**
- * READER.JS (UPDATED)
- * Manga Reader - Support chapters dari multiple repos
- * Auto-redirect ke Trakteer untuk locked chapters
- * UPDATED: Track chapter views to pending-chapter-views.json via Google Apps Script
+ * HYBRID DYNAMIC HEADER HEIGHT - ADD TO READER.JS
+ * This code updates CSS custom property (--header-height) based on actual header height
+ * Works with reader-hybrid.css
  */
 
-// Mapping repo ke URL manga.json
-const MANGA_REPOS = {
-    '10nenburi': 'https://raw.githubusercontent.com/nurananto/10nenburi/main/manga.json',
-    'madogiwa' : 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuu/refs/heads/main/manga.json',
-    'yarikonda': 'https://raw.githubusercontent.com/nurananto/YarikondaRenaiGame/refs/heads/main/manga.json',
-    'tensai'   : 'https://raw.githubusercontent.com/nurananto/TensaiBishoujo/refs/heads/main/manga.json',
-    'suufungo' : 'https://raw.githubusercontent.com/nurananto/SuufungonoMirai/refs/heads/main/manga.json',
-    'sankakukei' : 'https://raw.githubusercontent.com/nurananto/SankakukeinoLoop/refs/heads/main/manga.json',
-    'negatte' : 'https://raw.githubusercontent.com/nurananto/NegattemoNai/refs/heads/main/manga.json',
-    'midari' : 'https://raw.githubusercontent.com/nurananto/Midari/refs/heads/main/manga.json',
-    'kiminonegai' : 'https://raw.githubusercontent.com/nurananto/KiminoNegai/refs/heads/main/manga.json',
-    'amarichan' : 'https://raw.githubusercontent.com/nurananto/Amarichan/refs/heads/main/manga.json',
-    'aiwooshiete' : 'https://raw.githubusercontent.com/nurananto/AiwoOshiete/refs/heads/main/manga.json',
-    'kawaiigal' : 'https://raw.githubusercontent.com/nurananto/KawaiiGal/refs/heads/main/manga.json',
-    'vtuber' : 'https://raw.githubusercontent.com/nurananto/YuumeiVTuber/refs/heads/main/manga.json',
-    'uchi' : 'https://raw.githubusercontent.com/nurananto/UchinoSeiso-kei/refs/heads/main/manga.json',
-};
-
-// Link Trakteer untuk chapter terkunci
-const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
-
-// Google Apps Script URL untuk chapter view counter
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ0-VeyloQxjvh-h65G0wtfAzxVq6VYzU5Bz9n1Rl0T4GAkGu9X7HmGh_3_0cJhCS1iA/exec';
-
-let mangaData = null;
-let currentChapterFolder = null;
-let currentChapter = null;
-let allChapters = [];
-let repoParam = null;
-
-// Load saat halaman dimuat
-document.addEventListener('DOMContentLoaded', async () => {
-    await initializeReader();
-});
+/* ========================================
+   STEP 1: Add these functions to reader.js
+   (Add anywhere in the file, preferably near other utility functions)
+   ======================================== */
 
 /**
- * Initialize reader
+ * Update --header-height CSS custom property based on actual header height
+ * This handles manga titles that wrap to 2-3 lines
  */
-async function initializeReader() {
-    try {
-        showLoading(); // Show loading at start
-        
-        console.log('🚀 Initializing reader...');
-        
-        // Get parameters from URL
-        const urlParams = new URLSearchParams(window.location.search);
-        const chapterParam = urlParams.get('chapter');
-        repoParam = urlParams.get('repo');
-        
-        console.log('📋 Parameters:', { chapter: chapterParam, repo: repoParam });
-        
-        if (!chapterParam) {
-            alert('Error: Parameter chapter tidak ditemukan.');
-            hideLoading();
-            return;
-        }
-        
-        if (!repoParam) {
-            alert('Error: Parameter repo tidak ditemukan.');
-            hideLoading();
-            return;
-        }
-        
-        // Load manga data from repo
-        await loadMangaData(repoParam);
-        
-        if (!mangaData) {
-            alert('Error: Gagal memuat data manga.');
-            hideLoading();
-            return;
-        }
-        
-        // Check if chapter exists
-        const chapterData = findChapterByFolder(chapterParam);
-        
-        if (!chapterData) {
-            alert(`Error: Chapter ${chapterParam} tidak ditemukan.`);
-            hideLoading();
-            return;
-        }
-        
-        // Check if chapter is locked
-        if (chapterData.locked) {
-            console.log('🔒 Chapter terkunci, redirect ke Trakteer...');
-            alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
-            window.location.href = TRAKTEER_LINK;
-            return;
-        }
-        
-        // Set current chapter
-        currentChapter = chapterData;
-        currentChapterFolder = chapterParam;
-        
-        // Setup UI
-        setupUI();
-        
-        // Load chapter pages
-        await loadChapterPages();
-        
-        // Track chapter view (async, don't wait)
-        trackChapterView();
-        
-        console.log('✅ Reader initialized successfully');
-        
-    } catch (error) {
-        console.error('❌ Error initializing reader:', error);
-        alert('Terjadi kesalahan saat memuat reader.');
-        hideLoading();
+function updateDynamicHeaderHeight() {
+    const header = document.querySelector('header');
+    
+    if (!header) {
+        console.warn('⚠️ Header element not found');
+        return;
     }
+    
+    // Get actual computed height of header (including multi-line titles)
+    const headerHeight = header.offsetHeight;
+    
+    // Update CSS custom property
+    document.documentElement.style.setProperty('--header-height', `${headerHeight}px`);
+    
+    console.log(`📏 Dynamic header height updated: ${headerHeight}px`);
 }
 
 /**
- * Load manga.json dari repo
+ * Initialize dynamic header height adjustment
+ * Sets up listeners for resize and initial calculation
  */
-async function loadMangaData(repo) {
-    try {
-        const mangaJsonUrl = MANGA_REPOS[repo];
-        
-        if (!mangaJsonUrl) {
-            throw new Error(`Repo "${repo}" tidak ditemukan di mapping`);
-        }
-        
-        console.log(`📚 Loading manga data from: ${repo}`);
-        
-        // Add cache buster
-        const timestamp = new Date().getTime();
-        const response = await fetch(`${mangaJsonUrl}?t=${timestamp}`);
-        
-        if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
-        }
-        
-        mangaData = await response.json();
-        
-        console.log('📦 Manga data loaded:', mangaData);
-        
-        // Convert chapters to array and sort
-        allChapters = Object.values(mangaData.chapters).sort((a, b) => {
-            return parseFloat(b.folder) - parseFloat(a.folder);
+function initDynamicHeaderHeight() {
+    // Initial update after a delay to ensure DOM is fully rendered
+    setTimeout(() => {
+        updateDynamicHeaderHeight();
+    }, 100);
+    
+    // Update on window resize (handles orientation changes, etc)
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+        clearTimeout(resizeTimeout);
+        resizeTimeout = setTimeout(() => {
+            updateDynamicHeaderHeight();
+        }, 200);
+    });
+    
+    // Optional: Use ResizeObserver for more accurate tracking (modern browsers)
+    if ('ResizeObserver' in window) {
+        const headerObserver = new ResizeObserver((entries) => {
+            for (let entry of entries) {
+                const height = entry.contentRect.height;
+                document.documentElement.style.setProperty('--header-height', `${height}px`);
+                console.log(`🔄 ResizeObserver: Header height changed to ${height}px`);
+            }
         });
         
-        console.log(`✅ Loaded ${allChapters.length} chapters`);
-        
-    } catch (error) {
-        console.error('❌ Error loading manga data:', error);
-        throw error;
+        // Start observing when header is available
+        const header = document.querySelector('header');
+        if (header) {
+            headerObserver.observe(header);
+            console.log('👀 ResizeObserver monitoring header height changes');
+        }
     }
 }
 
-/**
- * Find chapter by folder name
- */
-function findChapterByFolder(folder) {
-    if (!mangaData || !mangaData.chapters) return null;
-    
-    return Object.values(mangaData.chapters).find(ch => ch.folder === folder);
-}
 
-/**
- * Setup UI elements
- */
+/* ========================================
+   STEP 2: Call initDynamicHeaderHeight() in setupUI()
+   
+   Find the setupUI() function and add this line at the END:
+   ======================================== */
+
 function setupUI() {
     // Set manga title di header
     const mangaTitleElement = document.getElementById('mangaTitle');
@@ -200,313 +109,125 @@ function setupUI() {
     // Update navigation button states
     updateNavigationButtons();
     
-    // Setup modal close
-    const btnCloseModal = document.getElementById('btnCloseModal');
-    btnCloseModal.onclick = () => closeChapterListModal();
-    
-    const modalOverlay = document.getElementById('modalOverlay');
-    modalOverlay.onclick = (e) => {
-        if (e.target === modalOverlay) {
-            closeChapterListModal();
-        }
-    };
+    // 🎯 ADD THIS LINE HERE - Initialize dynamic header height
+    initDynamicHeaderHeight();
 }
 
-/**
- * Adjust manga title size based on length
- */
-function adjustMangaTitleSize(element, title) {
-    if (!element || !title) return;
-    
-    const length = title.length;
-    
-    // Remove existing classes
-    element.classList.remove('long-title', 'extra-long-title');
-    
-    // Add appropriate class based on length
-    if (length > 100) {
-        element.classList.add('extra-long-title');
-    } else if (length > 50) {
-        element.classList.add('long-title');
-    }
-    
-    console.log(`📝 Manga title length: ${length} characters`);
-}
 
-/**
- * Load chapter pages
- */
-async function loadChapterPages() {
+/* ========================================
+   ALTERNATIVE: Call in initializeReader() instead
+   
+   If you prefer to call it in initializeReader(), add after setupUI():
+   ======================================== */
+
+async function initializeReader() {
     try {
-        const readerContainer = document.getElementById('readerContainer');
-        readerContainer.innerHTML = '';
+        showLoading();
         
-        const { repoUrl, imagePrefix, imageFormat } = mangaData.manga;
-        const totalPages = currentChapter.pages;
+        console.log('🚀 Initializing reader...');
         
-        console.log('📄 Loading chapter pages...');
-        console.log('- Repo URL:', repoUrl);
-        console.log('- Folder:', currentChapterFolder);
-        console.log('- Image Prefix:', imagePrefix);
-        console.log('- Image Format:', imageFormat);
-        console.log('- Total Pages:', totalPages);
+        // Get URL params
+        const urlParams = new URLSearchParams(window.location.search);
+        repoParam = urlParams.get('repo');
+        currentChapterFolder = urlParams.get('chapter');
         
-        // Update page indicator
-        document.getElementById('currentPageNum').textContent = '1';
-        document.getElementById('totalPagesNum').textContent = totalPages;
-        
-        // Load all pages
-        for (let i = 1; i <= totalPages; i++) {
-            const pageNum = String(i).padStart(2, '0');
-            const imageUrl = `${repoUrl}/${currentChapterFolder}/${imagePrefix}${pageNum}.${imageFormat}`;
-            
-            console.log(`Loading page ${i}:`, imageUrl);
-            
-            const img = document.createElement('img');
-            img.className = 'reader-page';
-            img.src = imageUrl;
-            img.alt = `Page ${i}`;
-            img.loading = 'lazy';
-            
-            // Update page indicator on scroll
-            img.setAttribute('data-page', i);
-            
-            img.onload = () => {
-                console.log(`✅ Page ${i} loaded successfully`);
-            };
-            
-            img.onerror = () => {
-                console.error(`❌ Failed to load page ${i}:`, imageUrl);
-                img.alt = `Failed to load page ${i}`;
-                img.style.minHeight = '300px';
-                img.style.backgroundColor = '#333333';
-                img.style.display = 'flex';
-                img.style.alignItems = 'center';
-                img.style.justifyContent = 'center';
-            };
-            
-            readerContainer.appendChild(img);
+        if (!repoParam || !currentChapterFolder) {
+            throw new Error('Missing repo or chapter parameter');
         }
         
-        // Setup intersection observer for page tracking
-        setupPageTracking();
+        // Load manga data
+        await loadMangaData(repoParam);
         
-        console.log('✅ Pages container setup complete');
+        // Find current chapter
+        currentChapter = allChapters.find(ch => ch.folder === currentChapterFolder);
         
-        // Hide loading overlay after DOM is ready
-        hideLoading();
-        
-    } catch (error) {
-        console.error('❌ Error loading pages:', error);
-        hideLoading();
-        alert('Gagal memuat halaman chapter.');
-    }
-}
-
-/**
- * Setup page tracking with intersection observer
- */
-function setupPageTracking() {
-    const options = {
-        root: null,
-        rootMargin: '0px',
-        threshold: 0.5
-    };
-    
-    const observer = new IntersectionObserver((entries) => {
-        entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                const pageNum = entry.target.getAttribute('data-page');
-                document.getElementById('currentPageNum').textContent = pageNum;
-            }
-        });
-    }, options);
-    
-    const pages = document.querySelectorAll('.reader-page');
-    pages.forEach(page => observer.observe(page));
-}
-
-/**
- * Update navigation button states
- */
-function updateNavigationButtons() {
-    const currentIndex = allChapters.findIndex(ch => ch.folder === currentChapterFolder);
-    
-    const btnPrev = document.getElementById('btnPrevChapter');
-    const btnNext = document.getElementById('btnNextChapter');
-    
-    // Previous button (karena sort descending, prev = index + 1)
-    if (currentIndex >= allChapters.length - 1) {
-        btnPrev.disabled = true;
-        btnPrev.style.opacity = '0.5';
-    } else {
-        btnPrev.disabled = false;
-        btnPrev.style.opacity = '1';
-    }
-    
-    // Next button (karena sort descending, next = index - 1)
-    if (currentIndex <= 0) {
-        btnNext.disabled = true;
-        btnNext.style.opacity = '0.5';
-    } else {
-        btnNext.disabled = false;
-        btnNext.style.opacity = '1';
-    }
-}
-
-/**
- * Navigate to prev/next chapter
- */
-function navigateChapter(direction) {
-    const currentIndex = allChapters.findIndex(ch => ch.folder === currentChapterFolder);
-    
-    let targetIndex;
-    if (direction === 'prev') {
-        targetIndex = currentIndex + 1; // Karena sort descending
-    } else {
-        targetIndex = currentIndex - 1;
-    }
-    
-    if (targetIndex < 0 || targetIndex >= allChapters.length) {
-        return;
-    }
-    
-    const targetChapter = allChapters[targetIndex];
-    
-    // Check if locked
-    if (targetChapter.locked) {
-        alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
-        window.open(TRAKTEER_LINK, '_blank');
-        return;
-    }
-    
-    // Redirect to new chapter
-    window.location.href = `reader.html?repo=${repoParam}&chapter=${targetChapter.folder}`;
-}
-
-/**
- * Open chapter list modal
- */
-function openChapterListModal() {
-    const modal = document.getElementById('modalOverlay');
-    const modalBody = document.getElementById('chapterListModal');
-    
-    // Clear and populate
-    modalBody.innerHTML = '';
-    
-    allChapters.forEach(chapter => {
-        const item = document.createElement('div');
-        item.className = 'chapter-item-modal';
-        
-        if (chapter.folder === currentChapterFolder) {
-            item.classList.add('active');
+        if (!currentChapter) {
+            throw new Error(`Chapter "${currentChapterFolder}" not found`);
         }
         
-        if (chapter.locked) {
-            item.classList.add('locked');
-        }
-        
-        const lockIcon = chapter.locked ? '🔒 ' : '';
-        
-        item.innerHTML = `
-            <div class="chapter-item-title">${lockIcon}${chapter.title}</div>
-            <div class="chapter-item-views">👁️ ${chapter.views}</div>
-        `;
-        
-        item.onclick = () => {
-            if (chapter.locked) {
-                alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
-                window.open(TRAKTEER_LINK, '_blank');
-            } else if (chapter.folder !== currentChapterFolder) {
-                window.location.href = `reader.html?repo=${repoParam}&chapter=${chapter.folder}`;
-            }
-        };
-        
-        modalBody.appendChild(item);
-    });
-    
-    modal.classList.add('active');
-    document.body.style.overflow = 'hidden';
-}
-
-/**
- * Close chapter list modal
- */
-function closeChapterListModal() {
-    const modal = document.getElementById('modalOverlay');
-    modal.classList.remove('active');
-    document.body.style.overflow = '';
-}
-
-/**
- * UPDATED: Track chapter view - increment pending views
- */
-async function trackChapterView() {
-    try {
-        // Check if already viewed in this session
-        const viewKey = `viewed_${repoParam}_${currentChapterFolder}`;
-        const hasViewed = sessionStorage.getItem(viewKey);
-        
-        if (hasViewed) {
-            console.log('👁️ Already counted in this session');
+        // Check if chapter is locked
+        if (currentChapter.locked) {
+            showLockedChapterMessage();
             return;
         }
         
-        console.log('📤 Tracking chapter view...');
-        console.log(`   Repo: ${repoParam}, Chapter: ${currentChapterFolder}`);
+        // Setup UI
+        setupUI();
         
-        // Increment via Google Apps Script
-        // IMPORTANT: Script ini akan increment pending-chapter-views.json di repo
-        await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ 
-                repo: repoParam,
-                chapter: currentChapterFolder,
-                type: 'chapter'  // Important: identify ini untuk chapter views
-            }),
-            mode: 'no-cors'
-        });
+        // Load chapter pages
+        await loadChapterPages();
         
-        // Mark as viewed
-        sessionStorage.setItem(viewKey, 'true');
+        // Track chapter view
+        trackChapterView();
         
-        console.log('✅ Chapter view tracked successfully');
+        // 🎯 OR ADD THIS LINE HERE - Initialize dynamic header height
+        initDynamicHeaderHeight();
         
+        hideLoading();
     } catch (error) {
-        console.error('❌ Error tracking chapter view:', error);
-        // Don't throw - continue normal operation
+        console.error('❌ Error initializing reader:', error);
+        showErrorMessage(error.message);
+        hideLoading();
     }
 }
 
-/**
- * Show loading overlay
- */
-function showLoading() {
-    const overlay = document.getElementById('loadingOverlay');
-    if (overlay) {
-        overlay.classList.add('active');
-        console.log('📄 Loading overlay shown');
-    } else {
-        console.error('❌ Loading overlay element not found!');
-    }
-}
+
+/* ========================================
+   TESTING
+   
+   After implementation, test in browser console:
+   ======================================== */
+
+// Check current header height
+console.log('Header height:', document.querySelector('header').offsetHeight);
+
+// Check CSS variable value
+console.log('--header-height:', 
+    getComputedStyle(document.documentElement).getPropertyValue('--header-height'));
+
+// Check chapter bar position
+console.log('Chapter bar top:', 
+    getComputedStyle(document.querySelector('.chapter-info-bar')).top);
+
+// Expected: All three values should match!
+
+
+/* ========================================
+   BENEFITS OF THIS APPROACH
+   ======================================== */
 
 /**
- * Hide loading overlay
+ * ✅ Fully dynamic - adapts to any title length (1, 2, or 3 lines)
+ * ✅ Graceful degradation - CSS fallback values work without JS
+ * ✅ Smooth transitions - CSS transition handles changes smoothly
+ * ✅ Responsive - updates on window resize
+ * ✅ Modern - uses ResizeObserver for accurate tracking
+ * ✅ No overlap - chapter bar always positioned correctly
+ * ✅ No gap - works perfectly for both short and long titles
+ * ✅ Performance - uses CSS custom property (one update affects all)
  */
-function hideLoading() {
-    const overlay = document.getElementById('loadingOverlay');
-    if (overlay) {
-        overlay.classList.remove('active');
-        // Force hide dengan style langsung jika class tidak bekerja
-        overlay.style.display = 'none';
-        overlay.style.opacity = '0';
-        overlay.style.visibility = 'hidden';
-        console.log('✅ Loading overlay hidden');
-    } else {
-        console.error('❌ Loading overlay element not found!');
-    }
-}
+
+
+/* ========================================
+   SUMMARY
+   ======================================== */
+
+/**
+ * What this does:
+ * 1. Measures actual header height (which varies with title length)
+ * 2. Updates CSS custom property --header-height with that value
+ * 3. .chapter-info-bar uses that variable for its `top` position
+ * 4. Result: Chapter bar always positioned right below header, no overlap!
+ * 
+ * When it runs:
+ * - On page load (after DOM ready + 100ms delay)
+ * - On window resize (with 200ms debounce)
+ * - On header size change (via ResizeObserver)
+ * 
+ * What you need to do:
+ * 1. Replace reader.css with reader-hybrid.css
+ * 2. Copy these two functions to reader.js
+ * 3. Call initDynamicHeaderHeight() in setupUI() or initializeReader()
+ * 4. Test with long and short manga titles
+ * 5. Done! ✅
+ */
