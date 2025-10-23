@@ -193,8 +193,8 @@ header {
 }
 
 .trakteer-icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -255,8 +255,8 @@ header {
   
   .github-link-header .github-icon,
   .facebook-link-header .facebook-icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
   
   .github-link-header .github-text,
@@ -574,8 +574,8 @@ header {
 }
 
 .trakteer-icon {
-  width: 28px;
-  height: 28px;
+  width: 24px;
+  height: 24px;
   object-fit: contain;
   flex-shrink: 0;
 }
@@ -630,8 +630,8 @@ header {
   }
   
   .facebook-link-header .facebook-icon {
-    width: 28px;
-    height: 28px;
+    width: 24px;
+    height: 24px;
   }
   
   .facebook-link-header .facebook-text {
