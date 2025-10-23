@@ -251,7 +251,7 @@ function createChapterElement(chapter) {
     // Check if locked
     if (chapter.locked) {
         div.classList.add('chapter-locked');
-        div.onclick = () => openTrakteer();
+        div.onclick = () => trackLockedChapterView(chapter);
     } else {
         div.onclick = () => openChapter(chapter);
     }
@@ -275,6 +275,64 @@ function createChapterElement(chapter) {
  */
 function openTrakteer() {
     window.open(TRAKTEER_LINK, '_blank');
+}
+
+/**
+ * Track locked chapter view and open Trakteer
+ */
+async function trackLockedChapterView(chapter) {
+    try {
+        const urlParams = new URLSearchParams(window.location.search);
+        const repoParam = urlParams.get('repo');
+        
+        if (!repoParam) {
+            console.error('❌ Repo parameter not found');
+            openTrakteer();
+            return;
+        }
+        
+        console.log('🔒 Locked chapter clicked:', chapter.folder);
+        console.log('📊 Tracking view for locked chapter...');
+        
+        incrementPendingChapterViews(repoParam, chapter.folder).catch(err => {
+            console.error('⚠️ Failed to track locked chapter view:', err);
+        });
+        
+        alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
+        openTrakteer();
+        
+    } catch (error) {
+        console.error('❌ Error tracking locked chapter:', error);
+        openTrakteer();
+    }
+}
+
+/**
+ * Increment pending chapter views via Google Apps Script
+ */
+async function incrementPendingChapterViews(repo, chapter) {
+    try {
+        console.log('📡 Sending chapter view increment to Google Apps Script...');
+        
+        const response = await fetch(GOOGLE_SCRIPT_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ 
+                repo: repo,
+                chapter: chapter,
+                type: 'chapter'
+            }),
+            mode: 'no-cors'
+        });
+        
+        console.log('✅ Chapter view increment request sent');
+        
+    } catch (error) {
+        console.error('❌ Error incrementing chapter views:', error);
+        throw error;
+    }
 }
 
 /**
