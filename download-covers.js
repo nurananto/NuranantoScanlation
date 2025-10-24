@@ -2,10 +2,15 @@
  * SCRIPT DOWNLOAD COVER MANGA DARI MANGADEX
  * FITUR: Auto-ambil cover TERBARU & Replace cover lama
  * 
+ * Arsitektur:
+ * - script.js berisi: title, cover, repo
+ * - manga.json di setiap repo berisi: mangadex URL + info lengkap
+ * 
  * Cara Pakai:
  * 1. Jalankan: node download-covers.js
- * 2. Script akan ambil cover TERBARU dari MangaDex
- * 3. Kalau ada cover lebih baru, otomatis replace yang lama
+ * 2. Script akan fetch manga.json dari setiap repo
+ * 3. Ambil cover TERBARU dari MangaDex
+ * 4. Replace cover lama dengan yang baru
  */
 
 const fs = require('fs');
@@ -15,28 +20,74 @@ const https = require('https');
 // Config
 const DELAY_MS = 1500;
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
-const FORCE_UPDATE = false; // Set true untuk force download ulang semua cover
+const FORCE_UPDATE = false;
+const GITHUB_USERNAME = 'nurananto'; // Username GitHub Anda
 
 // Baca script.js
 const scriptPath = path.join(__dirname, 'script.js');
 const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
 
-const mangaListMatch = scriptContent.match(/const mangaList = (\[[\s\S]*?\n\]);/);
+// Try multiple patterns to find mangaList
+let mangaListMatch = scriptContent.match(/const\s+mangaList\s*=\s*(\[[\s\S]*?\n\s*\]);/);
+if (!mangaListMatch) {
+  mangaListMatch = scriptContent.match(/let\s+mangaList\s*=\s*(\[[\s\S]*?\n\s*\]);/);
+}
+if (!mangaListMatch) {
+  mangaListMatch = scriptContent.match(/const\s+mangaList\s*=\s*(\[[\s\S]*?\n\s*\])/);
+}
+
 if (!mangaListMatch) {
   console.error('❌ Tidak bisa menemukan mangaList di script.js');
   process.exit(1);
 }
 
-const mangaList = eval(mangaListMatch[1]);
+let mangaList;
+try {
+  mangaList = eval(mangaListMatch[1]);
+} catch (e) {
+  console.error('❌ Error parsing mangaList:', e.message);
+  process.exit(1);
+}
 
 console.log(`📚 Ditemukan ${mangaList.length} manga dalam list`);
-console.log('🔍 Mode: Ambil cover TERBARU dari MangaDex');
+console.log('🔍 Mode: Fetch manga.json → Ambil cover TERBARU dari MangaDex');
 console.log('🔄 Cover lama akan di-replace dengan yang lebih baru\n');
 
 // Buat folder covers
 const coversDir = path.join(__dirname, 'covers');
 if (!fs.existsSync(coversDir)) {
   fs.mkdirSync(coversDir);
+}
+
+// Fetch manga.json dari GitHub repo
+function fetchMangaJson(repoName) {
+  return new Promise((resolve, reject) => {
+    const url = `https://raw.githubusercontent.com/${GITHUB_USERNAME}/${repoName}/main/manga.json`;
+    
+    https.get(url, { headers: { 'User-Agent': USER_AGENT } }, (res) => {
+      let data = '';
+      
+      if (res.statusCode === 404) {
+        reject(new Error('manga.json tidak ditemukan'));
+        return;
+      }
+      
+      if (res.statusCode !== 200) {
+        reject(new Error(`HTTP ${res.statusCode}`));
+        return;
+      }
+      
+      res.on('data', (chunk) => { data += chunk; });
+      res.on('end', () => {
+        try {
+          const json = JSON.parse(data);
+          resolve(json);
+        } catch (e) {
+          reject(new Error(`Parse error: ${e.message}`));
+        }
+      });
+    }).on('error', reject);
+  });
 }
 
 function getMangaIdFromUrl(url) {
@@ -83,12 +134,10 @@ function downloadFile(url, filepath) {
   });
 }
 
-// FITUR BARU: Ambil cover TERBARU dengan sorting
 async function fetchLatestCover(mangaId) {
   return new Promise((resolve, reject) => {
     const options = {
       hostname: 'api.mangadex.org',
-      // Sort by createdAt descending untuk ambil yang terbaru
       path: `/cover?manga[]=${mangaId}&limit=1&order[createdAt]=desc`,
       method: 'GET',
       headers: {
@@ -147,29 +196,6 @@ async function fetchLatestCover(mangaId) {
   });
 }
 
-// FITUR BARU: Cek apakah cover berbeda (compare filename)
-function isCoverDifferent(currentCoverPath, newCoverFilename) {
-  if (!fs.existsSync(currentCoverPath)) {
-    return true; // Cover tidak ada, pasti beda
-  }
-  
-  // Ambil nama file dari path
-  const currentFilename = path.basename(currentCoverPath);
-  
-  // Jika nama file berbeda, berarti cover beda
-  // Format: [sanitized-title]-[hash].jpg
-  // Hash MangaDex unik per cover
-  return !currentFilename.includes(newCoverFilename.split('.')[0]);
-}
-
-// FITUR BARU: Hapus cover lama
-function deleteOldCover(coverPath) {
-  if (fs.existsSync(coverPath)) {
-    fs.unlinkSync(coverPath);
-    console.log('  🗑️  Cover lama dihapus');
-  }
-}
-
 function delay(ms) {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -180,28 +206,42 @@ async function processAllManga() {
   let skipCount = 0;
   let errorCount = 0;
   let updatedCount = 0;
+  let noMangaJsonCount = 0;
 
   for (let i = 0; i < mangaList.length; i++) {
     const manga = mangaList[i];
-    const mangaId = getMangaIdFromUrl(manga.mangadex);
     
     console.log(`\n[${i + 1}/${mangaList.length}] ${manga.title}`);
     
-    if (!mangaId) {
-      console.log('  ⚠️  Link MangaDex tidak valid, skip');
-      updatedMangaList.push(manga);
-      skipCount++;
-      continue;
-    }
-
-    const sanitizedTitle = sanitizeFilename(manga.title);
-
     try {
-      // Fetch info cover terbaru dari API
+      // Step 1: Fetch manga.json dari repo
+      console.log(`  🔍 Fetch manga.json dari repo: ${manga.repo}`);
+      const mangaJson = await fetchMangaJson(manga.repo);
+      
+      // Step 2: Ambil MangaDex URL
+      const mangadexUrl = mangaJson.mangadex;
+      if (!mangadexUrl) {
+        console.log('  ⚠️  Tidak ada MangaDex URL di manga.json');
+        updatedMangaList.push(manga);
+        noMangaJsonCount++;
+        continue;
+      }
+      
+      const mangaId = getMangaIdFromUrl(mangadexUrl);
+      if (!mangaId) {
+        console.log('  ⚠️  MangaDex URL tidak valid');
+        updatedMangaList.push(manga);
+        skipCount++;
+        continue;
+      }
+
+      const sanitizedTitle = sanitizeFilename(manga.title);
+
+      // Step 3: Fetch cover terbaru dari MangaDex
       console.log('  🔍 Cek cover terbaru dari MangaDex...');
       const latestCover = await fetchLatestCover(mangaId);
       
-      // Ekstrak hash dari filename MangaDex (untuk unique ID)
+      // Step 4: Process cover
       const coverHash = latestCover.filename.split('.')[0];
       const newCoverFilename = `${sanitizedTitle}-${coverHash}.jpg`;
       const newCoverPath = path.join(coversDir, newCoverFilename);
@@ -224,7 +264,7 @@ async function processAllManga() {
       console.log('  📥 Downloading cover terbaru...');
       await downloadFile(latestCover.url, newCoverPath);
       
-      // Hapus cover lama dengan prefix yang sama
+      // Hapus cover lama
       if (existingCovers.length > 0) {
         console.log('  🔄 Mengganti cover lama dengan yang baru...');
         existingCovers.forEach(oldCover => {
@@ -245,7 +285,7 @@ async function processAllManga() {
       updatedMangaList.push(manga);
       successCount++;
       
-      // Delay
+      // Delay untuk rate limiting
       if (i < mangaList.length - 1) {
         await delay(DELAY_MS);
       }
@@ -270,19 +310,23 @@ async function processAllManga() {
     }
   }
 
-  return { updatedMangaList, successCount, skipCount, errorCount, updatedCount };
+  return { updatedMangaList, successCount, skipCount, errorCount, updatedCount, noMangaJsonCount };
 }
 
 function updateScriptJs(updatedMangaList) {
   let updatedScript = scriptContent;
   
-  const mangaListString = 'const mangaList = ' + 
+  // Format mangaList dengan indentasi yang sama seperti aslinya
+  const mangaListString = 'const mangaList = \n  ' + 
     JSON.stringify(updatedMangaList, null, 2)
       .replace(/"([^"]+)":/g, '$1:')
-      .replace(/"/g, "'") + ';';
+      .replace(/"/g, "'")
+      .split('\n')
+      .join('\n  ') + ';';
   
+  // Replace mangaList
   updatedScript = updatedScript.replace(
-    /const mangaList = \[[\s\S]*?\n\];/,
+    /const\s+mangaList\s*=\s*\n?\s*\[[\s\S]*?\n\s*\];?/,
     mangaListString
   );
   
@@ -291,18 +335,22 @@ function updateScriptJs(updatedMangaList) {
   
   fs.writeFileSync(scriptPath, updatedScript, 'utf-8');
   console.log('\n💾 script.js diupdate!');
+  console.log('📦 Backup disimpan: script.js.backup');
 }
 
 // Main
 (async () => {
   try {
-    const { updatedMangaList, successCount, skipCount, errorCount, updatedCount } = await processAllManga();
+    const { updatedMangaList, successCount, skipCount, errorCount, updatedCount, noMangaJsonCount } = await processAllManga();
     
     console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
     console.log('📊 HASIL:');
     console.log(`  ✅ Berhasil download: ${successCount}`);
     console.log(`  🔄 Cover diupdate (replaced): ${updatedCount}`);
-    console.log(`  ⏭️  Sudah terbaru (skip): ${skipCount}`);
+    console.log(`  ⭐ Sudah terbaru (skip): ${skipCount}`);
+    if (noMangaJsonCount > 0) {
+      console.log(`  ⚠️  Tidak ada MangaDex URL: ${noMangaJsonCount}`);
+    }
     console.log(`  ❌ Error: ${errorCount}`);
     console.log(`  📚 Total: ${mangaList.length}`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
@@ -322,6 +370,8 @@ function updateScriptJs(updatedMangaList) {
       console.log('   git add covers/ script.js');
       console.log('   git commit -m "Update covers to latest version"');
       console.log('   git push\n');
+    } else {
+      console.log('✨ Semua cover sudah up-to-date!');
     }
     
   } catch (error) {
