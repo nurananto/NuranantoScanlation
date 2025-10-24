@@ -242,10 +242,24 @@ async function processAllManga() {
       console.log(`  🔍 Fetch manga.json dari: ${manga.repo}`);
       const mangaJson = await fetchMangaJson(mangaJsonUrl);
       
-      // Step 3: Ambil MangaDex URL
-      const mangadexUrl = mangaJson.mangadex;
+      // Step 3: Ambil MangaDex URL (support multiple structures)
+      let mangadexUrl = null;
+      
+      // Try different JSON structures
+      if (mangaJson.manga && mangaJson.manga.links && mangaJson.manga.links.mangadex) {
+        // Structure: { manga: { links: { mangadex: "..." } } }
+        mangadexUrl = mangaJson.manga.links.mangadex;
+      } else if (mangaJson.links && mangaJson.links.mangadex) {
+        // Structure: { links: { mangadex: "..." } }
+        mangadexUrl = mangaJson.links.mangadex;
+      } else if (mangaJson.mangadex) {
+        // Structure: { mangadex: "..." }
+        mangadexUrl = mangaJson.mangadex;
+      }
+      
       if (!mangadexUrl) {
         console.log('  ⚠️  Tidak ada MangaDex URL di manga.json');
+        console.log('  💡 Cek struktur JSON - expected: manga.links.mangadex');
         updatedMangaList.push(manga);
         skipCount++;
         continue;
