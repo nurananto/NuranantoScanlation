@@ -1,0 +1,82 @@
+name: Auto Update Manga Covers
+
+on:
+  # Jalankan setiap 2 minggu (bi-weekly) pada hari Minggu jam 00:00 UTC
+  schedule:
+    - cron: '0 0 */14 * *'  # Setiap 14 hari
+  
+  # Bisa juga trigger manual dari GitHub UI
+  workflow_dispatch:
+
+jobs:
+  update-covers:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 🔧 Checkout Repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          fetch-depth: 0
+      
+      - name: 📦 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: 📥 Download Latest Covers
+        run: |
+          echo "🚀 Starting cover update process..."
+          node download-covers.js
+        continue-on-error: false
+      
+      - name: 🔍 Check for Changes
+        id: check_changes
+        run: |
+          if [[ -n $(git status -s) ]]; then
+            echo "has_changes=true" >> $GITHUB_OUTPUT
+            echo "✅ Ada perubahan cover terdeteksi"
+          else
+            echo "has_changes=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ Tidak ada perubahan cover"
+          fi
+      
+      - name: 📊 Generate Update Summary
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          echo "## 📸 Cover Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "**Date:** $(date +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Changed Files:" >> $GITHUB_STEP_SUMMARY
+          git status -s | while read line; do
+            echo "- \`$line\`" >> $GITHUB_STEP_SUMMARY
+          done
+      
+      - name: 💾 Commit and Push Changes
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          
+          # Add covers dan script.js
+          git add covers/ script.js
+          
+          # Commit dengan message informatif
+          COMMIT_MSG="🤖 Auto-update covers - $(date +'%Y-%m-%d')"
+          git commit -m "$COMMIT_MSG" -m "Automated cover update by GitHub Actions" || exit 0
+          
+          # Push ke repository
+          git push
+      
+      - name: ✅ Success Notification
+        if: steps.check_changes.outputs.has_changes == 'true'
+        run: |
+          echo "🎉 Cover update berhasil!"
+          echo "✨ Changes telah di-push ke repository"
+      
+      - name: ℹ️ No Changes Notification
+        if: steps.check_changes.outputs.has_changes == 'false'
+        run: |
+          echo "📌 Semua cover sudah up-to-date"
+          echo "⏭️ Tidak ada yang perlu diupdate"
