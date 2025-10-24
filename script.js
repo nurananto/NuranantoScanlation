@@ -26,7 +26,7 @@ const mangaList =
     },
     {
       title: 'Seishun wa Sankakukei no Loop',
-      cover: 'covers/seishun-wa-sankakukei-no-loop-6d676869-6140-44ed-8210-58264ae612df.jpg',
+      cover: 'covers/seishun-wa-sankakukei-no-loop-4cf5a0cc-9123-43bd-bf54-c5f8c0aa9e16.jpg',
       repo: 'sankakukei'
     },
     {
@@ -36,7 +36,7 @@ const mangaList =
     },
     {
       title: 'Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta',
-      cover: 'covers/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-j-6d676869-6140-44ed-8210-58264ae612df.jpg',
+      cover: 'covers/madogiwa-henshuu-to-baka-ni-sareta-ore-ga-futago-j-ce74d132-81f0-491a-bb19-83de73746c8e.jpg',
       repo: 'madogiwa'
     },
     {
