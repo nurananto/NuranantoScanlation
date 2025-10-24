@@ -5,6 +5,11 @@
 const mangaList = 
   [
   {
+    title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
+    cover: 'covers/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hana-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
+    repo: 'kawaiigal'
+  },
+  {
     title: 'Watashi ni Ai wo Oshiete',
     cover: 'covers/watashi-ni-ai-wo-oshiete-e56a300a-60aa-433e-8589-c8a963f188f8.jpg',
     repo: 'aiwooshiete'
@@ -18,11 +23,6 @@ const mangaList =
     title: 'Kanojo ni Shitai Joshi Ichii, no Tonari de Mitsuketa Amari-chan',
     cover: 'covers/kanojo-ni-shitai-joshi-ichii-no-tonari-de-mitsuket-6ffed041-aa59-49e2-b79f-dac40ac0ef53.jpg',
     repo: 'amarichan'
-  },
-  {
-    title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
-    cover: 'covers/class-de-ichiban-kawaii-gal-wo-ezuke-shiteiru-hana-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
-    repo: 'kawaiigal'
   },
   {
     title: 'Seishun wa Sankakukei no Loop',
