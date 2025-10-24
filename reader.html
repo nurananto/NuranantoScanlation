@@ -2,86 +2,101 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Reader - Nurananto Scanlation</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="theme-color" content="#0a0a0a">
+    <title>Baca Manga - Reader</title>
     <link rel="stylesheet" href="reader.css">
 </head>
 <body>
-    <!-- Header - Hanya Judul Manga -->
-    <header>
-        <div class="header-content">
-            <h1 id="mangaTitle" class="manga-title">Loading...</h1>
-        </div>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="loading-overlay">
+        <div class="loading-spinner"></div>
+        <p>Loading Chapter...</p>
+    </div>
+
+    <!-- Header -->
+    <header class="header">
+        <h1 class="manga-title" id="mangaTitle">Judul Manga</h1>
     </header>
 
-    <!-- Chapter Info Bar -->
-    <div class="chapter-info-bar">
-        <button id="btnBackToInfo" class="btn-back">
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <button class="nav-btn back-btn" id="btnBackToInfo">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M19 12H5M12 19l-7-7 7-7"/>
             </svg>
             <span>Back to Info</span>
         </button>
         
-        <div class="chapter-title-display">
-            <h1 id="chapterTitle">Loading...</h1>
+        <div class="chapter-selector">
+            <button class="nav-btn chapter-btn" id="btnChapterList">
+                <span id="chapterTitle">Chapter 1</span>
+            </button>
         </div>
-        
-        <button id="btnChapterList" class="btn-chapter-list">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M3 12h18M3 6h18M3 18h18"/>
-            </svg>
-            <span>Chapters</span>
+
+        <button class="nav-btn mode-btn" id="modeBtn">
+            <span id="modeText">Manga</span>
         </button>
-    </div>
+    </nav>
 
     <!-- Reader Container -->
-    <div class="reader-container" id="readerContainer">
-        <!-- Pages will be loaded here -->
+    <main class="reader-container webtoon-mode" id="readerContainer">
+        <!-- Pages will be loaded here by JS -->
+    </main>
+
+    <!-- Next Chapter Button -->
+    <div class="next-chapter-container" id="nextChapterContainer">
+        <button class="next-chapter-btn" id="btnNextChapterBottom">
+            Next Chapter
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M5 12h14M12 5l7 7-7 7"/>
+            </svg>
+        </button>
     </div>
 
-    <!-- Navigation Controls -->
-    <div class="navigation-controls">
-        <button id="btnPrevChapter" class="nav-btn nav-btn-prev" disabled>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M15.41 7.41L14 6l-6 6 6 6 1.41-1.41L10.83 12z"/>
-            </svg>
-            <span>Previous</span>
-        </button>
+    <!-- Page Navigation Handle -->
+    <div class="page-nav-handle" id="pageNavHandle"></div>
 
-        <div class="page-indicator">
-            <span id="currentPageNum">0</span> / <span id="totalPagesNum">0</span>
+    <!-- Page Navigation (Bottom) -->
+    <div class="page-nav" id="pageNav">
+        <div class="page-nav-content">
+            <button class="page-nav-btn" id="prevPageBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M15 18l-6-6 6-6"/>
+                </svg>
+            </button>
+            <div class="page-list" id="pageList">
+                <!-- Page thumbnails will be populated by JS -->
+            </div>
+            <button class="page-nav-btn" id="nextPageBtn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M9 18l6-6-6-6"/>
+                </svg>
+            </button>
         </div>
-
-        <button id="btnNextChapter" class="nav-btn nav-btn-next" disabled>
-            <span>Next</span>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M10 6L8.59 7.41 13.17 12l-4.58 4.59L10 18l6-6z"/>
-            </svg>
-        </button>
     </div>
 
     <!-- Chapter List Modal -->
-    <div class="modal-overlay" id="modalOverlay">
+    <div id="modalOverlay" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>Select Chapter</h2>
-                <button class="btn-close-modal" id="btnCloseModal">×</button>
+                <h2>Chapter List</h2>
+                <button class="btn-close-modal" id="btnCloseModal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M18 6L6 18M6 6l12 12"/>
+                    </svg>
+                </button>
             </div>
             <div class="modal-body" id="chapterListModal">
-                <!-- Chapters will be loaded here -->
+                <!-- Chapter list will be populated by JS -->
             </div>
         </div>
     </div>
 
-    <!-- Loading Overlay -->
-    <div class="loading-overlay active" id="loadingOverlay">
-        <div class="loading-spinner"></div>
-        <p>Loading chapter...</p>
-    </div>
+    <!-- Overlay untuk mencegah klik kanan -->
+    <div class="protection-overlay"></div>
 
     <script src="reader.js"></script>
 </body>
