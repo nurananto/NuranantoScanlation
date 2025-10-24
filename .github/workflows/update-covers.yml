@@ -8,6 +8,10 @@ on:
   # Bisa juga trigger manual dari GitHub UI
   workflow_dispatch:
 
+# IMPORTANT: Permissions needed for GitHub Actions to push
+permissions:
+  contents: write  # Allow push to repository
+
 jobs:
   update-covers:
     runs-on: ubuntu-latest
