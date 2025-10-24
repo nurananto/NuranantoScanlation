@@ -336,19 +336,21 @@ header {
   /* GitHub & Facebook - Hanya icon, sembunyikan text */
   .github-link-header,
   .facebook-link-header {
-    height: auto;
-    width: auto;
+    height: 45px;
+    width: 45px;
     min-width: 45px;
     min-height: 45px;
-    padding: 0.5rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
     justify-content: center;
     border-radius: 10px;
   }
   
   .github-link-header .github-icon,
   .facebook-link-header .facebook-icon {
-    width: 26px;
-    height: 26px;
+    width: 24px;
+    height: 24px;
   }
   
   .github-link-header .github-text,
@@ -419,18 +421,21 @@ header {
   
   .github-link-header,
   .facebook-link-header {
-    height: auto;
-    width: auto;
+    height: 40px;
+    width: 40px;
     min-width: 40px;
     min-height: 40px;
-    padding: 0.45rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 8px;
   }
   
   .github-link-header .github-icon,
   .facebook-link-header .facebook-icon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
   
   .github-link-header .github-text,
@@ -622,6 +627,11 @@ header {
     height: 50px;
   }
   
+  .header-buttons {
+    gap: 8px;
+  }
+  
+  .github-link-header,
   .facebook-link-header {
     height: auto;
     padding: 0.45rem 0.85rem;
@@ -629,11 +639,13 @@ header {
     border-radius: 10px;
   }
   
+  .github-link-header .github-icon,
   .facebook-link-header .facebook-icon {
     width: 24px;
     height: 24px;
   }
   
+  .github-link-header .github-text,
   .facebook-link-header .facebook-text {
     font-size: 0.9rem;
   }
@@ -702,26 +714,6 @@ header {
     font-size: 0.7rem;
     line-height: 1.15em;
   }
-  
-  /* Facebook - Hanya icon, sembunyikan text */
-  .facebook-link-header {
-    height: auto;
-    width: auto;
-    min-width: 45px;
-    min-height: 45px;
-    padding: 0.5rem;
-    justify-content: center;
-    border-radius: 10px;
-  }
-  
-  .facebook-link-header .facebook-icon {
-    width: 26px;
-    height: 26px;
-  }
-  
-  .facebook-link-header .facebook-text {
-    display: none;
-  }
 }
 
 @media (max-width: 480px) {
@@ -780,20 +772,30 @@ header {
     line-height: 1.15em;
   }
   
+  .header-buttons {
+    gap: 6px;
+  }
+  
+  .github-link-header,
   .facebook-link-header {
-    height: auto;
-    width: auto;
+    height: 40px;
+    width: 40px;
     min-width: 40px;
     min-height: 40px;
-    padding: 0.45rem;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     border-radius: 8px;
   }
   
+  .github-link-header .github-icon,
   .facebook-link-header .facebook-icon {
-    width: 24px;
-    height: 24px;
+    width: 22px;
+    height: 22px;
   }
   
+  .github-link-header .github-text,
   .facebook-link-header .facebook-text {
     display: none;
   }
