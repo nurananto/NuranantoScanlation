@@ -4,7 +4,12 @@
 
 const mangaList = 
   [
-    {
+  {
+    title: 'Watashi ni Ai wo Oshiete',
+    cover: 'covers/watashi-ni-ai-wo-oshiete-e56a300a-60aa-433e-8589-c8a963f188f8.jpg',
+    repo: 'aiwooshiete'
+  },
+  {
     title: 'Yarikonda Renai Game no Akuyaku ni Tensei shitanode, Gensaku Chishiki de Heroine wo Kouryaku shimasu',
     cover: 'covers/yarikonda-renai-game-no-akuyaku-ni-tensei-shitanod-eaecd9b5-0510-46aa-b65c-a09611fa912b.jpg',
     repo: 'yarikonda'
@@ -58,11 +63,6 @@ const mangaList =
     title: 'Kimi no Negai ga Kanau made',
     cover: 'covers/kimi-no-negai-ga-kanau-made-5c6872ff-e467-44e1-b190-b01c0c1d8857.jpg',
     repo: 'kiminonegai'
-  },
-  {
-    title: 'Watashi ni Ai wo Oshiete',
-    cover: 'covers/watashi-ni-ai-wo-oshiete-e56a300a-60aa-433e-8589-c8a963f188f8.jpg',
-    repo: 'aiwooshiete'
   },
   {
     title: 'Yuumei VTuber no Ani Dakedo, Nazeka Ore ga Yuumei ni Natteita',
