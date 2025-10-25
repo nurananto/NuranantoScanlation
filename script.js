@@ -5,14 +5,14 @@
 const mangaList = 
   [
     {
-      title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
-      cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
-      repo: '10nenburi'
-    },
-    {
       title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
       cover: 'covers/class-de-ichiban-kawaii-gal-o-ezuke-shiteiru-hanas-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
       repo: 'kawaiigal'
+    },
+    {
+      title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
+      cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
+      repo: '10nenburi'
     },
     {
       title: 'Watashi ni Ai wo Oshiete',
