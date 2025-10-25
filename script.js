@@ -5,6 +5,11 @@
 const mangaList = 
   [
     {
+      title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
+      cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
+      repo: '10nenburi'
+    },
+    {
       title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
       cover: 'covers/class-de-ichiban-kawaii-gal-o-ezuke-shiteiru-hanas-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
       repo: 'kawaiigal'
@@ -28,11 +33,6 @@ const mangaList =
       title: 'Seishun wa Sankakukei no Loop',
       cover: 'covers/seishun-wa-sankakukei-no-loop-4cf5a0cc-9123-43bd-bf54-c5f8c0aa9e16.jpg',
       repo: 'sankakukei'
-    },
-    {
-      title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
-      cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
-      repo: '10nenburi'
     },
     {
       title: 'Madogiwa Henshuu to Baka ni Sareta Ore ga, Futago JK to Doukyo suru Koto ni Natta',
