@@ -129,7 +129,7 @@ img {
     border-bottom: 1px solid var(--border-color);
     position: relative;
     z-index: 999;
-    flex-wrap: wrap;
+    flex-wrap: nowrap; /* Prevent wrapping on mobile */
 }
 
 .nav-btn {
@@ -146,12 +146,16 @@ img {
     font-size: 0.95rem;
     font-weight: 600;
     transition: all 0.3s ease;
-    flex: 1;
-    min-width: 0;
     min-height: 44px; /* Ensure minimum height for all buttons */
     white-space: nowrap;
     box-sizing: border-box;
     text-align: center;
+}
+
+/* Back button - fixed width */
+.back-btn {
+    flex: 0 0 auto;
+    min-width: 140px;
 }
 
 .nav-btn:hover {
@@ -167,14 +171,20 @@ img {
 
 /* Chapter Selector */
 .chapter-selector {
-    flex: 1;
-    min-width: 0;
+    flex: 0 0 auto;
+    min-width: 180px;
 }
 
 .chapter-btn {
     width: 100%;
     justify-content: center;
     text-align: center;
+    white-space: normal; /* Allow wrap if needed */
+    line-height: 1.3;
+    max-height: 2.86rem; /* Same as manga title - 2 lines max */
+    overflow: hidden;
+    display: flex;
+    align-items: center;
 }
 
 /* Reader Container */
@@ -196,6 +206,7 @@ img {
     -webkit-overflow-scrolling: touch;
     touch-action: pan-x pinch-zoom; /* Allow horizontal scroll and pinch zoom */
     max-width: 100vw;
+    height: 100vh; /* Full viewport height */
     padding: 0;
     margin: 0;
     scrollbar-width: none; /* Firefox */
@@ -223,12 +234,15 @@ img {
 }
 
 .manga-mode .reader-page {
-    min-width: 100vw;
-    max-width: 100vw;
-    height: auto;
-    object-fit: contain;
+    min-width: auto;
+    max-width: none;
+    width: auto;
+    height: 100vh; /* Fit to viewport height */
+    max-height: 100vh;
+    object-fit: contain; /* Maintain aspect ratio, fit height */
     scroll-snap-align: start;
     flex-shrink: 0;
+    touch-action: pinch-zoom; /* Enable pinch to zoom on mobile */
 }
 
 .webtoon-mode .reader-page {
@@ -401,12 +415,14 @@ body.show-page-nav .page-nav-handle {
     display: flex;
     gap: 0.8rem;
     overflow-x: auto;
-    padding: 0.5rem 0;
+    padding: 0.5rem 1.5rem; /* Horizontal padding for all devices */
     scroll-behavior: smooth;
     flex: 1;
     min-height: 140px; /* Reserve space for thumbnails */
     align-items: center;
-    justify-content: center; /* Center thumbnails when there are few */
+    justify-content: flex-start; /* Align to start */
+    scroll-padding: 1.5rem; /* Ensure scrolling stops with padding visible */
+    scroll-snap-type: x proximity; /* Optional: snap to thumbnails */
 }
 
 .page-list::-webkit-scrollbar {
@@ -436,11 +452,14 @@ body.show-page-nav .page-nav-handle {
     opacity: 0;
     visibility: hidden;
     transform: translateY(20px);
+    scroll-snap-align: center; /* Snap to center when scrolling */
+    flex-shrink: 0; /* Prevent shrinking */
 }
 
-/* Show thumbnails on hover */
+/* Show thumbnails on hover OR when page nav is shown on mobile */
 .page-nav:hover .page-thumb,
-.page-list:hover .page-thumb {
+.page-list:hover .page-thumb,
+body.show-page-nav .page-thumb {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
@@ -451,6 +470,33 @@ body.show-page-nav .page-nav-handle {
     height: 100%;
     object-fit: cover;
     pointer-events: none;
+    background-color: var(--secondary-bg);
+}
+
+/* Loading state for thumbnails */
+.page-thumb:not(.loaded) img {
+    opacity: 0.3;
+}
+
+.page-thumb.loaded img {
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+/* Error state */
+.page-thumb.error {
+    background-color: var(--border-color);
+}
+
+.page-thumb.error::before {
+    content: '✕';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    color: var(--text-secondary);
+    font-size: 1.5rem;
+    z-index: 1;
 }
 
 .page-thumb.active {
@@ -619,20 +665,28 @@ body.show-page-nav .page-nav-handle {
     .navbar {
         padding: 0.8rem;
         gap: 0.5rem;
+        overflow-x: hidden; /* Prevent horizontal overflow */
     }
 
     .nav-btn {
-        padding: 0.5rem 0.8rem;
+        padding: 0.5rem 0.6rem;
         font-size: 0.85rem;
         min-height: 40px; /* Adjust for tablet */
+        flex: 1 1 0; /* Equal flex basis */
+        min-width: 0; /* Allow shrinking */
     }
 
     .chapter-selector {
-        /* Keep flex: 1 for equal size */
+        min-width: 160px;
     }
 
-    .mode-btn span {
-        /* Text will be controlled by 900px media query */
+    .back-btn {
+        min-width: 150px;
+    }
+
+    .nav-btn {
+        padding: 0.6rem 1rem;
+        font-size: 0.9rem;
     }
 
     .reader-container {
@@ -643,6 +697,10 @@ body.show-page-nav .page-nav-handle {
     .page-thumb {
         min-width: 60px;
         height: 90px;
+    }
+
+    .page-list {
+        padding: 0.5rem 2rem; /* Extra padding for tablet/mobile */
     }
 
     .next-chapter-btn {
@@ -673,14 +731,52 @@ body.show-page-nav .page-nav-handle {
         max-height: 2.21rem;
     }
 
-    .back-btn span {
-        display: none; /* Hide "Back to Info" text on small mobile */
+    .navbar {
+        padding: 0.6rem 0.4rem;
+        gap: 0.4rem;
+    }
+
+    .nav-btn {
+        padding: 0.5rem 0.6rem;
+        font-size: 0.75rem;
+        min-height: 44px;
+    }
+
+    .back-btn {
+        flex: 0 0 auto;
+        min-width: 120px;
+        max-width: 140px;
+    }
+
+    .chapter-selector {
+        flex: 1;
+        min-width: 0; /* Allow shrinking */
+    }
+
+    .chapter-btn {
+        width: 100%;
+        white-space: normal;
+        line-height: 1.2;
     }
 
     .chapter-selector {
         order: 3;
         width: 100%;
         max-width: 100%;
+    }
+
+    .reader-container.manga-mode {
+        height: calc(100vh - 80px); /* Account for navbar */
+        align-items: center; /* Center images vertically */
+        justify-content: center; /* Center images horizontally */
+    }
+
+    .manga-mode .reader-page {
+        height: auto;
+        max-height: calc(100vh - 80px);
+        width: 100vw;
+        max-width: 100vw;
+        object-fit: contain;
     }
 
     .page-nav {
@@ -690,6 +786,7 @@ body.show-page-nav .page-nav-handle {
 
     .page-list {
         min-height: 100px;
+        padding: 0.5rem 1.5rem; /* Extra padding on mobile for first/last thumbnails */
     }
 
     .page-thumb {

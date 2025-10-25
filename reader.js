@@ -45,8 +45,6 @@ let totalPages = 0;
 
 // DOM Elements
 const readerContainer = document.getElementById('readerContainer');
-const modeBtn = document.getElementById('modeBtn');
-const modeText = document.getElementById('modeText');
 const pageNav = document.getElementById('pageNav');
 const pageList = document.getElementById('pageList');
 const prevPageBtn = document.getElementById('prevPageBtn');
@@ -55,9 +53,25 @@ const btnNextChapterBottom = document.getElementById('btnNextChapterBottom');
 
 // Load saat halaman dimuat
 document.addEventListener('DOMContentLoaded', async () => {
-    initProtection();
-    await initializeReader();
-    setupEnhancedEventListeners();
+    try {
+        initProtection();
+        await initializeReader();
+        setupEnhancedEventListeners();
+    } catch (error) {
+        console.error('❌ Fatal error during initialization:', error);
+        alert(`Terjadi kesalahan saat memuat reader:\n${error.message}\n\nSilakan refresh halaman atau kembali ke info.`);
+        hideLoading();
+    }
+});
+
+// Global error handler
+window.addEventListener('error', (event) => {
+    console.error('❌ Global error:', event.error);
+    // Don't show alert for every error, just log it
+});
+
+window.addEventListener('unhandledrejection', (event) => {
+    console.error('❌ Unhandled promise rejection:', event.reason);
 });
 
 /**
@@ -210,6 +224,31 @@ function loadLastPage() {
 }
 
 /**
+ * Adjust chapter title font size to fit in button
+ */
+function adjustChapterTitleFontSize(element) {
+    const parentButton = element.closest('.chapter-btn');
+    if (!parentButton) return;
+    
+    const maxHeight = 44; // Button min-height
+    let fontSize = parseFloat(window.getComputedStyle(element).fontSize);
+    const minFontSize = 10;
+    
+    // Function to check if text overflows button height
+    const checkOverflow = () => {
+        return element.scrollHeight > maxHeight;
+    };
+    
+    // Reduce font size until it fits
+    while (checkOverflow() && fontSize > minFontSize) {
+        fontSize -= 0.5;
+        element.style.fontSize = `${fontSize}px`;
+    }
+    
+    console.log(`📝 Chapter title font adjusted to: ${fontSize}px`);
+}
+
+/**
  * Setup UI elements
  */
 function setupUI() {
@@ -224,8 +263,9 @@ function setupUI() {
     const titleElement = document.getElementById('chapterTitle');
     titleElement.textContent = currentChapter.title;
     
-    // Set mode text based on current mode
-    modeText.textContent = readMode === 'manga' ? 'Manga' : 'Webtoon';
+    // Adjust chapter title font size to fit in button
+    adjustChapterTitleFontSize(titleElement);
+    
     console.log(`📖 Read mode: ${readMode}`);
     
     // Setup back button
@@ -490,6 +530,16 @@ function goToPage(pageNum) {
 }
 
 /**
+ * Generate thumbnail URL using image proxy for faster loading
+ */
+function getThumbnailUrl(originalUrl) {
+    // Use images.weserv.nl proxy to resize images on-the-fly
+    // Original: ~2MB, Thumbnail: ~50KB (40x faster!)
+    const encodedUrl = originalUrl.replace('https://', '');
+    return `https://images.weserv.nl/?url=${encodedUrl}&w=200&h=300&fit=cover&output=webp`;
+}
+
+/**
  * Render page thumbnails
  */
 function renderPageThumbnails() {
@@ -508,11 +558,30 @@ function renderPageThumbnails() {
         }
         
         const paddedPage = String(i).padStart(2, '0');
-        const imageUrl = `${repoUrl}/${currentChapterFolder}/${imagePrefix}${paddedPage}.${imageFormat}`;
+        const originalUrl = `${repoUrl}/${currentChapterFolder}/${imagePrefix}${paddedPage}.${imageFormat}`;
         
         const img = document.createElement('img');
-        img.src = imageUrl;
+        img.loading = 'lazy'; // Add lazy loading for thumbnails
         img.alt = `Page ${i}`;
+        
+        // Add loading placeholder
+        img.style.backgroundColor = 'var(--secondary-bg)';
+        
+        // Use thumbnail proxy for faster loading
+        const thumbnailUrl = getThumbnailUrl(originalUrl);
+        img.src = thumbnailUrl;
+        
+        // Add loaded class when image loads
+        img.onload = () => {
+            thumb.classList.add('loaded');
+        };
+        
+        img.onerror = () => {
+            // Fallback to original if proxy fails
+            console.warn(`Proxy failed for page ${i}, using original`);
+            img.src = originalUrl;
+            thumb.classList.add('error');
+        };
         
         const pageNum = document.createElement('div');
         pageNum.className = 'page-number';
@@ -527,6 +596,8 @@ function renderPageThumbnails() {
         
         pageList.appendChild(thumb);
     }
+    
+    console.log(`📸 Generated ${totalPages} thumbnails using image proxy`);
 }
 
 /**
@@ -806,28 +877,6 @@ function initProtection() {
  * Setup enhanced event listeners
  */
 function setupEnhancedEventListeners() {
-    // Mode toggle
-    modeBtn.addEventListener('click', async () => {
-        readMode = readMode === 'manga' ? 'webtoon' : 'manga';
-        modeText.textContent = readMode === 'manga' ? 'Manga' : 'Webtoon';
-        
-        // Save mode to localStorage
-        localStorage.setItem('readMode', readMode);
-        
-        // Reset next chapter button visibility
-        const nextChapterContainer = document.getElementById('nextChapterContainer');
-        readerContainer.classList.remove('show-next-chapter');
-        if (readMode === 'manga') {
-            nextChapterContainer.style.display = 'none'; // Hide in manga mode initially
-        } else {
-            nextChapterContainer.style.display = 'block'; // Show in webtoon mode
-        }
-        
-        // Reload pages with new mode
-        currentPage = 1;
-        await loadChapterPages();
-    });
-    
     // Page navigation handle
     const pageNavHandle = document.getElementById('pageNavHandle');
     
@@ -872,31 +921,56 @@ function setupEnhancedEventListeners() {
         }, 500);
     });
     
-    // Touch support for mobile
+    // Touch support for mobile - Immediate show with single tap
     let touchTimeout;
+    let isNavShowing = false;
     
+    // Single tap on progress bar handle shows navigation
     pageNavHandle.addEventListener('touchstart', (e) => {
-        e.preventDefault();
+        e.stopPropagation();
         document.body.classList.add('show-page-nav');
+        isNavShowing = true;
         clearTimeout(touchTimeout);
         
         touchTimeout = setTimeout(() => {
             document.body.classList.remove('show-page-nav');
+            isNavShowing = false;
         }, 5000);
     });
     
-    document.addEventListener('touchstart', () => {
-        // Only show briefly on touch if not touching handle
-        if (!event.target.closest('.page-nav-handle') && !event.target.closest('.page-nav')) {
-            clearTimeout(touchTimeout);
-            touchTimeout = setTimeout(() => {
-                document.body.classList.add('show-page-nav');
-                
-                setTimeout(() => {
-                    document.body.classList.remove('show-page-nav');
-                }, 3000);
-            }, 100);
+    // Tap near bottom to show navigation immediately
+    document.addEventListener('touchstart', (e) => {
+        // Ignore if already tapping on page nav itself
+        if (e.target.closest('.page-nav')) {
+            return;
         }
+        
+        const windowHeight = window.innerHeight;
+        const touchY = e.touches[0].clientY;
+        
+        // Show immediately if touching bottom 50px
+        if (touchY > windowHeight - 50) {
+            document.body.classList.add('show-page-nav');
+            isNavShowing = true;
+            clearTimeout(touchTimeout);
+            
+            touchTimeout = setTimeout(() => {
+                document.body.classList.remove('show-page-nav');
+                isNavShowing = false;
+            }, 4000);
+        }
+    }, { passive: true });
+    
+    // Tap anywhere on page-nav to keep it visible
+    pageNav.addEventListener('touchstart', () => {
+        clearTimeout(touchTimeout);
+        document.body.classList.add('show-page-nav');
+        isNavShowing = true;
+        
+        touchTimeout = setTimeout(() => {
+            document.body.classList.remove('show-page-nav');
+            isNavShowing = false;
+        }, 5000);
     });
     
     // Keyboard navigation
