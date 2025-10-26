@@ -119,8 +119,21 @@ function isRecentlyUpdated(lastChapterUpdateStr) {
   if (!lastChapterUpdateStr) return false;
   
   const lastChapterUpdate = new Date(lastChapterUpdateStr);
+  
+  // Validasi: Cek apakah date valid
+  if (isNaN(lastChapterUpdate.getTime())) {
+    console.warn(`Invalid date format: ${lastChapterUpdateStr}`);
+    return false;
+  }
+  
   const now = new Date();
   const diffDays = (now - lastChapterUpdate) / (1000 * 60 * 60 * 24);
+  
+  // Validasi: Cek apakah date tidak di masa depan
+  if (diffDays < 0) {
+    console.warn(`Future date detected: ${lastChapterUpdateStr}`);
+    return false;
+  }
   
   return diffDays <= 1; // Update dalam 1 hari terakhir (24 jam)
 }
@@ -237,7 +250,12 @@ async function renderMangaList(filteredList = mangaList) {
   mangaWithData.sort((a, b) => {
     const dateA = a.lastChapterUpdate ? new Date(a.lastChapterUpdate) : new Date(0);
     const dateB = b.lastChapterUpdate ? new Date(b.lastChapterUpdate) : new Date(0);
-    return dateB - dateA; // Descending (terbaru dulu)
+    
+    // Validasi: Handle invalid dates
+    const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
+    const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
+    
+    return timeB - timeA; // Descending (terbaru dulu)
   });
   
   // Sembunyikan loading
