@@ -1,33 +1,15 @@
 /**
- * READER.JS (INTEGRATED VERSION)
- * Manga Reader - Support chapters dari multiple repos
- * Auto-redirect ke Trakteer untuk locked chapters
- * Track chapter views to pending-chapter-views.json via Google Apps Script
- * Enhanced with page navigation, mode switching, and image protection
+ * READER.JS
+ * Manga reader with navigation
  */
 
-// Mapping repo ke URL manga.json
-const MANGA_REPOS = {
-    '10nenburi': 'https://raw.githubusercontent.com/nurananto/10nenburi/main/manga.json',
-    'madogiwa' : 'https://raw.githubusercontent.com/nurananto/MadogiwaHenshuu/refs/heads/main/manga.json',
-    'yarikonda': 'https://raw.githubusercontent.com/nurananto/YarikondaRenaiGame/refs/heads/main/manga.json',
-    'tensai'   : 'https://raw.githubusercontent.com/nurananto/TensaiBishoujo/refs/heads/main/manga.json',
-    'suufungo' : 'https://raw.githubusercontent.com/nurananto/SuufungonoMirai/refs/heads/main/manga.json',
-    'sankakukei' : 'https://raw.githubusercontent.com/nurananto/SankakukeinoLoop/refs/heads/main/manga.json',
-    'negatte' : 'https://raw.githubusercontent.com/nurananto/NegattemoNai/refs/heads/main/manga.json',
-    'midari' : 'https://raw.githubusercontent.com/nurananto/Midari/refs/heads/main/manga.json',
-    'kiminonegai' : 'https://raw.githubusercontent.com/nurananto/KiminoNegai/refs/heads/main/manga.json',
-    'amarichan' : 'https://raw.githubusercontent.com/nurananto/Amarichan/refs/heads/main/manga.json',
-    'aiwooshiete' : 'https://raw.githubusercontent.com/nurananto/AiwoOshiete/refs/heads/main/manga.json',
-    'kawaiigal' : 'https://raw.githubusercontent.com/nurananto/KawaiiGal/refs/heads/main/manga.json',
-    'vtuber' : 'https://raw.githubusercontent.com/nurananto/YuumeiVTuber/refs/heads/main/manga.json',
-    'uchi' : 'https://raw.githubusercontent.com/nurananto/UchinoSeiso-kei/refs/heads/main/manga.json',
-};
+// ============================================
+// MANGA_REPOS sudah di-export dari manga-config.js
+// TIDAK PERLU DEFINE DI SINI LAGI!
+// ============================================
 
 // Link Trakteer untuk chapter terkunci
 const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
-
-// Google Apps Script URL untuk chapter view counter
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ0-VeyloQxjvh-h65G0wtfAzxVq6VYzU5Bz9n1Rl0T4GAkGu9X7HmGh_3_0cJhCS1iA/exec';
 
 // Debug mode - set to true to allow console access
