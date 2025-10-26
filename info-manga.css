@@ -7,8 +7,8 @@
 
 body {
     font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
-    background-color: #1a1a1a;
-    color: #e0e0e0;
+    background-color: #0a0a0a;
+    color: #e4e6eb;
     padding: 20px;
     line-height: 1.6;
 }
@@ -44,95 +44,82 @@ header {
 }
 
 /* GitHub Link di Header - Abu-abu Putih */
+/* GitHub Link - Solid Black Background */
 .github-link-header {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
-    padding: 0.5rem 1rem;
-    height: auto;
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 12px;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #24292e;
+    border-radius: 8px;
     text-decoration: none;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(200, 200, 200, 0.5);
 }
 
 .github-link-header:hover {
-    background: rgba(255, 255, 255, 0.1);
-    border-color: #d0d0d0;
-    transform: scale(1.03);
-    box-shadow: 0 4px 20px rgba(200, 200, 200, 0.3);
+    background: #1b1f23;
+    transform: translateY(-2px);
 }
 
 .github-link-header .github-icon {
-    width: 32px;
-    height: 32px;
-    color: #d0d0d0;
-    transition: color 0.3s ease;
+    width: 24px;
+    height: 24px;
+    color: #fff;
     flex-shrink: 0;
 }
 
 .github-link-header:hover .github-icon {
-    color: #ffffff;
+    color: #fff;
 }
 
 .github-link-header .github-text {
-    color: #d0d0d0;
+    color: #fff;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 14px;
     white-space: nowrap;
-    transition: color 0.3s ease;
 }
 
 .github-link-header:hover .github-text {
-    color: #ffffff;
+    color: #fff;
 }
 
-/* Facebook Link di Header - Sejajar dengan Logo */
+/* Facebook Link - Solid Blue Background */
 .facebook-link-header {
     display: flex;
     align-items: center;
-    gap: 0.625rem;
-    padding: 0.5rem 1rem;
-    height: auto;
-    background: rgba(0, 0, 0, 0.8);
-    border-radius: 12px;
+    gap: 8px;
+    padding: 8px 16px;
+    background: #1877f2;
+    border-radius: 8px;
     text-decoration: none;
     transition: all 0.3s ease;
-    backdrop-filter: blur(10px);
-    border: 2px solid rgba(59, 130, 246, 0.5);
 }
 
 .facebook-link-header:hover {
-    background: rgba(59, 130, 246, 0.15);
-    border-color: #3b82f6;
-    transform: scale(1.03);
-    box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+    background: #166fe5;
+    transform: translateY(-2px);
 }
 
 .facebook-link-header .facebook-icon {
-    width: 32px;
-    height: 32px;
-    color: #60a5fa;
-    transition: color 0.3s ease;
+    width: 24px;
+    height: 24px;
+    color: #fff;
     flex-shrink: 0;
 }
 
 .facebook-link-header:hover .facebook-icon {
-    color: #93c5fd;
+    color: #fff;
 }
 
 .facebook-link-header .facebook-text {
-    color: #60a5fa;
+    color: #fff;
     font-weight: 600;
-    font-size: 1rem;
+    font-size: 14px;
     white-space: nowrap;
-    transition: color 0.3s ease;
 }
 
 .facebook-link-header:hover .facebook-text {
-    color: #93c5fd;
+    color: #fff;
 }
 
 /* Main Container */
@@ -223,7 +210,7 @@ header {
 .info-value {
     font-size: 14px;
     font-weight: 600;
-    color: #e0e0e0;
+    color: #e4e6eb;
 }
 
 /* Genre Tags - bisa expand sesuai jumlah genre */
@@ -240,14 +227,14 @@ header {
     border-radius: 15px;
     font-size: 12px;
     font-weight: 600;
-    color: #e0e0e0;
+    color: #e4e6eb;
     text-transform: capitalize;
 }
 
 /* Sidebar Buttons - TOMBOL hanya untuk link eksternal */
 .sidebar-btn {
     background-color: #2a2a2a;
-    color: #e0e0e0;
+    color: #e4e6eb;
     border: 1px solid #3a3a3a;
     padding: 12px 20px;
     font-size: 14px;
@@ -426,7 +413,7 @@ header {
 .section-title {
     font-size: 16px;
     font-weight: 700;
-    color: #e0e0e0;
+    color: #e4e6eb;
     text-align: center;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -536,7 +523,7 @@ header {
 .btn-show-more {
     width: 100%;
     background-color: #2a2a2a;
-    color: #e0e0e0;
+    color: #e4e6eb;
     border: 1px solid #3a3a3a;
     padding: 12px 20px;
     font-size: 14px;
@@ -562,7 +549,7 @@ header {
 .chapter-title-text {
     font-size: 16px;
     font-weight: 600;
-    color: #e0e0e0;
+    color: #e4e6eb;
 }
 
 .chapter-meta {

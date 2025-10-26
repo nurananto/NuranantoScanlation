@@ -1,29 +1,40 @@
-/* === FINAL STYLE NURANANTO SCANLATION === */
-
-:root {
-  font-size: 16px;
+/* Reset & Base Styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-  background-color: #111;
-  color: #fff;
-  font-family: "Rounded Mplus 1c", "M PLUS Rounded 1c", "Varela Round", "Nunito", "Comfortaa", "Quicksand", "Segoe UI", sans-serif;
-  margin: 0;
-  padding: 1.25rem;
+  font-family: 'Roboto', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+  background-color: #0a0a0a;
+  color: #e4e6eb;
+  line-height: 1.6;
   padding-bottom: 100px;
 }
 
-/* Header dengan logo, GitHub, dan Facebook */
+/* Header Styles */
 header {
-  max-width: 1400px;
-  margin: 0 auto 1rem;
-  padding: 0 1.5rem;
+  background-color: #18191a;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  padding: 15px 20px;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  border-bottom: 1px solid #2f3336;
 }
 
 .header-content {
+  max-width: 1200px;
+  margin: 0 auto;
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.site-logo {
+  height: 50px;
+  width: auto;
 }
 
 .header-buttons {
@@ -32,843 +43,399 @@ header {
   align-items: center;
 }
 
-.site-logo {
-  height: 60px;
-  width: auto;
-  display: block;
-}
-
-/* GitHub Link di Header - Abu-abu Putih */
+/* GitHub Link */
 .github-link-header {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
-  padding: 0.5rem 1rem;
-  height: auto;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 12px;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #24292e;
+  border-radius: 8px;
   text-decoration: none;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(200, 200, 200, 0.5);
 }
 
 .github-link-header:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #d0d0d0;
-  transform: scale(1.03);
-  box-shadow: 0 4px 20px rgba(200, 200, 200, 0.3);
+  background: #1b1f23;
+  transform: translateY(-2px);
 }
 
-.github-link-header .github-icon {
-  width: 32px;
-  height: 32px;
-  color: #d0d0d0;
-  transition: color 0.3s ease;
-  flex-shrink: 0;
+.github-icon {
+  width: 24px;
+  height: 24px;
+  color: #fff;
 }
 
-.github-link-header:hover .github-icon {
-  color: #ffffff;
-}
-
-.github-link-header .github-text {
-  color: #d0d0d0;
+.github-text {
+  color: #fff;
   font-weight: 600;
-  font-size: 1rem;
-  white-space: nowrap;
-  transition: color 0.3s ease;
+  font-size: 14px;
 }
 
-.github-link-header:hover .github-text {
-  color: #ffffff;
-}
-
-/* Facebook Link di Header - Sejajar dengan Logo */
+/* Facebook Link */
 .facebook-link-header {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
-  padding: 0.5rem 1rem;
-  height: auto;
-  background: rgba(0, 0, 0, 0.8);
-  border-radius: 12px;
+  gap: 8px;
+  padding: 8px 16px;
+  background: #1877f2;
+  border-radius: 8px;
   text-decoration: none;
   transition: all 0.3s ease;
-  backdrop-filter: blur(10px);
-  border: 2px solid rgba(59, 130, 246, 0.5);
 }
 
 .facebook-link-header:hover {
-  background: rgba(59, 130, 246, 0.15);
-  border-color: #3b82f6;
-  transform: scale(1.03);
-  box-shadow: 0 4px 20px rgba(59, 130, 246, 0.5);
+  background: #166fe5;
+  transform: translateY(-2px);
 }
 
-.facebook-link-header .facebook-icon {
-  width: 32px;
-  height: 32px;
-  color: #60a5fa;
-  transition: color 0.3s ease;
+.facebook-icon {
+  width: 24px;
+  height: 24px;
+  color: #fff;
+}
+
+.facebook-text {
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+/* Search Section */
+.search-section {
+  max-width: 1200px;
+  margin: 20px auto;
+  padding: 0 20px;
+}
+
+#searchInput {
+  width: 100%;
+  padding: 15px 20px;
+  font-size: 16px;
+  border: 2px solid #3a3b3c;
+  border-radius: 8px;
+  transition: all 0.3s ease;
+  background-color: #3a3b3c;
+  color: #e4e6eb;
+}
+
+#searchInput::placeholder {
+  color: #8a8d91;
+}
+
+#searchInput:focus {
+  outline: none;
+  border-color: #1877f2;
+  box-shadow: 0 0 0 3px rgba(24, 119, 242, 0.2);
+  background-color: #242526;
+}
+
+/* Trakteer Button - Merah Original - Squircle Shape */
+.trakteer-button {
+  position: fixed;
+  bottom: 30px;
+  left: 1.5rem;
+  right: 1.5rem;
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #be1e2d 0%, #d32f2f 100%);
+  padding: 0.75rem 1.25rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: white;
+  font-weight: 700;
+  font-size: 0.95rem;
+  box-shadow: 0 4px 15px rgba(190, 30, 45, 0.4);
+  transition: all 0.3s ease;
+  max-width: calc(1400px - 3rem);
+  margin: 0 auto;
+}
+
+.trakteer-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 25px rgba(190, 30, 45, 0.6);
+  background: linear-gradient(135deg, #d32f2f 0%, #e53935 100%);
+}
+
+.trakteer-icon {
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
   flex-shrink: 0;
 }
 
-.facebook-link-header:hover .facebook-icon {
-  color: #93c5fd;
+/* Loading Indicator */
+.loading-indicator {
+  text-align: center;
+  padding: 40px 20px;
+  display: none;
 }
 
-.facebook-link-header .facebook-text {
-  color: #60a5fa;
-  font-weight: 600;
-  font-size: 1rem;
+.loading-indicator.show {
+  display: block;
+}
+
+.spinner {
+  width: 50px;
+  height: 50px;
+  border: 4px solid #f3f3f3;
+  border-top: 4px solid #1877f2;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin: 0 auto 15px;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Manga List Container */
+.manga-list-container {
+  max-width: 1200px;
+  margin: 0 auto 40px;
+  padding: 0 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* Manga Card - Horizontal Layout */
+.manga-card {
+  background-color: #242526;
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  height: 200px;
+  border: 1px solid #3a3b3c;
+}
+
+.manga-card:hover {
+  box-shadow: 0 8px 25px rgba(24, 119, 242, 0.3);
+  transform: translateY(-4px);
+  border-color: #1877f2;
+}
+
+/* Cover Section */
+.manga-cover-section {
+  width: 140px;
+  flex-shrink: 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.manga-cover-image {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.3s ease;
+}
+
+.manga-card:hover .manga-cover-image {
+  transform: scale(1.05);
+}
+
+/* Updated Badge - Biru Facebook */
+.updated-badge {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  background: linear-gradient(135deg, #1877f2 0%, #0a5bd6 100%);
+  color: #fff;
+  padding: 6px 12px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  box-shadow: 0 2px 8px rgba(24, 119, 242, 0.5);
+  z-index: 10;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+.badge-text {
+  line-height: 1;
+}
+
+/* Timestamp disembunyikan */
+.badge-time {
+  display: none;
+}
+
+@keyframes pulse {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(24, 119, 242, 0.5);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(24, 119, 242, 0.7);
+  }
+}
+
+/* Recently Updated Card - Efek glow biru */
+.manga-card.recently-updated {
+  border: 2px solid rgba(24, 119, 242, 0.5);
+  box-shadow: 0 2px 10px rgba(24, 119, 242, 0.3);
+}
+
+.manga-card.recently-updated:hover {
+  box-shadow: 0 8px 25px rgba(24, 119, 242, 0.5);
+}
+
+/* Info Section */
+.manga-info-section {
+  flex: 1;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  overflow: hidden;
+}
+
+/* Title Container */
+.manga-title-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin-bottom: 15px;
+}
+
+/* Red dot dihapus - tidak perlu lagi */
+.status-dot {
+  display: none;
+}
+
+.manga-title-text {
+  font-size: 18px;
+  font-weight: 700;
+  color: #e4e6eb;
+  line-height: 1.3;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Chapters List */
+.manga-chapters-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.chapter-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.chapter-icon {
+  width: 20px;
+  height: 20px;
+  flex-shrink: 0;
+}
+
+.chapter-icon svg {
+  width: 100%;
+  height: 100%;
+  fill: #7f8c8d;
+}
+
+.chapter-title {
+  font-size: 14px;
+  color: #b0b3b8;
+  font-weight: 500;
   white-space: nowrap;
-  transition: color 0.3s ease;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.facebook-link-header:hover .facebook-text {
-  color: #93c5fd;
+.chapter-item:first-child .chapter-title {
+  color: #1877f2;
+  font-weight: 600;
 }
 
-/* Search Section - Melintang penuh di bawah header */
-.search-section {
-  max-width: 1400px;
-  margin: 0 auto 2.5rem;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: #8a8d91;
 }
 
-#searchInput {
-  width: 100%;
-  padding: 0.75rem 1.25rem;
-  font-size: 1rem;
-  border-radius: 50px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  outline: none;
-  background: #222;
-  color: #fff;
-  transition: all 0.3s ease;
+.empty-state p {
+  font-size: 18px;
+  margin-bottom: 10px;
+  color: #b0b3b8;
 }
 
-#searchInput:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-}
-
-#searchInput::placeholder {
-  color: #888;
-}
-
-/* Donation Box Trakteer - Floating di bawah dengan ukuran SAMA PERSIS seperti search bar */
-.trakteer-button {
-  position: fixed;
-  bottom: 30px;
-  left: 1.5rem;
-  right: 1.5rem;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, #be1e2d 0%, #d32f2f 100%);
-  padding: 0.75rem 1.25rem;
-  border-radius: 50px;
-  text-decoration: none;
-  color: white;
-  font-weight: 700;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 15px rgba(190, 30, 45, 0.4);
-  transition: all 0.3s ease;
-  
-  /* Lebar otomatis dari left-right, sama seperti search bar */
-  max-width: calc(1400px - 3rem);
-  margin: 0 auto;
-}
-
-.trakteer-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(190, 30, 45, 0.6);
-  background: linear-gradient(135deg, #d32f2f 0%, #e53935 100%);
-}
-
-.trakteer-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-/* Grid responsif */
-.grid-container {
-  display: grid;
-  gap: 1.25rem;
-  justify-content: center;
-  padding: 0 1.5rem;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-@media (min-width: 1024px) {
-  .grid-container {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .grid-container {
-    grid-template-columns: repeat(3, 1fr);
-    padding: 0 1rem;
-    gap: 1rem;
-  }
-  
-  header {
-    padding: 0 1rem;
-  }
-  
-  .search-section {
-    padding: 0 1rem;
-  }
-  
-  .trakteer-button {
-    left: 1rem;
-    right: 1rem;
-    bottom: 30px;
-    font-size: 1rem;
-  }
-  
+/* Responsive Design */
+@media (max-width: 768px) {
   .site-logo {
-    height: 50px;
-  }
-  
-  .header-buttons {
-    gap: 8px;
-  }
-  
-  .github-link-header,
-  .facebook-link-header {
-    height: auto;
-    padding: 0.45rem 0.85rem;
-    gap: 0.5rem;
-    border-radius: 10px;
-  }
-  
-  .github-link-header .github-icon,
-  .facebook-link-header .facebook-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .github-link-header .github-text,
-  .facebook-link-header .facebook-text {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 767px) {
-  body {
-    padding-bottom: 110px;
-  }
-  
-  .grid-container {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0 0.625rem;
-    gap: 0.875rem;
-  }
-  
-  header {
-    padding: 0 0.625rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .search-section {
-    padding: 0 0.625rem;
-    margin-bottom: 2rem;
-  }
-  
-  #searchInput {
-    padding: 0.65rem 1rem;
-    font-size: 0.95rem;
-  }
-  
-  .trakteer-button {
-    left: 0.625rem;
-    right: 0.625rem;
-    padding: 0.65rem 1rem;
-    font-size: 0.85rem;
-    bottom: 30px;
-  }
-  
-  .trakteer-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .site-logo {
-    height: 45px;
-  }
-  
-  /* Dynamic font sizes untuk mobile */
-  .title-large {
-    font-size: 1rem;
-    line-height: 1.3em;
+    height: 40px;
   }
 
-  .title-medium {
-    font-size: 0.875rem;
-    line-height: 1.25em;
-  }
-
-  .title-small {
-    font-size: 0.8rem;
-    line-height: 1.2em;
-  }
-
-  .title-xsmall {
-    font-size: 0.7rem;
-    line-height: 1.15em;
-  }
-  
-  .header-buttons {
-    gap: 8px;
-  }
-  
-  /* GitHub & Facebook - Hanya icon, sembunyikan text */
-  .github-link-header,
-  .facebook-link-header {
-    height: 45px;
-    width: 45px;
-    min-width: 45px;
-    min-height: 45px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 10px;
-  }
-  
-  .github-link-header .github-icon,
-  .facebook-link-header .facebook-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .github-link-header .github-text,
-  .facebook-link-header .facebook-text {
+  .github-text,
+  .facebook-text {
     display: none;
+  }
+
+  .github-link-header,
+  .facebook-link-header {
+    padding: 8px;
+  }
+
+  .manga-card {
+    height: 180px;
+  }
+
+  .manga-cover-section {
+    width: 120px;
+  }
+
+  .manga-info-section {
+    padding: 15px;
+  }
+
+  .manga-title-text {
+    font-size: 16px;
+  }
+
+  .chapter-title {
+    font-size: 13px;
   }
 }
 
 @media (max-width: 480px) {
-  body {
-    padding-bottom: 105px;
-  }
-  
-  .grid-container {
-    padding: 0 0.5rem;
-    gap: 0.75rem;
-  }
-  
-  header {
-    padding: 0 0.5rem;
-  }
-  
-  .search-section {
-    padding: 0 0.5rem;
-  }
-  
-  .trakteer-button {
-    left: 0.5rem;
-    right: 0.5rem;
-    font-size: 0.8rem;
-    padding: 0.6rem 0.9rem;
-    bottom: 25px;
-  }
-  
-  .trakteer-icon {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .site-logo {
-    height: 40px;
-  }
-  
-  /* Dynamic font sizes untuk small mobile */
-  .title-large {
-    font-size: 0.95rem;
-    line-height: 1.25em;
+  .manga-card {
+    height: 160px;
   }
 
-  .title-medium {
-    font-size: 0.825rem;
-    line-height: 1.2em;
+  .manga-cover-section {
+    width: 100px;
   }
 
-  .title-small {
-    font-size: 0.75rem;
-    line-height: 1.18em;
+  .manga-info-section {
+    padding: 12px;
   }
 
-  .title-xsmall {
-    font-size: 0.65rem;
-    line-height: 1.15em;
-  }
-  
-  .header-buttons {
-    gap: 6px;
-  }
-  
-  .github-link-header,
-  .facebook-link-header {
-    height: 40px;
-    width: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-  }
-  
-  .github-link-header .github-icon,
-  .facebook-link-header .facebook-icon {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .github-link-header .github-text,
-  .facebook-link-header .facebook-text {
-    display: none;
-  }
-  
-  #searchInput {
-    padding: 0.6rem 0.9rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* Kartu Manga */
-.manga-card {
-  position: relative;
-  overflow: hidden;
-  background-color: #1a1a1a;
-  border-radius: 0.6rem;
-  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease;
-  cursor: pointer;
-}
-
-.manga-card:hover {
-  transform: scale(1.03);
-}
-
-.manga-card img {
-  width: 100%;
-  aspect-ratio: 3/4.2;
-  object-fit: cover;
-  border-radius: 0.6rem 0.6rem 0 0;
-  display: block;
-  background-color: #1a1a1a;
-  transition: filter 0.3s ease;
-}
-
-/* Judul manga - Base style */
-.manga-title {
-  color: #fff;
-  padding: 0.6rem 0.5rem 0.9rem;
-  text-align: center;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  word-break: break-word;
-  line-height: 1.3em;
-  min-height: 3.9em;
-  max-height: none;
-  overflow: visible;
-  hyphens: auto;
-}
-
-/* Dynamic font sizes berdasarkan panjang judul */
-.title-large {
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.35em;
-}
-
-.title-medium {
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.3em;
-}
-
-.title-small {
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 1.25em;
-}
-
-.title-xsmall {
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1.2em;
-}
-
-/* Search Section - Melintang penuh di bawah header */
-.search-section {
-  max-width: 1400px;
-  margin: 0 auto 2.5rem;
-  padding: 0 1.5rem;
-  display: flex;
-  align-items: center;
-}
-
-#searchInput {
-  width: 100%;
-  padding: 0.75rem 1.25rem;
-  font-size: 1rem;
-  border-radius: 50px;
-  border: 2px solid rgba(255, 255, 255, 0.1);
-  outline: none;
-  background: #222;
-  color: #fff;
-  transition: all 0.3s ease;
-}
-
-#searchInput:focus {
-  border-color: #667eea;
-  box-shadow: 0 0 20px rgba(102, 126, 234, 0.3);
-}
-
-#searchInput::placeholder {
-  color: #888;
-}
-
-/* Donation Box Trakteer - Floating di bawah dengan ukuran SAMA PERSIS seperti search bar */
-.trakteer-button {
-  position: fixed;
-  bottom: 30px;
-  left: 1.5rem;
-  right: 1.5rem;
-  z-index: 1000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, #be1e2d 0%, #d32f2f 100%);
-  padding: 0.75rem 1.25rem;
-  border-radius: 50px;
-  text-decoration: none;
-  color: white;
-  font-weight: 700;
-  font-size: 0.95rem;
-  box-shadow: 0 4px 15px rgba(190, 30, 45, 0.4);
-  transition: all 0.3s ease;
-  
-  /* Lebar otomatis dari left-right, sama seperti search bar */
-  max-width: calc(1400px - 3rem);
-  margin: 0 auto;
-}
-
-.trakteer-button:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 6px 25px rgba(190, 30, 45, 0.6);
-  background: linear-gradient(135deg, #d32f2f 0%, #e53935 100%);
-}
-
-.trakteer-icon {
-  width: 24px;
-  height: 24px;
-  object-fit: contain;
-  flex-shrink: 0;
-}
-
-/* Grid responsif */
-.grid-container {
-  display: grid;
-  gap: 1.25rem;
-  justify-content: center;
-  padding: 0 1.5rem;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-@media (min-width: 1024px) {
-  .grid-container {
-    grid-template-columns: repeat(5, 1fr);
-  }
-}
-
-@media (min-width: 768px) and (max-width: 1023px) {
-  .grid-container {
-    grid-template-columns: repeat(3, 1fr);
-    padding: 0 1rem;
-    gap: 1rem;
-  }
-  
-  header {
-    padding: 0 1rem;
-  }
-  
-  .search-section {
-    padding: 0 1rem;
-  }
-  
-  .trakteer-button {
-    left: 1rem;
-    right: 1rem;
-    bottom: 30px;
-    font-size: 1rem;
-  }
-  
-  .site-logo {
-    height: 50px;
-  }
-  
-  .header-buttons {
-    gap: 8px;
-  }
-  
-  .github-link-header,
-  .facebook-link-header {
-    height: auto;
-    padding: 0.45rem 0.85rem;
-    gap: 0.5rem;
-    border-radius: 10px;
-  }
-  
-  .github-link-header .github-icon,
-  .facebook-link-header .facebook-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .github-link-header .github-text,
-  .facebook-link-header .facebook-text {
-    font-size: 0.9rem;
-  }
-}
-
-@media (max-width: 767px) {
-  body {
-    padding-bottom: 110px;
-  }
-  
-  .grid-container {
-    grid-template-columns: repeat(2, 1fr);
-    padding: 0 0.625rem;
-    gap: 0.875rem;
-  }
-  
-  header {
-    padding: 0 0.625rem;
-    margin-bottom: 0.75rem;
-  }
-  
-  .search-section {
-    padding: 0 0.625rem;
-    margin-bottom: 2rem;
-  }
-  
-  #searchInput {
-    padding: 0.65rem 1rem;
-    font-size: 0.95rem;
-  }
-  
-  .trakteer-button {
-    left: 0.625rem;
-    right: 0.625rem;
-    padding: 0.65rem 1rem;
-    font-size: 0.85rem;
-    bottom: 30px;
-  }
-  
-  .trakteer-icon {
-    width: 24px;
-    height: 24px;
-  }
-  
-  .site-logo {
-    height: 45px;
-  }
-  
-  /* Dynamic font sizes untuk mobile */
-  .title-large {
-    font-size: 1rem;
-    line-height: 1.3em;
+  .manga-title-text {
+    font-size: 14px;
+    -webkit-line-clamp: 2;
   }
 
-  .title-medium {
-    font-size: 0.875rem;
-    line-height: 1.25em;
+  .chapter-title {
+    font-size: 12px;
   }
 
-  .title-small {
-    font-size: 0.8rem;
-    line-height: 1.2em;
+  .status-dot {
+    width: 10px;
+    height: 10px;
   }
-
-  .title-xsmall {
-    font-size: 0.7rem;
-    line-height: 1.15em;
-  }
-}
-
-@media (max-width: 480px) {
-  body {
-    padding-bottom: 105px;
-  }
-  
-  .grid-container {
-    padding: 0 0.5rem;
-    gap: 0.75rem;
-  }
-  
-  header {
-    padding: 0 0.5rem;
-  }
-  
-  .search-section {
-    padding: 0 0.5rem;
-  }
-  
-  .trakteer-button {
-    left: 0.5rem;
-    right: 0.5rem;
-    font-size: 0.8rem;
-    padding: 0.6rem 0.9rem;
-    bottom: 25px;
-  }
-  
-  .trakteer-icon {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .site-logo {
-    height: 40px;
-  }
-  
-  /* Dynamic font sizes untuk small mobile */
-  .title-large {
-    font-size: 0.95rem;
-    line-height: 1.25em;
-  }
-
-  .title-medium {
-    font-size: 0.825rem;
-    line-height: 1.2em;
-  }
-
-  .title-small {
-    font-size: 0.75rem;
-    line-height: 1.18em;
-  }
-
-  .title-xsmall {
-    font-size: 0.65rem;
-    line-height: 1.15em;
-  }
-  
-  .header-buttons {
-    gap: 6px;
-  }
-  
-  .github-link-header,
-  .facebook-link-header {
-    height: 40px;
-    width: 40px;
-    min-width: 40px;
-    min-height: 40px;
-    padding: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 8px;
-  }
-  
-  .github-link-header .github-icon,
-  .facebook-link-header .facebook-icon {
-    width: 22px;
-    height: 22px;
-  }
-  
-  .github-link-header .github-text,
-  .facebook-link-header .facebook-text {
-    display: none;
-  }
-  
-  #searchInput {
-    padding: 0.6rem 0.9rem;
-    font-size: 0.9rem;
-  }
-}
-
-/* Kartu Manga */
-.manga-card {
-  position: relative;
-  overflow: hidden;
-  background-color: #1a1a1a;
-  border-radius: 0.6rem;
-  box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.4);
-  transition: transform 0.3s ease;
-  cursor: pointer;
-}
-
-.manga-card:hover {
-  transform: scale(1.03);
-}
-
-.manga-card img {
-  width: 100%;
-  aspect-ratio: 3/4.2;
-  object-fit: cover;
-  border-radius: 0.6rem 0.6rem 0 0;
-  display: block;
-  background-color: #1a1a1a;
-  transition: filter 0.3s ease;
-}
-
-/* Judul manga - Base style */
-.manga-title {
-  color: #fff;
-  padding: 0.6rem 0.5rem 0.9rem;
-  text-align: center;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  word-break: break-word;
-  line-height: 1.3em;
-  min-height: 3.9em;
-  max-height: none;
-  overflow: visible;
-  hyphens: auto;
-}
-
-/* Dynamic font sizes berdasarkan panjang judul */
-.title-large {
-  font-size: 1.1rem;
-  font-weight: 700;
-  line-height: 1.35em;
-}
-
-.title-medium {
-  font-size: 0.95rem;
-  font-weight: 600;
-  line-height: 1.3em;
-}
-
-.title-small {
-  font-size: 0.85rem;
-  font-weight: 600;
-  line-height: 1.25em;
-}
-
-.title-xsmall {
-  font-size: 0.75rem;
-  font-weight: 500;
-  line-height: 1.2em;
 }
