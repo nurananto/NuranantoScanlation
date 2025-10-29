@@ -762,8 +762,7 @@ async function trackChapterView() {
                 repo: repoParam,
                 chapter: currentChapterFolder,
                 type: 'chapter'
-            }),
-            mode: 'no-cors'
+            })
         });
         
         // Mark as viewed

@@ -480,8 +480,7 @@ async function incrementPendingViews(repo) {
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ repo }),
-            mode: 'no-cors' // Required for Google Apps Script
+            body: JSON.stringify({ repo })
         });
         
         // Note: 'no-cors' mode means we can't read the response,
