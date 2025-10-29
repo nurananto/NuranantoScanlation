@@ -304,7 +304,7 @@ async function incrementPendingChapterViews(repo, chapter) {
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
             },
             body: JSON.stringify({ 
                 repo: repo,
@@ -475,12 +475,11 @@ async function incrementPendingViews(repo) {
     try {
         console.log('📡 Sending view increment to Google Apps Script...');
         
-        // Note: Using 'no-cors' mode to avoid CORS preflight issues
-        // Request will be sent successfully, but response cannot be read
+        // Using text/plain to avoid CORS preflight with no-cors mode
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             headers: {
-                'Content-Type': 'application/json',
+                'Content-Type': 'text/plain',
             },
             body: JSON.stringify({ 
                 repo: repo,
@@ -489,11 +488,9 @@ async function incrementPendingViews(repo) {
             mode: 'no-cors'
         });
         
-        // With no-cors mode, we can't verify success, but request is sent
         console.log('✅ View increment request sent (no-cors mode)');
         
     } catch (error) {
         console.error('❌ Error incrementing views:', error);
-        // Don't throw - continue silently
     }
 }
