@@ -301,7 +301,7 @@ async function incrementPendingChapterViews(repo, chapter) {
     try {
         console.log('📡 Sending chapter view increment to Google Apps Script...');
         
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -314,7 +314,7 @@ async function incrementPendingChapterViews(repo, chapter) {
             mode: 'no-cors'
         });
         
-        console.log('✅ Chapter view increment request sent');
+        console.log('✅ Chapter view increment request sent (no-cors mode)');
         
     } catch (error) {
         console.error('❌ Error incrementing chapter views:', error);
@@ -475,20 +475,25 @@ async function incrementPendingViews(repo) {
     try {
         console.log('📡 Sending view increment to Google Apps Script...');
         
-        const response = await fetch(GOOGLE_SCRIPT_URL, {
+        // Note: Using 'no-cors' mode to avoid CORS preflight issues
+        // Request will be sent successfully, but response cannot be read
+        await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ repo })
+            body: JSON.stringify({ 
+                repo: repo,
+                type: 'page'
+            }),
+            mode: 'no-cors'
         });
         
-        // Note: 'no-cors' mode means we can't read the response,
-        // but the request will be sent successfully
-        console.log('✅ View increment request sent');
+        // With no-cors mode, we can't verify success, but request is sent
+        console.log('✅ View increment request sent (no-cors mode)');
         
     } catch (error) {
         console.error('❌ Error incrementing views:', error);
-        // Don't throw - just log the error
+        // Don't throw - continue silently
     }
 }
