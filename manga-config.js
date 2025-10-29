@@ -22,7 +22,7 @@ const MANGA_LIST = [
     id: '10nenburi',
     title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
     cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
-    repo: '10nenburi'
+    repo: '10nenburi'  // ← CORRECT! Sesuai GitHub repo name
   },
   {
     id: 'aiwooshiete',
@@ -133,7 +133,11 @@ function getChapterImageURL(manga, chapterFolder, imageName) {
 const mangaList = MANGA_LIST;
 
 // Export untuk info-manga.js dan reader.js
+// NEW FORMAT: Include githubRepo untuk view counter
 const MANGA_REPOS = {};
 MANGA_LIST.forEach(manga => {
-  MANGA_REPOS[manga.id] = getMangaDataURL(manga);
+  MANGA_REPOS[manga.id] = {
+    url: getMangaDataURL(manga),
+    githubRepo: manga.repo  // ← ADD THIS for view counter!
+  };
 });
