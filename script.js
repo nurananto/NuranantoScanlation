@@ -140,16 +140,16 @@ async function renderManga(filteredList) {
 
 let searchTimeout;
 document.addEventListener('DOMContentLoaded', function() {
-  // Use MANGA_LIST from manga-config.js
-  if (typeof MANGA_LIST === 'undefined') {
-    console.error('❌ ERROR: MANGA_LIST not found!');
+  // manga-config.js exports: const mangaList = MANGA_LIST;
+  if (typeof mangaList === 'undefined') {
+    console.error('❌ ERROR: mangaList not found!');
     console.error('Make sure manga-config.js is loaded before script.js in index.html');
     return;
   }
   
   console.log('🚀 Initializing manga list...');
-  console.log('📚 Total manga:', MANGA_LIST.length);
-  renderManga(MANGA_LIST);
+  console.log('📚 Total manga:', mangaList.length);
+  renderManga(mangaList);
   
   const searchInput = document.getElementById("searchInput");
   searchInput.addEventListener("input", function() {
@@ -158,9 +158,9 @@ document.addEventListener('DOMContentLoaded', function() {
     
     searchTimeout = setTimeout(() => {
       if (query === '') {
-        renderManga(MANGA_LIST);
+        renderManga(mangaList);
       } else {
-        const filtered = MANGA_LIST.filter(manga => 
+        const filtered = mangaList.filter(manga => 
           manga.title.toLowerCase().includes(query)
         );
         renderManga(filtered);
