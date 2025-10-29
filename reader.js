@@ -138,13 +138,26 @@ async function initializeReader() {
  */
 async function loadMangaData(repo) {
     try {
-        const mangaJsonUrl = MANGA_REPOS[repo];
+        const mangaConfig = MANGA_REPOS[repo];
         
-        if (!mangaJsonUrl) {
+        if (!mangaConfig) {
             throw new Error(`Repo "${repo}" tidak ditemukan di mapping`);
         }
         
         console.log(`📚 Loading manga data from: ${repo}`);
+        
+        // Extract manga.json URL and githubRepo
+        let mangaJsonUrl;
+        if (typeof mangaConfig === 'string') {
+            // Old format (string)
+            mangaJsonUrl = mangaConfig;
+        } else {
+            // New format (object with url and githubRepo)
+            mangaJsonUrl = mangaConfig.url;
+            // Store githubRepo globally for view tracking
+            window.currentGithubRepo = mangaConfig.githubRepo;
+            console.log(`🔗 GitHub repo: ${mangaConfig.githubRepo}`);
+        }
         
         // Add cache buster
         const timestamp = new Date().getTime();
@@ -750,7 +763,13 @@ async function trackChapterView() {
         }
         
         console.log('📤 Tracking chapter view...');
-        console.log(`   Repo: ${repoParam}, Chapter: ${currentChapterFolder}`);
+        
+        // Get GitHub repo name from config or use repoParam as fallback
+        const githubRepo = window.currentGithubRepo || repoParam;
+        
+        console.log(`   URL param: ${repoParam}`);
+        console.log(`   GitHub repo: ${githubRepo}`);
+        console.log(`   Chapter: ${currentChapterFolder}`);
         
         // Increment via Google Apps Script
         await fetch(GOOGLE_SCRIPT_URL, {
@@ -759,7 +778,7 @@ async function trackChapterView() {
                 'Content-Type': 'text/plain',
             },
             body: JSON.stringify({ 
-                repo: repoParam,
+                repo: githubRepo,  // Send GitHub repo name, not URL param
                 chapter: currentChapterFolder,
                 type: 'chapter'
             }),

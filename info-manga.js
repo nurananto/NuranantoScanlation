@@ -41,16 +41,24 @@ function getMangaJsonUrl() {
         return null;
     }
     
-    const mangaUrl = MANGA_REPOS[repoParam];
+    const mangaConfig = MANGA_REPOS[repoParam];
     
-    if (!mangaUrl) {
+    if (!mangaConfig) {
         console.error(`❌ Repo "${repoParam}" tidak ditemukan di mapping`);
         alert(`Error: Repo "${repoParam}" tidak terdaftar.\n\nRepo tersedia: ${Object.keys(MANGA_REPOS).join(', ')}`);
         return null;
     }
     
     console.log(`📚 Loading manga: ${repoParam}`);
-    return mangaUrl;
+    
+    // Support both old format (string) and new format (object)
+    if (typeof mangaConfig === 'string') {
+        return mangaConfig;
+    } else {
+        // Store githubRepo for later use
+        window.currentGithubRepo = mangaConfig.githubRepo;
+        return mangaConfig.url;
+    }
 }
 
 /**
@@ -281,7 +289,10 @@ async function trackLockedChapterView(chapter) {
         console.log('🔒 Locked chapter clicked:', chapter.folder);
         console.log('📊 Tracking view for locked chapter...');
         
-        incrementPendingChapterViews(repoParam, chapter.folder).catch(err => {
+        // Get GitHub repo name from config or use repoParam as fallback
+        const githubRepo = window.currentGithubRepo || repoParam;
+        
+        incrementPendingChapterViews(githubRepo, chapter.folder).catch(err => {
             console.error('⚠️ Failed to track locked chapter view:', err);
         });
         
@@ -454,8 +465,11 @@ async function trackPageView() {
         
         console.log('📤 Tracking page view for:', repoParam);
         
+        // Get GitHub repo name from config or use repoParam as fallback
+        const githubRepo = window.currentGithubRepo || repoParam;
+        
         // Increment pending views via Google Apps Script
-        await incrementPendingViews(repoParam);
+        await incrementPendingViews(githubRepo);
         
         // Mark as viewed in this session
         sessionStorage.setItem(viewKey, 'true');
