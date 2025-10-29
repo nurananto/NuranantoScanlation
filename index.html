@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Nurananto Scanlation - Baca manga terjemahan bahasa Indonesia gratis">
   <title>Nurananto Scanlation</title>
   <link rel="stylesheet" href="style.css">
 </head>
@@ -36,23 +37,21 @@
     <input type="text" id="searchInput" placeholder="Cari judul manga...">
   </div>
 
-  <!-- Donation Box Trakteer - Floating di bawah dengan lebar sama search bar -->
+  <!-- Loading indicator -->
+  <div id="loadingIndicator" class="loading-indicator">
+    <div class="spinner"></div>
+    <p>Memuat daftar manga...</p>
+  </div>
+
+  <!-- Grid container untuk manga cards -->
+  <div class="grid-container" id="mangaGrid"></div>
+
+  <!-- Donation Box Trakteer - Floating di bawah -->
   <a href="https://trakteer.id/NuranantoScanlation" target="_blank" class="trakteer-button">
     <img src="assets/trakteer-icon.png" alt="Trakteer" class="trakteer-icon">
     <span>Donasi untuk Beli RAW Chapter</span>
   </a>
 
-  <!-- Loading indicator -->
-  <div id="loadingIndicator" class="loading-indicator">
-    <div class="spinner"></div>
-    <p>Loading manga list...</p>
-  </div>
-
-  <!-- Container untuk manga cards -->
-  <div class="manga-list-container" id="mangaListContainer"></div>
-
-  <!-- LOAD CONFIG FIRST! -->
-  <script src="manga-config.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
