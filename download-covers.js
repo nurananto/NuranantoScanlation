@@ -352,8 +352,8 @@ async function processAllManga() {
 function updateMangaConfigJs(updatedMangaList) {
   const configContent = fs.readFileSync(MANGA_CONFIG_PATH, 'utf-8');
   
-  // Find MANGA_LIST array in file
-  const listStart = configContent.indexOf('const MANGA_LIST = [');
+  // Find MANGA_LIST array in file (without const/let)
+  const listStart = configContent.indexOf('MANGA_LIST = [');
   const listEnd = configContent.indexOf('];', listStart) + 2;
   
   if (listStart === -1 || listEnd === -1) {
@@ -361,7 +361,7 @@ function updateMangaConfigJs(updatedMangaList) {
   }
   
   // Build new MANGA_LIST string
-  const newMangaListStr = 'const MANGA_LIST = [\n' +
+  const newMangaListStr = 'MANGA_LIST = [\n' +
     updatedMangaList.map(manga => {
       return `  {\n` +
         `    id: '${manga.id}',\n` +
