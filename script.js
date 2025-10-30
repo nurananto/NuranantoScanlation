@@ -40,7 +40,7 @@ function isRecentlyUpdated(lastChapterUpdateStr) {
     return false;
   }
   
-  return diffDays <= 1;
+  return diffDays <= 2;
 }
 
 function getRelativeTime(lastChapterUpdateStr) {
