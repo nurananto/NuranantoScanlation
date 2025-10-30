@@ -1,5 +1,5 @@
 /**
- * READER.JS - WIB VERSION
+ * READER.JS - FIXED
  * Manga reader with navigation
  */
 
@@ -8,18 +8,16 @@
 // ============================================
 
 function getWIBTimestamp() {
-    const now = new Date();
-    // Add 7 hours for WIB
-    const wibTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
-    return wibTime.toISOString();
+    const date = new Date();
+    const wibStr = date.toLocaleString('sv-SE', { timeZone: 'Asia/Jakarta' }).replace(' ', 'T');
+    return wibStr + '+07:00';
 }
 
 function convertToWIB(isoString) {
     if (!isoString) return null;
     const date = new Date(isoString);
-    // Add 7 hours for WIB
-    const wibTime = new Date(date.getTime() + (7 * 60 * 60 * 1000));
-    return wibTime.toISOString();
+    const wibStr = date.toLocaleString('sv-SE', { timeZone: 'Asia/Jakarta' }).replace(' ', 'T');
+    return wibStr + '+07:00';
 }
 
 // ============================================
