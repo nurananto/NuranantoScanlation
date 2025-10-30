@@ -11,18 +11,12 @@
 // 4. Save & push - DONE! Otomatis muncul di semua halaman
 // ============================================
 
-const MANGA_LIST = [
+let MANGA_LIST = [
   {
     id: 'wakachan',
     title: 'Waka-chan wa Kyou mo Azatoi',
     cover: '',
     repo: 'wakachan'
-  },
-  {
-    id: 'kawaiigal',
-    title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
-    cover: 'covers/class-de-ichiban-kawaii-gal-o-ezuke-shiteiru-hanas-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
-    repo: 'KawaiiGal'
   },
   {
     id: '10nenburi',
@@ -138,15 +132,12 @@ function getChapterImageURL(manga, chapterFolder, imageName) {
 // Export untuk script.js (index.html)
 const mangaList = MANGA_LIST;
 
-// Export MANGA_LIST untuk download-covers.js (tanpa const)
-MANGA_LIST = MANGA_LIST;  // ← Tambah ini!
-
 // Export untuk info-manga.js dan reader.js
 // NEW FORMAT: Include githubRepo untuk view counter
-MANGA_REPOS = {};  // ← Hapus 'const'
+let MANGA_REPOS = {};
 MANGA_LIST.forEach(manga => {
   MANGA_REPOS[manga.id] = {
     url: getMangaDataURL(manga),
-    githubRepo: manga.repo
+    githubRepo: manga.repo  // ← ADD THIS for view counter!
   };
 });
