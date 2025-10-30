@@ -1,16 +1,15 @@
 /**
- * SCRIPT DOWNLOAD COVER MANGA DARI MANGADEX v3.0
+ * SCRIPT DOWNLOAD COVER MANGA DARI MANGADEX v4.0
  * FITUR: Auto-ambil cover TERBARU & Replace cover lama
  * 
- * Arsitektur:
- * - script.js berisi: title, cover, repo
- * - manga-repos.json: Shared config untuk repo URLs (SINGLE SOURCE OF TRUTH)
- * - manga.json di setiap repo berisi: mangadex URL + info lengkap
+ * Update v4.0:
+ * - Load dari manga-config.js (TIDAK PERLU manga-repos.json lagi!)
+ * - Auto-generate MANGA_REPOS dari MANGA_LIST
  * 
  * Cara Pakai:
  * 1. Jalankan: node download-covers.js
- * 2. Script akan load manga-repos.json
- * 3. Fetch manga.json dari URL yang sudah di-mapping
+ * 2. Script akan load manga-config.js
+ * 3. Fetch manga.json dari URL yang di-generate
  * 4. Ambil cover TERBARU dari MangaDex
  * 5. Replace cover lama dengan yang baru
  */
@@ -18,53 +17,56 @@
 const fs = require('fs');
 const path = require('path');
 const https = require('https');
+const vm = require('vm');
 
 // Config
 const DELAY_MS = 1500;
 const USER_AGENT = 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36';
 const FORCE_UPDATE = false;
 
-// Load MANGA_REPOS dari file JSON
-const MANGA_REPOS_PATH = path.join(__dirname, 'manga-repos.json');
+// Load manga-config.js
+const MANGA_CONFIG_PATH = path.join(__dirname, 'manga-config.js');
+let MANGA_LIST = [];
 let MANGA_REPOS = {};
 
 try {
-  const reposContent = fs.readFileSync(MANGA_REPOS_PATH, 'utf-8');
-  MANGA_REPOS = JSON.parse(reposContent);
-  console.log(`📋 Loaded ${Object.keys(MANGA_REPOS).length} repo mappings from manga-repos.json\n`);
+  console.log('📋 Loading manga-config.js...');
+  
+  // Read manga-config.js
+  const configContent = fs.readFileSync(MANGA_CONFIG_PATH, 'utf-8');
+  
+  // Create sandbox untuk execute manga-config.js
+  const sandbox = {
+    console: console,
+    MANGA_LIST: null,
+    MANGA_REPOS: null
+  };
+  
+  // Execute manga-config.js dalam sandbox
+  vm.createContext(sandbox);
+  vm.runInContext(configContent, sandbox);
+  
+  // Extract MANGA_LIST dan MANGA_REPOS
+  MANGA_LIST = sandbox.MANGA_LIST;
+  MANGA_REPOS = sandbox.MANGA_REPOS;
+  
+  if (!MANGA_LIST || MANGA_LIST.length === 0) {
+    throw new Error('MANGA_LIST is empty or undefined');
+  }
+  
+  if (!MANGA_REPOS || Object.keys(MANGA_REPOS).length === 0) {
+    throw new Error('MANGA_REPOS is empty or undefined');
+  }
+  
+  console.log(`✅ Loaded ${MANGA_LIST.length} manga from manga-config.js`);
+  console.log(`✅ Generated ${Object.keys(MANGA_REPOS).length} repo mappings\n`);
+  
 } catch (error) {
-  console.error('❌ Error loading manga-repos.json:', error.message);
-  console.error('\n💡 Pastikan file manga-repos.json ada di folder yang sama dengan script ini');
+  console.error('❌ Error loading manga-config.js:', error.message);
+  console.error('\n💡 Pastikan manga-config.js ada dan format nya benar');
   process.exit(1);
 }
 
-// Baca script.js
-const scriptPath = path.join(__dirname, 'script.js');
-const scriptContent = fs.readFileSync(scriptPath, 'utf-8');
-
-// Try multiple patterns to find mangaList
-let mangaListMatch = scriptContent.match(/const\s+mangaList\s*=\s*(\[[\s\S]*?\n\s*\]);/);
-if (!mangaListMatch) {
-  mangaListMatch = scriptContent.match(/let\s+mangaList\s*=\s*(\[[\s\S]*?\n\s*\]);/);
-}
-if (!mangaListMatch) {
-  mangaListMatch = scriptContent.match(/const\s+mangaList\s*=\s*(\[[\s\S]*?\n\s*\])/);
-}
-
-if (!mangaListMatch) {
-  console.error('❌ Tidak bisa menemukan mangaList di script.js');
-  process.exit(1);
-}
-
-let mangaList;
-try {
-  mangaList = eval(mangaListMatch[1]);
-} catch (e) {
-  console.error('❌ Error parsing mangaList:', e.message);
-  process.exit(1);
-}
-
-console.log(`📚 Ditemukan ${mangaList.length} manga dalam list`);
 console.log('🔍 Mode: Fetch manga.json → Ambil cover TERBARU dari MangaDex');
 console.log('🔄 Cover lama akan di-replace dengan yang lebih baru\n');
 
@@ -219,47 +221,43 @@ async function processAllManga() {
   let skipCount = 0;
   let errorCount = 0;
   let updatedCount = 0;
-  let noMappingCount = 0;
 
-  for (let i = 0; i < mangaList.length; i++) {
-    const manga = mangaList[i];
+  for (let i = 0; i < MANGA_LIST.length; i++) {
+    const manga = MANGA_LIST[i];
     
-    console.log(`\n[${i + 1}/${mangaList.length}] ${manga.title}`);
+    console.log(`\n[${i + 1}/${MANGA_LIST.length}] ${manga.title}`);
     
     try {
-      // Step 1: Get manga.json URL dari mapping
-      const mangaJsonUrl = MANGA_REPOS[manga.repo];
+      // Step 1: Get manga.json URL dari MANGA_REPOS
+      const mangaConfig = MANGA_REPOS[manga.id];
       
-      if (!mangaJsonUrl) {
-        console.log(`  ⚠️  Tidak ada mapping untuk repo: ${manga.repo}`);
-        console.log(`  💡 Tambahkan di manga-repos.json: "${manga.repo}": "https://raw.githubusercontent.com/..."`);
+      if (!mangaConfig) {
+        console.log(`  ⚠️  Tidak ada config untuk: ${manga.id}`);
         updatedMangaList.push(manga);
-        noMappingCount++;
+        errorCount++;
         continue;
       }
       
+      // Extract URL from config (support both string and object format)
+      const mangaJsonUrl = typeof mangaConfig === 'string' ? mangaConfig : mangaConfig.url;
+      
       // Step 2: Fetch manga.json dari URL
-      console.log(`  🔍 Fetch manga.json dari: ${manga.repo}`);
+      console.log(`  🔍 Fetch manga.json...`);
       const mangaJson = await fetchMangaJson(mangaJsonUrl);
       
       // Step 3: Ambil MangaDex URL (support multiple structures)
       let mangadexUrl = null;
       
-      // Try different JSON structures
       if (mangaJson.manga && mangaJson.manga.links && mangaJson.manga.links.mangadex) {
-        // Structure: { manga: { links: { mangadex: "..." } } }
         mangadexUrl = mangaJson.manga.links.mangadex;
       } else if (mangaJson.links && mangaJson.links.mangadex) {
-        // Structure: { links: { mangadex: "..." } }
         mangadexUrl = mangaJson.links.mangadex;
       } else if (mangaJson.mangadex) {
-        // Structure: { mangadex: "..." }
         mangadexUrl = mangaJson.mangadex;
       }
       
       if (!mangadexUrl) {
         console.log('  ⚠️  Tidak ada MangaDex URL di manga.json');
-        console.log('  💡 Cek struktur JSON - expected: manga.links.mangadex');
         updatedMangaList.push(manga);
         skipCount++;
         continue;
@@ -324,7 +322,7 @@ async function processAllManga() {
       successCount++;
       
       // Delay untuk rate limiting
-      if (i < mangaList.length - 1) {
+      if (i < MANGA_LIST.length - 1) {
         await delay(DELAY_MS);
       }
       
@@ -348,53 +346,63 @@ async function processAllManga() {
     }
   }
 
-  return { updatedMangaList, successCount, skipCount, errorCount, updatedCount, noMappingCount };
+  return { updatedMangaList, successCount, skipCount, errorCount, updatedCount };
 }
 
-function updateScriptJs(updatedMangaList) {
-  let updatedScript = scriptContent;
+function updateMangaConfigJs(updatedMangaList) {
+  const configContent = fs.readFileSync(MANGA_CONFIG_PATH, 'utf-8');
   
-  // Format mangaList dengan indentasi yang sama seperti aslinya
-  const mangaListString = 'const mangaList = \n  ' + 
-    JSON.stringify(updatedMangaList, null, 2)
-      .replace(/"([^"]+)":/g, '$1:')
-      .replace(/"/g, "'")
-      .split('\n')
-      .join('\n  ') + ';';
+  // Find MANGA_LIST array in file
+  const listStart = configContent.indexOf('const MANGA_LIST = [');
+  const listEnd = configContent.indexOf('];', listStart) + 2;
   
-  // Replace mangaList
-  updatedScript = updatedScript.replace(
-    /const\s+mangaList\s*=\s*\n?\s*\[[\s\S]*?\n\s*\];?/,
-    mangaListString
-  );
+  if (listStart === -1 || listEnd === -1) {
+    throw new Error('Could not find MANGA_LIST in manga-config.js');
+  }
   
-  const backupPath = path.join(__dirname, 'script.js.backup');
-  fs.copyFileSync(scriptPath, backupPath);
+  // Build new MANGA_LIST string
+  const newMangaListStr = 'const MANGA_LIST = [\n' +
+    updatedMangaList.map(manga => {
+      return `  {\n` +
+        `    id: '${manga.id}',\n` +
+        `    title: '${manga.title.replace(/'/g, "\\'")}',\n` +
+        `    cover: '${manga.cover}',\n` +
+        `    repo: '${manga.repo}'\n` +
+        `  }`;
+    }).join(',\n') +
+    '\n];';
   
-  fs.writeFileSync(scriptPath, updatedScript, 'utf-8');
-  console.log('\n💾 script.js diupdate!');
-  console.log('📦 Backup disimpan: script.js.backup');
+  // Replace MANGA_LIST
+  const before = configContent.substring(0, listStart);
+  const after = configContent.substring(listEnd);
+  const newContent = before + newMangaListStr + after;
+  
+  // Backup
+  const backupPath = path.join(__dirname, 'manga-config.js.backup');
+  fs.copyFileSync(MANGA_CONFIG_PATH, backupPath);
+  
+  // Write
+  fs.writeFileSync(MANGA_CONFIG_PATH, newContent, 'utf-8');
+  console.log('\n💾 manga-config.js diupdate!');
+  console.log('📦 Backup disimpan: manga-config.js.backup');
 }
 
 // Main
 (async () => {
   try {
-    const { updatedMangaList, successCount, skipCount, errorCount, updatedCount, noMappingCount } = await processAllManga();
+    const { updatedMangaList, successCount, skipCount, errorCount, updatedCount } = await processAllManga();
     
-    console.log('\n━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
+    console.log('\n╔════════════════════════════════════╗');
     console.log('📊 HASIL:');
     console.log(`  ✅ Berhasil download: ${successCount}`);
     console.log(`  🔄 Cover diupdate (replaced): ${updatedCount}`);
     console.log(`  ⭐ Sudah terbaru (skip): ${skipCount}`);
-    if (noMappingCount > 0) {
-      console.log(`  ⚠️  Tidak ada mapping URL: ${noMappingCount}`);
-    }
     console.log(`  ❌ Error: ${errorCount}`);
-    console.log(`  📚 Total: ${mangaList.length}`);
-    console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
+    console.log(`  📚 Total: ${MANGA_LIST.length}`);
+    console.log('╚════════════════════════════════════╝\n');
     
     if (successCount > 0 || updatedCount > 0) {
-      updateScriptJs(updatedMangaList);
+      updateMangaConfigJs(updatedMangaList);
       
       console.log('🎉 Selesai!');
       if (updatedCount > 0) {
@@ -405,12 +413,9 @@ function updateScriptJs(updatedMangaList) {
       }
       
       console.log('\n📝 Push ke GitHub:');
-      console.log('   git add covers/ script.js');
+      console.log('   git add covers/ manga-config.js');
       console.log('   git commit -m "Update covers to latest version"');
       console.log('   git push\n');
-    } else if (noMappingCount > 0) {
-      console.log('⚠️  Ada manga tanpa mapping URL');
-      console.log('💡 Update manga-repos.json dengan mapping yang hilang');
     } else {
       console.log('✨ Semua cover sudah up-to-date!');
     }
