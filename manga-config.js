@@ -13,7 +13,7 @@
 
 const MANGA_LIST = [
   {
-    id: 'waka',
+    id: 'wakachan',
     title: 'Waka-chan wa Kyou mo Azatoi',
     cover: '',
     repo: 'wakachan'
