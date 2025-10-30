@@ -19,6 +19,12 @@ MANGA_LIST = [
     repo: 'wakachan'
   },
   {
+    id: 'kawaiigal',
+    title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
+    cover: 'covers/class-de-ichiban-kawaii-gal-o-ezuke-shiteiru-hanas-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
+    repo: 'KawaiiGal'
+  },
+  {
     id: '10nenburi',
     title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
     cover: 'covers/10-nen-buri-ni-saikai-shita-kusogaki-wa-seijun-bis-6d676869-6140-44ed-8210-58264ae612df.jpg',
