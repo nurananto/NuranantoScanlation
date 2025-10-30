@@ -13,6 +13,12 @@
 
 const MANGA_LIST = [
   {
+    id: 'waka',
+    title: 'Waka-chan wa Kyou mo Azatoi',
+    cover: '',
+    repo: 'wakachan'
+  },
+  {
     id: 'kawaiigal',
     title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
     cover: 'covers/class-de-ichiban-kawaii-gal-o-ezuke-shiteiru-hanas-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
