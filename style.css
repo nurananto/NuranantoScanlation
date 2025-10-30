@@ -223,7 +223,7 @@ header {
    ============================================ */
 .manga-card {
   position: relative;
-  overflow: hidden;
+  overflow: visible; /* Changed from hidden to visible for badge overflow */
   background-color: var(--bg-card);
   border-radius: 0.6rem;
   box-shadow: 0 0.25rem 0.625rem rgba(0, 0, 0, 0.4);
@@ -244,41 +244,43 @@ header {
   display: block;
   background-color: var(--bg-card);
   transition: filter 0.3s ease;
+  position: relative;
 }
 
 /* ============================================
-   UPDATED BADGE (Above Title)
+   UPDATED BADGE (Top of Card, Full Width)
    ============================================ */
 .updated-badge {
   position: absolute;
   top: 0;
-  left: 50%;
-  transform: translateX(-50%);
+  left: 0;
+  right: 0;
+  width: 100%;  /* Selebar cover */
   background: linear-gradient(135deg, #1877f2 0%, #0a5bd6 100%);
   color: #fff;
-  padding: 4px 12px;
-  border-radius: 0 0 8px 8px;
-  font-size: 10px;
+  padding: 5px 8px;
+  border-radius: 0.6rem 0.6rem 0 0;  /* Ikut rounded corner card */
+  font-size: 9px;
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.5px;
   box-shadow: 0 2px 8px rgba(24, 119, 242, 0.5);
   z-index: 10;
   text-align: center;
-  min-width: 60px;
+  pointer-events: none;  /* Badge tidak menghalangi klik */
 }
 
 .badge-text {
-  display: block;
+  display: inline;
   line-height: 1.2;
+  margin-right: 5px;
 }
 
 .badge-time {
-  display: block;
-  font-size: 8px;
-  font-weight: 400;
-  opacity: 0.9;
-  margin-top: 2px;
+  display: inline;
+  font-size: inherit;  /* Sama dengan ukuran badge */
+  font-weight: 500;
+  opacity: 0.95;
 }
 
 /* Recently Updated Card - Efek glow biru */
@@ -296,7 +298,7 @@ header {
    ============================================ */
 .manga-title {
   color: var(--text-primary);
-  padding: 0.6rem 0.5rem 1.2rem; /* Tambah padding bottom untuk descender */
+  padding: 0.6rem 0.5rem 1.2rem; /* Padding bottom untuk descender */
   text-align: center;
   background: transparent;
   display: -webkit-box;
@@ -307,13 +309,13 @@ header {
   word-break: break-word;
   word-wrap: break-word;
   overflow-wrap: break-word;
-  /* Tambahan padding top untuk badge */
-  padding-top: 0.8rem;
+  /* Padding sama untuk semua, TIDAK berubah dengan badge */
+  padding-top: 0.6rem;
 }
 
-/* Jika ada badge, tambah padding */
+/* HAPUS extra padding - badge tidak mendorong judul */
 .manga-card.recently-updated .manga-title {
-  padding-top: 1.2rem;
+  padding-top: 0.6rem;  /* Sama seperti normal, TIDAK ada extra padding */
 }
 
 /* Desktop - Font lebih besar */
@@ -348,7 +350,7 @@ header {
   }
   
   .manga-card.recently-updated .manga-title {
-    padding-top: 1rem;
+    padding-top: 0.5rem;  /* Sama dengan normal - TIDAK ada extra */
   }
 }
 
@@ -363,7 +365,7 @@ header {
   }
   
   .manga-card.recently-updated .manga-title {
-    padding-top: 0.9rem;
+    padding-top: 0.45rem;  /* Sama dengan normal - TIDAK ada extra */
   }
 }
 
@@ -473,6 +475,12 @@ header {
   .facebook-text {
     font-size: 0.9rem;
   }
+  
+  /* Badge adjustment for tablet */
+  .updated-badge {
+    padding: 4px 8px;
+    font-size: 9px;
+  }
 }
 
 @media (max-width: 767px) {
@@ -534,13 +542,8 @@ header {
   
   /* Badge adjustment for mobile */
   .updated-badge {
-    padding: 3px 10px;
-    font-size: 9px;
-    min-width: 50px;
-  }
-  
-  .badge-time {
-    font-size: 7px;
+    padding: 4px 6px;
+    font-size: 8px;
   }
 }
 
@@ -596,5 +599,11 @@ header {
   #searchInput {
     padding: 0.6rem 0.9rem;
     font-size: 0.9rem;
+  }
+  
+  /* Badge adjustment for small mobile */
+  .updated-badge {
+    padding: 3px 5px;
+    font-size: 7px;
   }
 }

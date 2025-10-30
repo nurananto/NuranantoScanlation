@@ -76,7 +76,7 @@ function createCard(manga, mangaData) {
   
   const updatedBadge = isRecent ? `
     <div class="updated-badge">
-      <span class="badge-text">UPDATED</span>
+      <span class="badge-text">UPDATED!</span>
       ${relativeTime ? `<span class="badge-time">${relativeTime}</span>` : ''}
     </div>
   ` : '';
