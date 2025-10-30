@@ -138,12 +138,15 @@ function getChapterImageURL(manga, chapterFolder, imageName) {
 // Export untuk script.js (index.html)
 const mangaList = MANGA_LIST;
 
+// Export MANGA_LIST untuk download-covers.js (tanpa const)
+MANGA_LIST = MANGA_LIST;  // ← Tambah ini!
+
 // Export untuk info-manga.js dan reader.js
 // NEW FORMAT: Include githubRepo untuk view counter
-const MANGA_REPOS = {};
+MANGA_REPOS = {};  // ← Hapus 'const'
 MANGA_LIST.forEach(manga => {
   MANGA_REPOS[manga.id] = {
     url: getMangaDataURL(manga),
-    githubRepo: manga.repo  // ← ADD THIS for view counter!
+    githubRepo: manga.repo
   };
 });
