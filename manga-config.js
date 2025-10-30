@@ -99,7 +99,7 @@ MANGA_LIST = [
   {
     id: 'uchi',
     title: 'Uchi no Seiso-kei Iinchou ga Katsute Chuunibyou Idol datta Koto o Ore Dake ga Shitteiru.',
-    cover: 'covers/uchi-no-seiso-kei-iinchou-ga-katsute-chuunibyou-id-8c348f37-efdc-463c-9b5f-ce3ec9a7bb58.jpg',
+    cover: 'covers/uchi-no-seiso-kei-iinchou-ga-katsute-chuunibyou-id-1bd09e61-5321-4aa8-8625-e4cb321b7690.jpg',
     repo: 'UchinoSeiso-kei'
   }
 ];
