@@ -1,6 +1,14 @@
 // ============================================
-// SCRIPT.JS - MAIN PAGE (index.html)
+// SCRIPT.JS - MAIN PAGE (index.html) - WIB VERSION
 // ============================================
+
+// WIB Timezone Helper (GMT+7)
+function convertToWIB(isoString) {
+  if (!isoString) return null;
+  const date = new Date(isoString);
+  // Add 7 hours for WIB  
+  return new Date(date.getTime() + (7 * 60 * 60 * 1000));
+}
 
 async function fetchMangaData(repo) {
   try {
@@ -25,14 +33,15 @@ async function fetchMangaData(repo) {
 function isRecentlyUpdated(lastChapterUpdateStr) {
   if (!lastChapterUpdateStr) return false;
   
-  const lastChapterUpdate = new Date(lastChapterUpdateStr);
+  // Convert to WIB
+  const lastChapterUpdate = convertToWIB(lastChapterUpdateStr);
   
-  if (isNaN(lastChapterUpdate.getTime())) {
+  if (!lastChapterUpdate || isNaN(lastChapterUpdate.getTime())) {
     console.warn(`Invalid date format: ${lastChapterUpdateStr}`);
     return false;
   }
   
-  const now = new Date();
+  const now = convertToWIB(new Date().toISOString());
   const diffDays = (now - lastChapterUpdate) / (1000 * 60 * 60 * 24);
   
   if (diffDays < 0) {
@@ -46,8 +55,10 @@ function isRecentlyUpdated(lastChapterUpdateStr) {
 function getRelativeTime(lastChapterUpdateStr) {
   if (!lastChapterUpdateStr) return '';
   
-  const lastChapterUpdate = new Date(lastChapterUpdateStr);
-  const now = new Date();
+  // Convert to WIB
+  const lastChapterUpdate = convertToWIB(lastChapterUpdateStr);
+  const now = convertToWIB(new Date().toISOString());
+  
   const diffMs = now - lastChapterUpdate;
   const diffMins = Math.floor(diffMs / (1000 * 60));
   const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
@@ -65,7 +76,8 @@ function getRelativeTime(lastChapterUpdateStr) {
     return lastChapterUpdate.toLocaleDateString('id-ID', { 
       day: 'numeric', 
       month: 'short', 
-      year: 'numeric' 
+      year: 'numeric',
+      timeZone: 'Asia/Jakarta'
     });
   }
 }
@@ -110,8 +122,8 @@ async function renderManga(filteredList) {
   );
   
   mangaWithData.sort((a, b) => {
-    const dateA = a.lastChapterUpdate ? new Date(a.lastChapterUpdate) : new Date(0);
-    const dateB = b.lastChapterUpdate ? new Date(b.lastChapterUpdate) : new Date(0);
+    const dateA = a.lastChapterUpdate ? convertToWIB(a.lastChapterUpdate) : new Date(0);
+    const dateB = b.lastChapterUpdate ? convertToWIB(b.lastChapterUpdate) : new Date(0);
     
     const timeA = isNaN(dateA.getTime()) ? 0 : dateA.getTime();
     const timeB = isNaN(dateB.getTime()) ? 0 : dateB.getTime();
@@ -135,7 +147,7 @@ async function renderManga(filteredList) {
     createCard(manga, mangaData)
   ).join("");
   
-  console.log('✅ Manga sorted by lastChapterUpdate (newest first)');
+  console.log('✅ Manga sorted by lastChapterUpdate (newest first) - WIB timezone');
 }
 
 let searchTimeout;
@@ -147,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
     return;
   }
   
-  console.log('🚀 Initializing manga list...');
+  console.log('🚀 Initializing manga list (WIB timezone)...');
   console.log('📚 Total manga:', mangaList.length);
   renderManga(mangaList);
   

@@ -1,7 +1,26 @@
 /**
- * READER.JS
+ * READER.JS - WIB VERSION
  * Manga reader with navigation
  */
+
+// ============================================
+// WIB TIMEZONE HELPER (GMT+7)
+// ============================================
+
+function getWIBTimestamp() {
+    const now = new Date();
+    // Add 7 hours for WIB
+    const wibTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+    return wibTime.toISOString();
+}
+
+function convertToWIB(isoString) {
+    if (!isoString) return null;
+    const date = new Date(isoString);
+    // Add 7 hours for WIB
+    const wibTime = new Date(date.getTime() + (7 * 60 * 60 * 1000));
+    return wibTime.toISOString();
+}
 
 // ============================================
 // MANGA_REPOS sudah di-export dari manga-config.js
@@ -780,7 +799,8 @@ async function trackChapterView() {
             body: JSON.stringify({ 
                 repo: githubRepo,  // Send GitHub repo name, not URL param
                 chapter: currentChapterFolder,
-                type: 'chapter'
+                type: 'chapter',
+                timestamp: getWIBTimestamp()
             }),
             mode: 'no-cors'
         });
@@ -788,7 +808,7 @@ async function trackChapterView() {
         // Mark as viewed
         sessionStorage.setItem(viewKey, 'true');
         
-        console.log('✅ Chapter view tracked successfully');
+        console.log('✅ Chapter view tracked successfully (WIB)');
         
     } catch (error) {
         console.error('❌ Error tracking chapter view:', error);

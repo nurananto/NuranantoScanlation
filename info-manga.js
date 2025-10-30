@@ -1,10 +1,29 @@
 /**
- * INFO-MANGA.JS
+ * INFO-MANGA.JS - WIB VERSION
  * Load manga data dari repo chapter (support multiple manga)
  * 
  * CARA PAKAI:
  * info-manga.html?repo=10nenburi
  */
+
+// ============================================
+// WIB TIMEZONE HELPER (GMT+7)
+// ============================================
+
+function getWIBTimestamp() {
+    const now = new Date();
+    // Add 7 hours for WIB
+    const wibTime = new Date(now.getTime() + (7 * 60 * 60 * 1000));
+    return wibTime.toISOString();
+}
+
+function convertToWIB(isoString) {
+    if (!isoString) return null;
+    const date = new Date(isoString);
+    // Add 7 hours for WIB
+    const wibTime = new Date(date.getTime() + (7 * 60 * 60 * 1000));
+    return wibTime.toISOString();
+}
 
 // ============================================
 // MANGA_REPOS sudah di-export dari manga-config.js
@@ -90,7 +109,7 @@ async function loadMangaFromRepo() {
         // Update page title
         document.title = `${mangaData.manga.title} - Info`;
         
-        console.log('✅ Manga data loaded from repo');
+        console.log('✅ Manga data loaded from repo (WIB timezone)');
         
     } catch (error) {
         console.error('❌ Error loading manga data:', error);
@@ -310,7 +329,7 @@ async function trackLockedChapterView(chapter) {
  */
 async function incrementPendingChapterViews(repo, chapter) {
     try {
-        console.log('📡 Sending chapter view increment to Google Apps Script...');
+        console.log('📡 Sending chapter view increment to Google Apps Script (WIB)...');
         
         await fetch(GOOGLE_SCRIPT_URL, {
             method: 'POST',
@@ -320,12 +339,13 @@ async function incrementPendingChapterViews(repo, chapter) {
             body: JSON.stringify({ 
                 repo: repo,
                 chapter: chapter,
-                type: 'chapter'
+                type: 'chapter',
+                timestamp: getWIBTimestamp()
             }),
             mode: 'no-cors'
         });
         
-        console.log('✅ Chapter view increment request sent (no-cors mode)');
+        console.log('✅ Chapter view increment request sent (no-cors mode, WIB)');
         
     } catch (error) {
         console.error('❌ Error incrementing chapter views:', error);
@@ -474,7 +494,7 @@ async function trackPageView() {
         // Mark as viewed in this session
         sessionStorage.setItem(viewKey, 'true');
         
-        console.log('✅ View tracked successfully');
+        console.log('✅ View tracked successfully (WIB)');
         
     } catch (error) {
         console.error('❌ Error tracking view:', error);
@@ -487,7 +507,7 @@ async function trackPageView() {
  */
 async function incrementPendingViews(repo) {
     try {
-        console.log('📡 Sending view increment to Google Apps Script...');
+        console.log('📡 Sending view increment to Google Apps Script (WIB)...');
         
         // Using text/plain to avoid CORS preflight with no-cors mode
         await fetch(GOOGLE_SCRIPT_URL, {
@@ -497,12 +517,13 @@ async function incrementPendingViews(repo) {
             },
             body: JSON.stringify({ 
                 repo: repo,
-                type: 'page'
+                type: 'page',
+                timestamp: getWIBTimestamp()
             }),
             mode: 'no-cors'
         });
         
-        console.log('✅ View increment request sent (no-cors mode)');
+        console.log('✅ View increment request sent (no-cors mode, WIB)');
         
     } catch (error) {
         console.error('❌ Error incrementing views:', error);
