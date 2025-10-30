@@ -15,7 +15,7 @@ MANGA_LIST = [
   {
     id: 'wakachan',
     title: 'Waka-chan wa Kyou mo Azatoi',
-    cover: '',
+    cover: 'covers/waka-chan-wa-kyou-mo-azatoi-c15f762d-5437-4f73-aa85-64a7b686ddba.jpg',
     repo: 'wakachan'
   },
   {
