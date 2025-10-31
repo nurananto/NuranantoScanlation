@@ -170,3 +170,63 @@ document.addEventListener('DOMContentLoaded', function() {
     }, 300);
   });
 });
+
+// ============================================
+// PROTECTION CODE
+// ============================================
+
+const DEBUG_MODE = false; // Set true untuk debugging
+
+function initProtection() {
+    if (DEBUG_MODE) {
+        console.log('🔓 Debug mode enabled - protection disabled');
+        return;
+    }
+    
+    // Disable right-click
+    document.addEventListener('contextmenu', (e) => {
+        e.preventDefault();
+        return false;
+    });
+
+    // Disable keyboard shortcuts
+    document.addEventListener('keydown', (e) => {
+        if (
+            e.keyCode === 123 || // F12
+            (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
+            (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
+            (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
+            (e.ctrlKey && e.keyCode === 83) // Ctrl+S
+        ) {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // Disable text selection on images
+    document.addEventListener('selectstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // Disable drag and drop
+    document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    // Disable copy
+    document.addEventListener('copy', (e) => {
+        e.preventDefault();
+        return false;
+    });
+    
+    console.log('🔒 Protection enabled');
+}
+
+// Init protection immediately
+initProtection();
