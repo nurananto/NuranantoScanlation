@@ -86,7 +86,7 @@ MANGA_LIST = [
   },
   {
     id: 'kiminonegai',
-    title: 'Kimi no Negai ga Kanau made',
+    title: 'Kimi no Negai ga Kanau Made',
     cover: 'covers/kiminonegai-5c6872ff-e467-44e1-b190-b01c0c1d8857.jpg',
     repo: 'KiminoNegai'
   },
