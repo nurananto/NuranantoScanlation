@@ -452,8 +452,10 @@ function updateMangaConfigJs(updatedMangaList) {
     console.log(`  📚 Total: ${MANGA_LIST.length}`);
     console.log('╚════════════════════════════════════╝\n');
     
+    // ALWAYS update manga-config.js (fix xxxx, yyyy, zzzz)
+    updateMangaConfigJs(updatedMangaList);
+    
     if (successCount > 0 || updatedCount > 0) {
-      updateMangaConfigJs(updatedMangaList);
       await syncCoverToRepos(updatedMangaList);
       
       console.log('🎉 Selesai!');
