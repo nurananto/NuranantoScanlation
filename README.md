@@ -1,513 +1,612 @@
-# 📚 Nurananto Scanlation
+# 📚 Nurananto Scanlation - Website Manga
 
-Website manga scanlation berbahasa Indonesia dengan sistem chapter management yang modern dan otomatis.
-
-[![Auto Update Covers](https://github.com/nurananto/NuranantoScanlation/actions/workflows/update-covers.yml/badge.svg)](https://github.com/nurananto/NuranantoScanlation/actions/workflows/update-covers.yml)
-
-🔗 **Live Demo**: [https://nurananto.github.io/NuranantoScanlation/](https://nurananto.github.io/NuranantoScanlation/)
+Website manga scanlation modern dengan sistem automasi lengkap untuk menampilkan dan membaca manga terjemahan.
 
 ---
 
-## ✨ Fitur
+## 📖 Daftar Isi
 
-- 🎯 **Auto-Sorting** - Manga otomatis diurutkan berdasarkan update terbaru
-- 🔄 **Badge "UPDATED"** - Menampilkan manga yang diupdate dalam 24 jam terakhir
-- 🔍 **Real-time Search** - Pencarian manga dengan debounce 300ms
-- 📱 **Fully Responsive** - Optimized untuk desktop, tablet, dan mobile
-- 📊 **View Counter** - Tracking views otomatis via Google Apps Script
-- 🔒 **Locked Chapters** - Sistem chapter terkunci dengan donasi integration
-- 🖼️ **Auto Cover Update** - GitHub Actions untuk update cover otomatis setiap 2 minggu
-- 🎨 **Modern UI** - Design clean dengan squircle buttons dan smooth animations
-- 🚀 **Webtoon Reader** - Reader mode dengan infinite scroll dan page navigation
+1. [Penjelasan File & Fungsinya](#-penjelasan-file--fungsinya)
+2. [Setup Awal](#-setup-awal)
+3. [Konfigurasi Website](#-konfigurasi-website)
+4. [Menambah Manga Baru](#-menambah-manga-baru)
+5. [Automasi Cover](#-automasi-cover)
+6. [Deploy ke GitHub Pages](#-deploy-ke-github-pages)
+7. [FAQ](#-faq)
 
 ---
 
-## 🗂️ Struktur Project
+## 📁 Penjelasan File & Fungsinya
 
+### **File HTML (Halaman Website)**
+
+#### `index.html`
+**Fungsi:** Halaman utama yang menampilkan daftar manga
+- Grid card manga dengan cover
+- Search bar untuk cari manga
+- Badge "UPDATED!" untuk manga baru
+- Sort otomatis berdasarkan update terbaru
+
+**Yang Perlu Diedit:**
+```html
+<!-- Line 13: Ganti nama website di title -->
+<title>Nurananto Scanlation</title>
+
+<!-- Line 16: Ganti path logo -->
+<img src="assets/logo.png" alt="Nurananto Scanlation">
+
+<!-- Line 19: Ganti URL GitHub repo -->
+<a href="https://github.com/nurananto/NuranantoScanlation">
+
+<!-- Line 27: Ganti URL Facebook -->
+<a href="https://web.facebook.com/profile.php?id=61556658895013">
+
+<!-- Line 59: Ganti URL Trakteer -->
+<a href="https://trakteer.id/NuranantoScanlation">
+
+<!-- Line 60: Ganti path icon Trakteer -->
+<img src="assets/trakteer-icon.png">
 ```
-NuranantoScanlation/
-├── index.html              # Halaman utama (daftar manga)
-├── info-manga.html         # Halaman info manga + chapter list
-├── reader.html             # Halaman reader
-├── script.js               # Logic untuk index.html
-├── info-manga.js           # Logic untuk info-manga.html
-├── reader.js               # Logic untuk reader.html
-├── style.css               # Styling untuk index.html
-├── info-manga.css          # Styling untuk info-manga.html
-├── reader.css              # Styling untuk reader.html
-├── manga-config.js         # ⭐ SINGLE SOURCE OF TRUTH untuk manga list
-├── manga-repos.json        # Mapping repo → manga.json URLs
-├── download-covers.js      # Script untuk download cover dari MangaDex
-├── .github/
-│   └── workflows/
-│       └── update-covers.yml  # GitHub Actions untuk auto-update covers
-├── assets/
-│   ├── logo.png
-│   └── trakteer-icon.png
-└── covers/                 # Folder untuk menyimpan cover manga
-    ├── manga-1-hash.jpg
-    ├── manga-2-hash.jpg
-    └── ...
+
+#### `info-manga.html`
+**Fungsi:** Halaman detail manga (sinopsis, genre, daftar chapter)
+- Cover manga
+- Info author, artist, genre
+- Sinopsis lengkap
+- Daftar chapter dengan views
+- Link MangaDex dan RAW
+
+**Yang Perlu Diedit:**
+```html
+<!-- Line 48-52: Sama seperti index.html -->
+<!-- Ganti logo, GitHub, Facebook URL -->
+```
+
+#### `reader.html`
+**Fungsi:** Halaman baca manga (webtoon mode)
+- Scroll vertical untuk baca
+- Navigation antar chapter
+- Protection anti copy/download
+- Page navigation thumbnails
+
+**Yang Perlu Diedit:**
+```html
+<!-- Tidak perlu edit, sudah otomatis! -->
 ```
 
 ---
 
-## 📖 Cara Menambah Manga Baru
+### **File CSS (Tampilan/Style)**
 
-### **Step 1: Buat Repository untuk Manga Baru**
+#### `style.css`
+**Fungsi:** Style untuk `index.html`
+- Dark theme
+- Responsive grid (desktop/tablet/mobile)
+- Card hover effects
+- Badge "UPDATED!" styling
 
-Setiap manga harus punya repository tersendiri dengan struktur:
-
-```
-NamaMangaRepo/
-├── manga.json          # Metadata manga
-├── Chapter-1/          # Folder chapter
-│   ├── 1.jpg
-│   ├── 2.jpg
-│   └── ...
-├── Chapter-2/
-│   ├── 1.jpg
-│   ├── 2.jpg
-│   └── ...
-└── ...
-```
-
-**Contoh `manga.json`:**
-
-```json
-{
-  "manga": {
-    "title": "Judul Manga",
-    "alternativeTitle": "Alternative Title",
-    "description": "Sinopsis manga...",
-    "cover": "https://link-to-cover.jpg",
-    "author": "Nama Author",
-    "artist": "Nama Artist",
-    "genre": ["Romance", "Comedy", "School Life"],
-    "views": 0,
-    "links": {
-      "mangadex": "https://mangadex.org/title/...",
-      "raw": "https://comic-walker.com/..."
-    }
-  },
-  "lastUpdated": "2025-01-29T10:30:00Z",
-  "lastChapterUpdate": "2025-01-29T10:30:00Z",
-  "chapters": {
-    "1": {
-      "folder": "Chapter-1",
-      "title": "Chapter 1",
-      "views": 0,
-      "locked": false,
-      "images": ["1.jpg", "2.jpg", "3.jpg"]
-    },
-    "2": {
-      "folder": "Chapter-2",
-      "title": "Chapter 2",
-      "views": 0,
-      "locked": false,
-      "images": ["1.jpg", "2.jpg"]
-    }
-  }
+**Yang Perlu Diedit:**
+```css
+/* Line 8-15: Ganti warna tema (opsional) */
+:root {
+  --primary-color: #1877f2;  /* Warna utama (biru Facebook) */
+  --bg-dark: #111;           /* Background gelap */
+  --bg-card: #1a1a1a;        /* Background card */
 }
 ```
 
+#### `info-manga.css`
+**Fungsi:** Style untuk `info-manga.html`
+
+#### `reader.css`
+**Fungsi:** Style untuk `reader.html`
+
+> **Catatan:** File CSS tidak perlu diedit kecuali ingin ganti warna tema!
+
 ---
 
-### **Step 2: Update `manga-config.js`**
+### **File JavaScript (Logika Website)**
 
-Tambahkan manga baru di **paling atas** array `MANGA_LIST`:
+#### `manga-config.js` ⭐ **FILE PALING PENTING**
+**Fungsi:** Database manga - SATU-SATUNYA tempat data manga
+- List semua manga
+- Cover path
+- Repo GitHub per manga
+- Generate URL otomatis
+
+**HARUS DIEDIT:**
+```javascript
+// Line 15-105: Daftar manga
+MANGA_LIST = [
+  {
+    id: 'wakachan',                    // ID unik (huruf kecil, no spasi)
+    title: 'Waka-chan wa Kyou mo Azatoi',  // Judul manga
+    cover: 'covers/wakachan-hash.jpg', // Path cover (auto-update)
+    repo: 'wakachan'                   // Nama repo GitHub manga
+  },
+  // ... tambah manga baru di sini
+];
+
+// Line 131: Ganti username GitHub
+function getMangaDataURL(manga) {
+  return `https://raw.githubusercontent.com/nurananto/${manga.repo}/main/manga.json`;
+  //                                        ^^^^^^^^ GANTI INI!
+}
+
+// Line 135, 139: Sama, ganti username
+```
+
+#### `script.js`
+**Fungsi:** Logic untuk `index.html`
+- Fetch data manga dari repo
+- Sort manga by update terbaru
+- Search manga
+- Create card manga
+
+**Yang Perlu Diedit:**
+```javascript
+// Line 4: Ganti username GitHub
+const response = await fetch(`https://raw.githubusercontent.com/nurananto/${repo}/main/manga.json`);
+//                                                            ^^^^^^^^ GANTI!
+```
+
+#### `info-manga.js`
+**Fungsi:** Logic untuk `info-manga.html`
+- Load manga detail
+- Display chapter list
+- View counter
+- Open chapter di reader
+
+**Yang Perlu Diedit:**
+```javascript
+// Line 32: Link Trakteer untuk chapter locked
+const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
+//                                        ^^^^^^^^^^^^^^^^^^^^^ GANTI!
+
+// Line 35: Google Apps Script URL (view counter)
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/...';
+//                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ GANTI!
+// (Opsional, bisa dikosongkan jika tidak pakai view counter)
+```
+
+#### `reader.js`
+**Fungsi:** Logic untuk `reader.html`
+- Load images chapter
+- Navigation prev/next page
+- Track view chapter
+- Protection anti-screenshot
+
+**Yang Perlu Diedit:**
+```javascript
+// Line 32: Link Trakteer (sama seperti info-manga.js)
+const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
+
+// Line 35: Google Apps Script URL (sama)
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/...';
+```
+
+---
+
+### **File Automation (GitHub Actions)**
+
+#### `download-covers.js` ⭐ **SCRIPT AUTO-UPDATE COVER**
+**Fungsi:** Download cover terbaru dari MangaDex
+- Fetch manga.json dari setiap repo manga
+- Ambil cover TERBARU dari MangaDex API
+- Replace cover lama dengan baru
+- Update `manga-config.js` otomatis
+- Sync cover ke 15 repo manga
+
+**Yang Perlu Diedit:**
+```javascript
+// Line 355-359: Ganti username GitHub di URL
+const coverUrl = `https://raw.githubusercontent.com/nurananto/NuranantoScanlation/refs/heads/main/${manga.cover}`;
+const configUrl = `https://raw.githubusercontent.com/nurananto/${manga.repo}/main/manga-config.json`;
+//                                                ^^^^^^^^ GANTI!
+```
+
+#### `.github/workflows/update-covers.yml` ⭐ **WORKFLOW AUTO-UPDATE**
+**Fungsi:** GitHub Action untuk auto-update cover setiap 14 hari
+- Jalankan `download-covers.js`
+- Commit & push perubahan
+- Trigger sync ke 15 repo manga
+
+**Yang Perlu Diedit:**
+```yaml
+# Line 52-53: Daftar repo manga
+repos=("10nenburi" "wakachan" "KawaiiGal" ...)
+# GANTI dengan list repo manga kamu!
+
+# Line 58: Ganti username GitHub
+https://api.github.com/repos/nurananto/$repo/dispatches
+#                             ^^^^^^^^ GANTI!
+```
+
+---
+
+## 🚀 Setup Awal
+
+### **Step 1: Fork/Clone Repo**
+```bash
+# Clone repo ini
+git clone https://github.com/nurananto/NuranantoScanlation.git
+cd NuranantoScanlation
+```
+
+### **Step 2: Ganti Semua Username GitHub**
+
+**File yang HARUS diganti:**
+1. `manga-config.js` (line 131, 135, 139)
+2. `script.js` (line 4)
+3. `download-covers.js` (line 355-356)
+4. `.github/workflows/update-covers.yml` (line 58)
+
+**Cara cepat ganti semua:**
+```bash
+# Linux/Mac - Replace di semua file sekaligus
+find . -type f \( -name "*.js" -o -name "*.yml" \) -exec sed -i 's/nurananto/USERNAME_KAMU/g' {} +
+
+# Windows - Pakai search & replace di VS Code
+# Ctrl+Shift+H → Find: "nurananto" → Replace: "USERNAME_KAMU"
+```
+
+### **Step 3: Update Assets**
+
+**Siapkan file di folder `assets/`:**
+```
+assets/
+├── logo.png          ← Logo scanlation kamu (min. 300x80px)
+└── trakteer-icon.png ← Icon Trakteer (24x24px)
+```
+
+### **Step 4: Setup GitHub Pages**
+
+1. GitHub repo → **Settings** → **Pages**
+2. Source: **Deploy from a branch**
+3. Branch: **main** → Folder: **/ (root)**
+4. Save
+
+**Website akan online di:**
+```
+https://USERNAME_KAMU.github.io/NAMA_REPO/
+```
+
+---
+
+## ⚙️ Konfigurasi Website
+
+### **1. Ganti Informasi Dasar**
+
+#### **File: `index.html`**
+```html
+<!-- Ganti title -->
+<title>Nama Scanlation Kamu</title>
+
+<!-- Ganti logo -->
+<img src="assets/logo.png" alt="Nama Scanlation Kamu">
+
+<!-- Ganti URL Facebook -->
+<a href="https://web.facebook.com/profile.php?id=FACEBOOK_ID_KAMU">
+
+<!-- Ganti URL Trakteer -->
+<a href="https://trakteer.id/USERNAME_TRAKTEER_KAMU">
+```
+
+#### **File: `info-manga.html`**
+```html
+<!-- Sama seperti index.html, ganti logo, Facebook, dll -->
+```
+
+### **2. Setup Link Donasi**
+
+#### **File: `info-manga.js` dan `reader.js`**
+```javascript
+// Ganti URL Trakteer
+const TRAKTEER_LINK = 'https://trakteer.id/USERNAME_KAMU';
+```
+
+### **3. Setup View Counter (Opsional)**
+
+Jika ingin pakai view counter:
+
+1. Buat Google Apps Script
+2. Deploy sebagai Web App
+3. Copy URL
+4. Paste di `info-manga.js` dan `reader.js`:
 
 ```javascript
-const MANGA_LIST = [
-  // ⭐ MANGA BARU - Taruh di sini!
+const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/URL_KAMU/exec';
+```
+
+**Jika tidak mau pakai view counter:**
+```javascript
+// Kosongkan saja
+const GOOGLE_SCRIPT_URL = '';
+```
+
+---
+
+## ➕ Menambah Manga Baru
+
+### **Step 1: Buat Repo Manga**
+
+Contoh: Manga baru "One Punch Man"
+
+1. Buat repo baru: `OnePunchMan`
+2. Upload chapter manga ke repo tersebut
+3. Pastikan ada file `manga.json` dan `chapters.json`
+
+### **Step 2: Tambah Entry di `manga-config.js`**
+
+```javascript
+MANGA_LIST = [
+  // Paste di PALING ATAS array (urutan manga terbaru)
   {
-    id: 'mangabaru',                    // ID unik (lowercase, no space)
-    title: 'Judul Manga Lengkap',      // Judul penuh
-    cover: 'covers/manga-baru-hash.jpg', // Path ke cover (akan auto-update)
-    repo: 'NamaMangaRepo'               // Nama repository di GitHub
+    id: 'onepunchman',                 // Unique ID (lowercase, no space)
+    title: 'One Punch Man',            // Judul manga
+    cover: 'covers/onepunchman-xxx.jpg', // Path cover (nanti auto-update)
+    repo: 'OnePunchMan'                // Nama repo GitHub
   },
   
-  // Manga lainnya...
+  // Manga lain di bawah...
   {
-    id: 'kawaiigal',
-    title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
-    cover: 'covers/class-de-ichiban-kawaii-gal-o-ezuke-shiteiru-hanas-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
-    repo: 'KawaiiGal'
+    id: 'wakachan',
+    title: 'Waka-chan wa Kyou mo Azatoi',
+    cover: 'covers/wakachan-c15f762d.jpg',
+    repo: 'wakachan'
   },
   // ...
 ];
 ```
 
-**Field Explanation:**
-- `id`: Identifier unik untuk manga (digunakan di URL)
-- `title`: Judul lengkap manga
-- `cover`: Path ke file cover di folder `covers/`
-- `repo`: Nama repository GitHub (tanpa username)
+### **Step 3: Download Cover Pertama Kali**
 
----
-
-### **Step 3: Update `manga-repos.json`**
-
-Tambahkan mapping URL untuk repo baru:
-
-```json
-{
-  "mangabaru": "https://raw.githubusercontent.com/nurananto/NamaMangaRepo/main/manga.json",
-  "10nenburi": "https://raw.githubusercontent.com/nurananto/10nenburi/main/manga.json",
-  "madogiwa": "https://raw.githubusercontent.com/nurananto/MadogiwaHenshuu/refs/heads/main/manga.json",
-  ...
-}
-```
-
-**Format:**
-```
-"[id-manga]": "https://raw.githubusercontent.com/[username]/[NamaRepo]/main/manga.json"
-```
-
----
-
-### **Step 4: Download Cover dari MangaDex**
-
-Jalankan script untuk auto-download cover terbaru:
-
+**Opsi 1: Manual (Cepat)**
 ```bash
+# Download cover dari MangaDex
+# Save as: covers/onepunchman-HASH.jpg
+
+# Update path di manga-config.js:
+cover: 'covers/onepunchman-HASH.jpg'
+```
+
+**Opsi 2: Auto (Pakai Script)**
+```bash
+# Jalankan script download cover
 node download-covers.js
+
+# Script akan otomatis:
+# 1. Fetch manga.json dari repo OnePunchMan
+# 2. Ambil cover dari MangaDex
+# 3. Download ke folder covers/
+# 4. Update manga-config.js otomatis
 ```
 
-**Script ini akan:**
-1. Membaca `manga-repos.json`
-2. Fetch `manga.json` dari setiap repository
-3. Ambil cover terbaru dari MangaDex API
-4. Download dan simpan ke folder `covers/`
-5. Update path cover di `manga-config.js`
-
----
-
-### **Step 5: Commit & Push**
+### **Step 4: Commit & Push**
 
 ```bash
-git add manga-config.js manga-repos.json covers/
-git commit -m "Add new manga: Judul Manga"
+git add covers/ manga-config.js
+git commit -m "Add manga: One Punch Man"
 git push
 ```
 
-**✅ Done!** Manga baru akan langsung muncul di website.
+**✅ Manga baru otomatis muncul di website!**
 
 ---
 
-## 🔄 Auto-Update Covers
+## 🖼️ Automasi Cover
 
-Project ini menggunakan **GitHub Actions** untuk auto-update covers setiap 2 minggu.
+### **Setup Personal Access Token (PAT)**
 
-### **Cara Kerja:**
+Agar workflow bisa auto-sync cover ke semua repo manga:
 
-1. **Scheduled Run**: Setiap 14 hari (bi-weekly) pada hari Minggu jam 00:00 UTC
-2. **Workflow** menjalankan `download-covers.js`
-3. Jika ada cover baru, otomatis commit & push ke repository
-4. Website akan menggunakan cover terbaru
+#### **Step 1: Buat PAT Token**
 
-### **Manual Trigger:**
+1. GitHub → Settings → Developer settings
+2. Personal access tokens → **Tokens (classic)**
+3. Generate new token (classic)
+4. **Name:** `MANGA_SYNC_TOKEN`
+5. **Expiration:** 1 year
+6. **Scopes:** 
+   - ✅ `repo` (Full control)
+   - ✅ `workflow` (Update workflows)
+7. Generate → **Copy token!**
 
-Bisa juga trigger manual dari GitHub UI:
-1. Go to **Actions** tab
-2. Select **"Auto Update Manga Covers"**
-3. Click **"Run workflow"**
+#### **Step 2: Simpan Token di Repo**
 
-### **File Konfigurasi:**
+1. Repo website → Settings → Secrets and variables → Actions
+2. New repository secret
+3. **Name:** `PAT_TOKEN`
+4. **Value:** (paste token dari step 1)
+5. Add secret
 
-`.github/workflows/update-covers.yml`
+### **Cara Kerja Auto-Update Cover**
 
-```yaml
-on:
-  schedule:
-    - cron: '0 0 */14 * *'  # Every 14 days
-  workflow_dispatch:         # Manual trigger
 ```
+Setiap 14 hari / manual trigger:
+  ↓
+1. Workflow update-covers.yml jalan
+  ↓
+2. Script download-covers.js:
+   - Loop 15 manga
+   - Fetch manga.json dari setiap repo
+   - Ambil cover TERBARU dari MangaDex
+   - Download cover baru
+   - Hapus cover lama
+   - Update manga-config.js
+  ↓
+3. Commit & push perubahan
+  ↓
+4. Trigger sync-cover.yml di 15 repo manga
+  ↓
+5. Update manga-config.json di setiap repo
+```
+
+### **Manual Trigger Cover Update**
+
+1. GitHub repo → **Actions**
+2. Workflow: **Auto Update Manga Covers**
+3. Run workflow
+4. Wait ~2-3 menit
+5. ✅ Cover ter-update!
 
 ---
 
-## 📝 Struktur File Penting
+## 🌐 Deploy ke GitHub Pages
 
-### **1. `manga-config.js` - SINGLE SOURCE OF TRUTH**
+### **Aktifkan GitHub Pages**
 
-File ini adalah **satu-satunya tempat** untuk manage daftar manga. Digunakan oleh semua halaman (index, info-manga, reader).
+1. Repo → **Settings** → **Pages**
+2. Source: **Deploy from a branch**
+3. Branch: **main** → `/` (root)
+4. **Save**
 
-**✅ Keuntungan:**
-- Satu file = satu tempat edit
-- Tidak perlu update di banyak tempat
-- Konsisten di seluruh website
-
-**📍 Dipakai oleh:**
-- `index.html` → Daftar manga
-- `info-manga.html` → Load manga data
-- `reader.html` → Load chapter images
-
----
-
-### **2. `manga-repos.json` - URL Mapping**
-
-Mapping dari `id` manga ke URL `manga.json` di GitHub.
-
-**Format:**
-```json
-{
-  "manga-id": "https://raw.githubusercontent.com/username/repo/main/manga.json"
-}
+**Website online di:**
+```
+https://USERNAME_KAMU.github.io/NAMA_REPO/
 ```
 
-**📍 Dipakai oleh:**
-- `download-covers.js` → Fetch manga.json untuk download cover
-- `info-manga.js` → Fetch data manga
-- `reader.js` → Fetch chapter data
+### **Custom Domain (Opsional)**
 
----
+Jika punya domain sendiri (contoh: `mangasaya.com`):
 
-### **3. `download-covers.js` - Cover Downloader**
-
-Script Node.js untuk auto-download cover dari MangaDex API.
-
-**Features:**
-- ✅ Auto-detect cover terbaru
-- ✅ Replace cover lama dengan yang baru
-- ✅ Update `manga-config.js` otomatis
-- ✅ Rate limiting handling
-- ✅ Backup file sebelum update
-
-**Usage:**
-```bash
-node download-covers.js
-```
-
----
-
-## 🎨 Styling & Responsive Design
-
-### **Breakpoints:**
-
-```css
-/* Desktop */
-@media (min-width: 1024px) { ... }
-
-/* Tablet */
-@media (min-width: 768px) and (max-width: 1023px) { ... }
-
-/* Mobile */
-@media (max-width: 767px) { ... }
-
-/* Small Mobile */
-@media (max-width: 480px) { ... }
-```
-
-### **Key Features:**
-
-- **Squircle Buttons**: Border-radius 12-16px (bukan oval 50px)
-- **2-Line Title Ellipsis**: Judul maksimal 2 baris dengan `...`
-- **Dynamic Font Size**: Font menyesuaikan device
-- **Grid Layout**: 5 kolom (desktop), 3 kolom (tablet), 2 kolom (mobile)
-
----
-
-## 📊 View Counter System
-
-Website menggunakan **Google Apps Script** untuk tracking views.
-
-### **Endpoints:**
-
-1. **Page Views** (info-manga.html)
-   - Tracked saat halaman dimuat
-   - Hanya 1x per session (pakai `sessionStorage`)
-
-2. **Chapter Views** (reader.html)
-   - Tracked saat chapter dibuka
-   - Auto-increment di Google Sheet
-
-3. **Locked Chapter Views**
-   - Tracked saat user klik chapter terkunci
-   - Redirect ke Trakteer untuk donasi
-
-### **API URL:**
-
-```javascript
-const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/.../exec';
-```
-
-**Request Format:**
-```json
-{
-  "repo": "manga-id",
-  "chapter": "1",
-  "type": "chapter"
-}
-```
-
----
-
-## 🔒 Locked Chapters
-
-Chapter bisa dikunci dan hanya bisa dibuka setelah donasi.
-
-### **Setup di `manga.json`:**
-
-```json
-{
-  "chapters": {
-    "5": {
-      "folder": "Chapter-5",
-      "title": "Chapter 5",
-      "views": 0,
-      "locked": true,  // ⭐ Set locked = true
-      "images": ["1.jpg", "2.jpg"]
-    }
-  }
-}
-```
-
-### **Behavior:**
-
-- ❌ User **tidak bisa** langsung baca
-- 🔓 Klik chapter → Alert → Redirect ke Trakteer
-- 📊 View tetap di-track untuk statistik
-
-### **Trakteer Link:**
-
-```javascript
-const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
-```
-
----
-
-## 🚀 Deployment
-
-### **GitHub Pages:**
-
-1. Repository Settings → Pages
-2. Source: Deploy from a branch
-3. Branch: `main` / `root`
-4. Save
-
-**URL:** `https://username.github.io/NuranantoScanlation/`
-
-### **Custom Domain (Optional):**
-
-1. Buat file `CNAME` di root:
+1. Buat file `CNAME` di root repo:
    ```
-   yourdomain.com
+   mangasaya.com
    ```
 
-2. Update DNS:
+2. Setting DNS di provider domain:
    ```
    Type: CNAME
-   Name: @
-   Value: username.github.io
+   Name: @ (atau www)
+   Value: USERNAME_KAMU.github.io
    ```
 
+3. GitHub Pages → Custom domain → `mangasaya.com` → Save
+
 ---
 
-## 🛠️ Development
+## ❓ FAQ
 
-### **Local Testing:**
+### **Q: Manga tidak muncul di website?**
 
-Karena ada CORS issue saat buka file langsung, gunakan web server:
+**A:** Cek:
+1. `manga-config.js` → Pastikan entry manga sudah ditambah
+2. `manga.json` → Pastikan ada di repo manga
+3. Console browser (F12) → Cek error
 
-**Option 1: VS Code Live Server**
-1. Install extension "Live Server"
-2. Right-click `index.html` → Open with Live Server
+### **Q: Cover 404 / tidak muncul?**
 
-**Option 2: Python HTTP Server**
+**A:** 
+1. Cek path cover di `manga-config.js`:
+   ```javascript
+   cover: 'covers/wakachan-HASH.jpg'  // ✅ Benar
+   cover: 'wakachan-HASH.jpg'         // ❌ Salah (kurang covers/)
+   ```
+
+2. Pastikan file cover ada di folder `covers/`
+
+3. Trigger workflow `update-covers.yml` untuk re-download
+
+### **Q: GitHub Action failed?**
+
+**A:** Cek:
+1. **PAT_TOKEN** → Pastikan sudah disimpan di Secrets
+2. Token permission → Harus punya akses `repo` & `workflow`
+3. Username GitHub → Pastikan sudah diganti di semua file
+
+### **Q: View counter tidak jalan?**
+
+**A:**
+1. Jika tidak perlu view counter, kosongkan:
+   ```javascript
+   const GOOGLE_SCRIPT_URL = '';
+   ```
+
+2. Jika mau pakai, setup Google Apps Script dulu
+
+### **Q: Website blank / error di browser?**
+
+**A:**
+1. Buka Console (F12) → Lihat error
+2. Biasanya: path file salah atau `manga-config.js` tidak ke-load
+3. Cek struktur folder:
+   ```
+   ├── index.html
+   ├── manga-config.js  ← HARUS di root!
+   ├── script.js
+   ├── covers/
+   └── assets/
+   ```
+
+### **Q: Cara update workflow di semua repo manga?**
+
+**A:**
+1. Update file `sync-cover.yml` atau `manga-automation.yml`
+2. Copy ke semua repo manga (15 repo)
+3. Commit & push di masing-masing repo
+
+**Atau:** Buat script bash:
 ```bash
-python -m http.server 8000
+#!/bin/bash
+repos=("10nenburi" "wakachan" "KawaiiGal" ...)
+
+for repo in "${repos[@]}"; do
+  cd ../$repo
+  cp ../NuranantoScanlation/.github/workflows/sync-cover.yml .github/workflows/
+  git add .github/workflows/sync-cover.yml
+  git commit -m "Update sync-cover.yml"
+  git push
+  cd ../NuranantoScanlation
+done
 ```
-Lalu buka: `http://localhost:8000`
-
-**Option 3: Node.js HTTP Server**
-```bash
-npx http-server
-```
 
 ---
 
-## 📁 File Dependencies
+## 📝 Checklist Setup
 
-### **Halaman Index (Daftar Manga)**
-- `index.html`
-- `style.css`
-- `script.js`
-- `manga-config.js` ✅
+Gunakan checklist ini untuk memastikan setup sudah benar:
 
-### **Halaman Info Manga**
-- `info-manga.html`
-- `info-manga.css`
-- `info-manga.js`
-- `manga-config.js` ✅
-- `manga-repos.json` ✅
+### **Setup Dasar**
+- [ ] Fork/clone repo
+- [ ] Ganti semua username `nurananto` → username kamu
+- [ ] Upload logo & assets
+- [ ] Update link Facebook & Trakteer
+- [ ] Aktifkan GitHub Pages
 
-### **Halaman Reader**
-- `reader.html`
-- `reader.css`
-- `reader.js`
-- `manga-config.js` ✅
-- `manga-repos.json` ✅
+### **Konfigurasi Manga**
+- [ ] Edit `manga-config.js` → Tambah entry manga
+- [ ] Buat repo manga (1 repo per manga)
+- [ ] Upload cover ke folder `covers/`
+- [ ] Test buka website → Manga muncul?
 
----
+### **Automasi (Opsional)**
+- [ ] Buat PAT Token
+- [ ] Simpan token di Secrets (`PAT_TOKEN`)
+- [ ] Edit `update-covers.yml` → List repo manga
+- [ ] Test workflow: Manual trigger → Berhasil?
 
-## 🐛 Troubleshooting
-
-### **1. Manga tidak muncul di website**
-
-**✓ Checklist:**
-- [ ] Sudah tambah di `manga-config.js`?
-- [ ] Sudah tambah di `manga-repos.json`?
-- [ ] URL `manga.json` bisa diakses?
-- [ ] Sudah commit & push?
-- [ ] Clear browser cache (Ctrl+F5)
-
-### **2. Cover tidak muncul**
-
-**✓ Checklist:**
-- [ ] File cover ada di folder `covers/`?
-- [ ] Path cover di `manga-config.js` benar?
-- [ ] Jalankan `node download-covers.js`
-- [ ] Cek console browser untuk error
-
-### **3. Chapter tidak bisa dibuka**
-
-**✓ Checklist:**
-- [ ] Repository chapter sudah public?
-- [ ] Struktur folder chapter benar?
-- [ ] File `manga.json` format valid?
-- [ ] URL di `manga-repos.json` benar?
-
-### **4. View counter tidak jalan**
-
-**✓ Checklist:**
-- [ ] Google Apps Script URL valid?
-- [ ] Script deployed as web app?
-- [ ] Permissions: Anyone (bahkan anonymous)
-- [ ] Check console untuk fetch errors
+### **Finishing**
+- [ ] Test semua link (GitHub, Facebook, Trakteer)
+- [ ] Test baca manga di reader
+- [ ] Test search manga
+- [ ] Cek responsive (mobile/tablet/desktop)
 
 ---
 
-## 📞 Support
+## 🎉 Selesai!
 
-- **Facebook**: [Nurananto Scanlation](https://web.facebook.com/profile.php?id=61556658895013)
-- **Donasi**: [Trakteer.id/NuranantoScanlation](https://trakteer.id/NuranantoScanlation)
-- **GitHub**: [Issues](https://github.com/nurananto/NuranantoScanlation/issues)
+Website manga kamu sudah online! 
 
----
+**Next Steps:**
+- Upload chapter manga ke repo manga
+- Share website ke social media
+- Promote di grup manga Indonesia
 
-## 📜 License
-
-MIT License - Free to use and modify
-
----
-
-## 🙏 Credits
-
-- **MangaDex API** - Cover images
-- **GitHub Pages** - Hosting
-- **Google Apps Script** - View counter
-- **Trakteer** - Donation platform
+**Need Help?**
+- Buka issue di GitHub repo
+- DM di Facebook Page
 
 ---
 
-**Made with ❤️ by Nurananto Scanlation Team**
+**Created by Nurananto Scanlation**
