@@ -110,15 +110,6 @@ function getMangaIdFromUrl(url) {
   return match ? match[1] : null;
 }
 
-function sanitizeFilename(title) {
-  return title
-    .toLowerCase()
-    .replace(/[^a-z0-9]/g, '-')
-    .replace(/-+/g, '-')
-    .replace(/^-|-$/g, '')
-    .substring(0, 50);
-}
-
 function downloadFile(url, filepath) {
   return new Promise((resolve, reject) => {
     const file = fs.createWriteStream(filepath);
@@ -271,20 +262,16 @@ async function processAllManga() {
         continue;
       }
 
-      const sanitizedTitle = sanitizeFilename(manga.title);
-
-      // Step 4: Fetch cover terbaru dari MangaDex
-      console.log('  🔍 Cek cover terbaru dari MangaDex...');
-      const latestCover = await fetchLatestCover(mangaId);
-      
       // Step 5: Process cover
       const coverHash = latestCover.filename.split('.')[0];
-      const newCoverFilename = `${sanitizedTitle}-${coverHash}.jpg`;
+      
+      // USE MANGA ID INSTEAD OF TITLE (consistent naming)
+      const newCoverFilename = `${manga.id}-${coverHash}.jpg`;
       const newCoverPath = path.join(coversDir, newCoverFilename);
       
-      // Cek apakah sudah punya cover dengan hash yang sama
+      // Cek apakah sudah punya cover dengan ID yang sama
       const existingCovers = fs.readdirSync(coversDir)
-        .filter(f => f.startsWith(sanitizedTitle) && f.endsWith('.jpg'));
+        .filter(f => f.startsWith(manga.id + '-') && f.endsWith('.jpg'));
       
       const alreadyHasLatest = existingCovers.some(f => f.includes(coverHash));
       
@@ -349,6 +336,66 @@ async function processAllManga() {
   return { updatedMangaList, successCount, skipCount, errorCount, updatedCount };
 }
 
+// Sync cover URL to all manga repos
+async function syncCoverToRepos(updatedMangaList) {
+  console.log('\n📤 Syncing covers to manga repos...\n');
+  
+  let syncSuccess = 0;
+  let syncFailed = 0;
+  
+  for (const manga of updatedMangaList) {
+    if (!manga.cover) {
+      console.log(`  ⏭️  Skip ${manga.id} (no cover)`);
+      continue;
+    }
+    
+    try {
+      const coverUrl = `https://raw.githubusercontent.com/nurananto/NuranantoScanlation/refs/heads/main/${manga.cover}`;
+      const configUrl = `https://raw.githubusercontent.com/nurananto/${manga.repo}/main/manga-config.json`;
+      
+      console.log(`  📝 ${manga.id}...`);
+      
+      // Fetch current manga-config.json
+      const response = await new Promise((resolve, reject) => {
+        https.get(configUrl, { headers: { 'User-Agent': USER_AGENT } }, resolve).on('error', reject);
+      });
+      
+      if (response.statusCode !== 200) {
+        throw new Error(`HTTP ${response.statusCode}`);
+      }
+      
+      let data = '';
+      for await (const chunk of response) {
+        data += chunk;
+      }
+      
+      const config = JSON.parse(data);
+      
+      // Update cover field
+      config.cover = coverUrl;
+      
+      // Save to file (akan di-commit oleh GitHub Actions)
+      const repoPath = path.join(__dirname, '..', manga.repo);
+      if (fs.existsSync(repoPath)) {
+        const configPath = path.join(repoPath, 'manga-config.json');
+        fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+        console.log(`  ✅ Updated ${manga.id}`);
+        syncSuccess++;
+      } else {
+        console.log(`  ⚠️  Repo ${manga.repo} not found locally (will sync via workflow)`);
+      }
+      
+      await delay(500);
+      
+    } catch (error) {
+      console.log(`  ❌ ${manga.id}: ${error.message}`);
+      syncFailed++;
+    }
+  }
+  
+  console.log(`\n✅ Sync complete: ${syncSuccess} success, ${syncFailed} failed\n`);
+}
+
 function updateMangaConfigJs(updatedMangaList) {
   const configContent = fs.readFileSync(MANGA_CONFIG_PATH, 'utf-8');
   
@@ -403,6 +450,7 @@ function updateMangaConfigJs(updatedMangaList) {
     
     if (successCount > 0 || updatedCount > 0) {
       updateMangaConfigJs(updatedMangaList);
+      await syncCoverToRepos(updatedMangaList);
       
       console.log('🎉 Selesai!');
       if (updatedCount > 0) {

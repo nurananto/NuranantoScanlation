@@ -1,16 +1,12 @@
 name: Auto Update Manga Covers
 
 on:
-  # Jalankan setiap 2 minggu (bi-weekly) pada hari Minggu jam 00:00 UTC
   schedule:
-    - cron: '0 0 */14 * *'  # Setiap 14 hari
-  
-  # Bisa juga trigger manual dari GitHub UI
+    - cron: '0 0 */14 * *'  # Every 14 days
   workflow_dispatch:
 
-# IMPORTANT: Permissions needed for GitHub Actions to push
 permissions:
-  contents: write  # Allow push to repository
+  contents: write
 
 jobs:
   update-covers:
@@ -45,42 +41,29 @@ jobs:
             echo "ℹ️ Tidak ada perubahan cover"
           fi
       
-      - name: 📊 Generate Update Summary
-        if: steps.check_changes.outputs.has_changes == 'true'
-        run: |
-          echo "## 📸 Cover Update Summary" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "**Date:** $(date +'%Y-%m-%d %H:%M:%S UTC')" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Changed Files:" >> $GITHUB_STEP_SUMMARY
-          git status -s | while read line; do
-            echo "- \`$line\`" >> $GITHUB_STEP_SUMMARY
-          done
-      
       - name: 💾 Commit and Push Changes
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           git config --local user.email "github-actions[bot]@users.noreply.github.com"
           git config --local user.name "github-actions[bot]"
           
-          # Add covers dan script.js
-          git add covers/ script.js
+          git add covers/ manga-config.js
           
-          # Commit dengan message informatif
           COMMIT_MSG="🤖 Auto-update covers - $(date +'%Y-%m-%d')"
-          git commit -m "$COMMIT_MSG" -m "Automated cover update by GitHub Actions" || exit 0
+          git commit -m "$COMMIT_MSG" || exit 0
           
-          # Push ke repository
           git push
+      
+      - name: 📤 Trigger Sync to Manga Repos
+        if: steps.check_changes.outputs.has_changes == 'true'
+        uses: peter-evans/repository-dispatch@v2
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+          event-type: sync-covers
+          client-payload: '{"triggered_by": "update-covers"}'
       
       - name: ✅ Success Notification
         if: steps.check_changes.outputs.has_changes == 'true'
         run: |
           echo "🎉 Cover update berhasil!"
-          echo "✨ Changes telah di-push ke repository"
-      
-      - name: ℹ️ No Changes Notification
-        if: steps.check_changes.outputs.has_changes == 'false'
-        run: |
-          echo "📌 Semua cover sudah up-to-date"
-          echo "⏭️ Tidak ada yang perlu diupdate"
+          echo "📤 Sync trigger sent to all manga repos"
