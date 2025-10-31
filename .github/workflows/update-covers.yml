@@ -55,13 +55,20 @@ jobs:
           git push
       
       - name: 📤 Trigger Sync to Manga Repos
-        uses: peter-evans/repository-dispatch@v2
-        with:
-          token: ${{ secrets.PAT_TOKEN }}
-          event-type: sync-covers
-          client-payload: '{"triggered_by": "update-covers"}'
+        run: |
+          repos=("10nenburi" "wakachan" "KawaiiGal" "AiwoOshiete" "YarikondaRenaiGame" "Amarichan" "SankakukeinoLoop" "MadogiwaHenshuu" "TensaiBishoujo" "SuufungonoMirai" "NegattemoNai" "Midari" "KiminoNegai" "YuumeiVTuber" "UchinoSeiso-kei")
+          
+          for repo in "${repos[@]}"; do
+            echo "📤 Triggering $repo..."
+            curl -X POST \
+              -H "Accept: application/vnd.github+json" \
+              -H "Authorization: Bearer ${{ secrets.PAT_TOKEN }}" \
+              https://api.github.com/repos/nurananto/$repo/dispatches \
+              -d '{"event_type":"sync-covers"}'
+            sleep 1
+          done
       
       - name: ✅ Success Notification
         run: |
           echo "🎉 Cover check complete!"
-          echo "📤 Sync trigger sent to all manga repos"
+          echo "📤 Sync trigger sent to 15 manga repos"
