@@ -262,6 +262,10 @@ async function processAllManga() {
         continue;
       }
 
+      // Step 4: Fetch cover terbaru dari MangaDex
+      console.log('  🔍 Cek cover terbaru dari MangaDex...');
+      const latestCover = await fetchLatestCover(mangaId);
+
       // Step 5: Process cover
       const coverHash = latestCover.filename.split('.')[0];
       
