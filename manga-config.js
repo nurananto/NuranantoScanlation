@@ -21,19 +21,19 @@ MANGA_LIST = [
   {
     id: 'kawaiigal',
     title: 'Class de Ichiban Kawaii Gal o Ezuke Shiteiru Hanashi',
-    cover: 'xxxx',
+    cover: 'covers/kawaiigal-057c4259-5fef-4db3-aef5-a805c7f096c2.jpg',
     repo: 'KawaiiGal'
   },
   {
     id: '10nenburi',
     title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
-    cover: 'yyyy',
+    cover: 'covers/10nenburi-6d676869-6140-44ed-8210-58264ae612df.jpg',
     repo: '10nenburi'
   },
   {
     id: 'aiwooshiete',
     title: 'Watashi ni Ai wo Oshiete',
-    cover: 'zzzz',
+    cover: 'covers/aiwooshiete-e56a300a-60aa-433e-8589-c8a963f188f8.jpg',
     repo: 'AiwoOshiete'
   },
   {
