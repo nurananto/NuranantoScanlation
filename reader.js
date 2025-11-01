@@ -1056,24 +1056,28 @@ window.addEventListener('scroll', () => {
     const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
     const mangaTitleElement = document.getElementById('mangaTitle');
     
-    if (scrollTop > lastScrollTop && scrollTop > 100) {
-        // Scroll down
-        navbar.style.transform = 'translateY(-100%)';
-        navbar.style.opacity = '0';
-        
-        // Update header: Judul + Chapter
-        if (mangaData && currentChapter) {
-            mangaTitleElement.textContent = `${mangaData.manga.title} - ${currentChapter.title}`;
-        }
-    } else {
-        // Scroll up
-        navbar.style.transform = 'translateY(0)';
-        navbar.style.opacity = '1';
-        
-        // Update header: Judul saja
+    // Update header title berdasarkan posisi scroll
+    if (scrollTop === 0) {
+        // Di paling atas: Judul saja
         if (mangaData) {
             mangaTitleElement.textContent = mangaData.manga.title;
         }
+    } else {
+        // Sudah scroll: Judul + Chapter
+        if (mangaData && currentChapter) {
+            mangaTitleElement.textContent = `${mangaData.manga.title} - ${currentChapter.title}`;
+        }
+    }
+    
+    // Hide/show navbar
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+        // Scroll down - hide navbar
+        navbar.style.transform = 'translateY(-100%)';
+        navbar.style.opacity = '0';
+    } else {
+        // Scroll up - show navbar
+        navbar.style.transform = 'translateY(0)';
+        navbar.style.opacity = '1';
     }
     
     lastScrollTop = scrollTop;
