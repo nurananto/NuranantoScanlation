@@ -777,3 +777,21 @@ header {
         display: none;
     }
 }
+/* ============================================
+   BUTTON ICON UPDATE
+   ============================================ */
+
+/* Update sidebar button untuk support icon */
+.sidebar-btn {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 10px !important;
+}
+
+/* Icon dalam button - Responsive */
+.btn-icon {
+    width: 1.2em;
+    height: 1.2em;
+    object-fit: contain;
+}

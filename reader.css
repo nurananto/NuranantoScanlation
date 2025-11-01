@@ -826,4 +826,11 @@ body.show-page-nav .page-thumb {
     background: linear-gradient(90deg, var(--secondary-bg) 0%, var(--border-color) 50%, var(--secondary-bg) 100%);
     background-size: 1000px 100%;
     animation: shimmer 2s infinite;
+}  
+/* ============================================
+   NAVBAR SMOOTH TRANSITION
+   ============================================ */
+
+.navbar {
+    transition: transform 0.3s ease, opacity 0.3s ease !important;
 }

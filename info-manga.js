@@ -508,26 +508,7 @@ async function incrementPendingViews(repo) {
         console.log('📡 Sending view increment to Google Apps Script (WIB)...');
         
         // Using text/plain to avoid CORS preflight with no-cors mode
-        await fetch(GOOGLE_SCRIPT_URL, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'text/plain',
-            },
-            body: JSON.stringify({ 
-                repo: repo,
-                type: 'page',
-                timestamp: getWIBTimestamp()
-            }),
-            mode: 'no-cors'
-        });
-        
-        console.log('✅ View increment request sent (no-cors mode, WIB)');
-        
-    } catch (error) {
-        console.error('❌ Error incrementing views:', error);
-    }
-}
-
+        await fetch(GOOGL
 // ============================================
 // PROTECTION CODE
 // ============================================
@@ -536,26 +517,56 @@ const DEBUG_MODE = false; // Set true untuk debugging
 
 function initProtection() {
     if (DEBUG_MODE) {
-        console.log('🔓 Debug mode enabled - protection disabled');
+        console.log('🔓 Debug mode enabled');
         return;
     }
     
-    // Disable right-click
     document.addEventListener('contextmenu', (e) => {
         e.preventDefault();
         return false;
     });
 
-    // Disable keyboard shortcuts
     document.addEventListener('keydown', (e) => {
         if (
-            e.keyCode === 123 || // F12
-            (e.ctrlKey && e.shiftKey && e.keyCode === 73) || // Ctrl+Shift+I
-            (e.ctrlKey && e.shiftKey && e.keyCode === 74) || // Ctrl+Shift+J
-            (e.ctrlKey && e.keyCode === 85) || // Ctrl+U
-            (e.ctrlKey && e.keyCode === 83) // Ctrl+S
+            e.keyCode === 123 ||
+            (e.ctrlKey && e.shiftKey && e.keyCode === 73) ||
+            (e.ctrlKey && e.shiftKey && e.keyCode === 74) ||
+            (e.ctrlKey && e.keyCode === 85) ||
+            (e.ctrlKey && e.keyCode === 83)
         ) {
             e.preventDefault();
+            return false;
+        }
+    });
+
+    document.addEventListener('selectstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    document.addEventListener('dragstart', (e) => {
+        if (e.target.tagName === 'IMG') {
+            e.preventDefault();
+            return false;
+        }
+    });
+
+    document.addEventListener('copy', (e) => {
+        e.preventDefault();
+        return false;
+    });
+    
+    console.log('🔒 Protection enabled');
+}
+
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initProtection);
+} else {
+    initProtection();
+}
+tDefault();
             return false;
         }
     });

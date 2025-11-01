@@ -268,6 +268,9 @@ function setupUI() {
     const mangaTitleElement = document.getElementById('mangaTitle');
     mangaTitleElement.textContent = mangaData.manga.title;
     
+    // Update browser tab title
+    document.title = `${mangaData.manga.title} - ${currentChapter.title}`;
+    
     // Adjust font size to fit in 2 lines
     adjustTitleFontSize(mangaTitleElement);
     
@@ -1040,3 +1043,38 @@ function setupEnhancedEventListeners() {
         }, 250);
     });
 }
+
+// ============================================
+// HIDE NAVBAR ON SCROLL & UPDATE HEADER TITLE
+// ============================================
+
+let lastScrollTop = 0;
+const navbar = document.querySelector('.navbar');
+const header = document.querySelector('.header');
+
+window.addEventListener('scroll', () => {
+    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+    const mangaTitleElement = document.getElementById('mangaTitle');
+    
+    if (scrollTop > lastScrollTop && scrollTop > 100) {
+        // Scroll down
+        navbar.style.transform = 'translateY(-100%)';
+        navbar.style.opacity = '0';
+        
+        // Update header: Judul + Chapter
+        if (mangaData && currentChapter) {
+            mangaTitleElement.textContent = `${mangaData.manga.title} - ${currentChapter.title}`;
+        }
+    } else {
+        // Scroll up
+        navbar.style.transform = 'translateY(0)';
+        navbar.style.opacity = '1';
+        
+        // Update header: Judul saja
+        if (mangaData) {
+            mangaTitleElement.textContent = mangaData.manga.title;
+        }
+    }
+    
+    lastScrollTop = scrollTop;
+});
