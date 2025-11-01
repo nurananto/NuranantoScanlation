@@ -27,7 +27,7 @@ MANGA_LIST = [
   {
     id: '10nenburi',
     title: '10-Nen Buri ni Saikai shita Kusogaki wa Seijun Bishoujo JK ni Seichou shiteita',
-    cover: 'covers/10nenburi-6d676869-6140-44ed-8210-58264ae612df.jpg',
+    cover: 'covers/10nenburi-254730e0-71bd-4008-9c08-e9d9d1d0989e.jpg',
     repo: '10nenburi'
   },
   {
