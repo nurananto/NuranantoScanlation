@@ -15,7 +15,7 @@ MANGA_LIST = [
   {
     id: 'youkyaninatta',
     title: 'Youkya ni Natta Ore no Seishun Shijou Shugi',
-    cover: '',
+    cover: 'covers/youkyaninatta-3eaf02cf-980c-44af-9ab9-2032f7458fb8.jpg',
     repo: 'YoukyaniNatta'
   },
   {
