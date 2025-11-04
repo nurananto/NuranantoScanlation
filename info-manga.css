@@ -321,7 +321,7 @@ header {
 }
 
 .btn-show-details .info-icon {
-    font-size: 18px;
+    font-size: 16px;  /* Same as rating-number */
     font-weight: bold;
 }
 
@@ -365,15 +365,14 @@ header {
 /* Views Badge - seperti Subscribe button */
 .views-badge {
     background-color: #dc143c;
-    border: none;
+    border: 3px solid #ffffff;
     border-radius: 4px;
-    padding: 10px 24px;
+    padding: 7px 21px;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 10px;
     width: fit-content;
-    margin-bottom: 5px;
 }
 
 .views-number {
@@ -777,21 +776,122 @@ header {
         display: none;
     }
 }
-/* ============================================
-   BUTTON ICON UPDATE
-   ============================================ */
-
-/* Update sidebar button untuk support icon */
-.sidebar-btn {
-    display: flex !important;
-    align-items: center !important;
-    justify-content: center !important;
-    gap: 10px !important;
-}
 
 /* Icon dalam button - Responsive */
 .btn-icon {
     width: 1.2em;
     height: 1.2em;
     object-fit: contain;
+}
+
+
+/* Rating Badge - Background putih, border orange */
+.rating-badge {
+    background-color: #ffffff;
+    border: 3px solid #ff6740;
+    border-radius: 4px;
+    padding: 7px 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+}
+
+
+.rating-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff6740;
+    text-align: center;
+}
+
+.rating-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff6740;
+    text-align: center;
+}
+
+/* Mobile - Stack vertically */
+@media (max-width: 768px) {
+    .title-section-mobile .views-badge,
+    .title-section-mobile .rating-badge {
+        margin: 8px auto;
+        display: flex;
+    }
+}
+/* ============================================
+   FIX RATING BADGE - EXACT SAME SIZE AS VIEWS
+   ============================================ */
+
+/* Remove old rating badge CSS and replace with: */
+
+/* Container untuk Views + Rating (Desktop & Mobile) */
+.badges-container {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    flex-wrap: wrap;
+    margin-bottom: 5px;
+}
+
+/* Views Badge - No changes */
+.views-badge {
+    background-color: #dc143c;
+    border: 3px solid #ffffff;
+    border-radius: 4px;
+    padding: 7px 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: fit-content;
+}
+
+/* Rating Badge - EXACT SAME SIZE (no border padding adjustment) */
+.rating-badge {
+    background-color: #ffffff;
+    border: 3px solid #ff6740;
+    border-radius: 4px;
+    padding: 7px 21px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    width: fit-content;
+}
+
+
+.rating-number {
+    font-size: 16px;
+    font-weight: 700;
+    color: #ff6740;
+    text-align: center;
+}
+
+.rating-text {
+    font-size: 14px;
+    font-weight: 600;
+    color: #ff6740;
+    text-align: center;
+}
+
+/* Mobile - Horizontal layout (side by side) */
+@media (max-width: 768px) {
+    .title-section-mobile .badges-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        gap: 10px;
+        margin: 15px auto;
+    }
+    
+    .title-section-mobile .views-badge,
+    .title-section-mobile .rating-badge {
+        margin: 0;
+    }
+}
+.star-icon {
+    font-size: 16px;
 }

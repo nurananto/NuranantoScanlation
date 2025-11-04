@@ -104,6 +104,9 @@ async function loadMangaFromRepo() {
         // Display chapters
         displayChapters();
         
+        // Fetch MangaDex rating
+        fetchMangaDexRating();
+        
         // Update page title
         document.title = `${mangaData.manga.title} - Info`;
         
@@ -532,7 +535,7 @@ async function incrementPendingViews(repo) {
 // PROTECTION CODE
 // ============================================
 
-const DEBUG_MODE = false; // Set true untuk debugging
+const DEBUG_MODE = true; // Set true untuk debugging
 
 function initProtection() {
     if (DEBUG_MODE) {
@@ -587,3 +590,66 @@ function initProtection() {
 
 // Init protection immediately
 initProtection();
+
+/**
+ * Fetch rating dari MangaDex API
+ */
+async function fetchMangaDexRating() {
+    try {
+        const mangadexUrl = mangaData.manga.links?.mangadex;
+        
+        if (!mangadexUrl) {
+            console.log('⚠️ MangaDex URL tidak tersedia');
+            return;
+        }
+        
+        // Extract manga ID dari URL
+        // Format: https://mangadex.org/title/{id}/slug
+        const mangaIdMatch = mangadexUrl.match(/\/title\/([a-f0-9-]+)/);
+        
+        if (!mangaIdMatch) {
+            console.error('❌ Tidak bisa extract MangaDex ID dari URL');
+            return;
+        }
+        
+        const mangaId = mangaIdMatch[1];
+        console.log(`📊 Fetching rating untuk manga ID: ${mangaId}`);
+        
+        // Fetch dari MangaDex API
+        const response = await fetch(`https://api.mangadex.org/statistics/manga/${mangaId}`);
+        
+        if (!response.ok) {
+            throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        
+        const data = await response.json();
+        
+        // Rating ada di data.statistics[mangaId].rating.average
+        const rating = data.statistics?.[mangaId]?.rating?.average;
+        
+        if (rating) {
+            const roundedRating = rating.toFixed(1);
+            
+            // Update desktop
+            const ratingScoreDesktop = document.getElementById('ratingScore');
+            if (ratingScoreDesktop) {
+                ratingScoreDesktop.textContent = roundedRating;
+            }
+            
+            // Update mobile
+            const ratingScoreMobile = document.getElementById('ratingScoreMobile');
+            if (ratingScoreMobile) {
+                ratingScoreMobile.textContent = roundedRating;
+            }
+            
+            console.log(`⭐ Rating MangaDex: ${roundedRating}/10`);
+        } else {
+            console.log('⚠️ Rating tidak tersedia di MangaDex');
+        }
+        
+    } catch (error) {
+        console.error('❌ Error fetching MangaDex rating:', error);
+        // Silent fail - tidak mengganggu user
+    }
+}
+
