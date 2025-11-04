@@ -595,7 +595,7 @@ initProtection();
  * Fetch rating dari MangaDex API
  */
 /**
- * Fetch rating dari MangaDex API dengan multi-proxy fallback
+ * Fetch rating dari MangaDex API dengan multi-proxy fallback + 48 hour cache
  */
 async function fetchMangaDexRating() {
     try {
@@ -615,20 +615,52 @@ async function fetchMangaDexRating() {
         }
         
         const mangaId = mangaIdMatch[1];
+        
+        // ============================================
+        // CEK CACHE DULU (48 JAM)
+        // ============================================
+        const cachedRating = localStorage.getItem(`rating_${mangaId}`);
+        const cachedTime = localStorage.getItem(`rating_time_${mangaId}`);
+        
+        if (cachedRating && cachedTime) {
+            const cacheAge = Date.now() - parseInt(cachedTime);
+            const cacheAgeHours = Math.floor(cacheAge / 3600000); // Convert to hours
+            const CACHE_DURATION = 48 * 3600000; // 48 jam dalam milliseconds
+            
+            if (cacheAge < CACHE_DURATION) {
+                console.log(`📦 Using cached rating: ${cachedRating} (${cacheAgeHours} hours old, valid for ${48 - cacheAgeHours} more hours)`);
+                
+                // Tampilkan rating dari cache
+                const ratingScoreDesktop = document.getElementById('ratingScore');
+                if (ratingScoreDesktop) {
+                    ratingScoreDesktop.textContent = cachedRating;
+                }
+                
+                const ratingScoreMobile = document.getElementById('ratingScoreMobile');
+                if (ratingScoreMobile) {
+                    ratingScoreMobile.textContent = cachedRating;
+                }
+                
+                return; // STOP DI SINI - tidak perlu fetch!
+            } else {
+                console.log(`🔄 Cache expired (${cacheAgeHours} hours old), fetching fresh data...`);
+            }
+        }
+        
+        // ============================================
+        // FETCH BARU (jika tidak ada cache atau expired)
+        // ============================================
         console.log(`📊 Fetching rating untuk manga ID: ${mangaId}`);
         
         const apiUrl = `https://api.mangadex.org/statistics/manga/${mangaId}`;
         
-        // Daftar proxy dengan prioritas (GAS pertama = paling reliable!)
+        // Daftar proxy dengan prioritas
         const proxies = [
             { 
                 name: 'GoogleAppsScript', 
                 url: 'https://script.google.com/macros/s/AKfycbwZ0-VeyloQxjvh-h65G0wtfAzxVq6VYzU5Bz9n1Rl0T4GAkGu9X7HmGh_3_0cJhCS1iA/exec?action=getRating&mangaId=',
                 isGAS: true
-            },
-            { name: 'AllOrigins', url: 'https://api.allorigins.win/raw?url=' },
-            { name: 'CorsProxy', url: 'https://corsproxy.io/?' },
-            { name: 'ThingProxy', url: 'https://thingproxy.freeboard.io/fetch/' }
+            }
         ];
         
         let rating = null;
