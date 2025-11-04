@@ -535,7 +535,7 @@ async function incrementPendingViews(repo) {
 // PROTECTION CODE
 // ============================================
 
-const DEBUG_MODE = true; // Set true untuk debugging
+const DEBUG_MODE = false; // Set true untuk debugging
 
 function initProtection() {
     if (DEBUG_MODE) {
@@ -619,9 +619,8 @@ async function fetchMangaDexRating() {
         
         const apiUrl = `https://api.mangadex.org/statistics/manga/${mangaId}`;
         
-        // Daftar proxy dengan prioritas (coba dari atas ke bawah)
+        // Daftar proxy dengan prioritas (skip direct untuk avoid CORS error di console)
         const proxies = [
-            { name: 'Direct', url: '' },  // Coba langsung dulu (tanpa proxy)
             { name: 'AllOrigins', url: 'https://api.allorigins.win/raw?url=' },
             { name: 'CorsProxy', url: 'https://corsproxy.io/?' },
             { name: 'ThingProxy', url: 'https://thingproxy.freeboard.io/fetch/' },
