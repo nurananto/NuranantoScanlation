@@ -535,7 +535,7 @@ async function incrementPendingViews(repo) {
 // PROTECTION CODE
 // ============================================
 
-const DEBUG_MODE = false; // Set true untuk debugging
+const DEBUG_MODE = true; // Set true untuk debugging
 
 function initProtection() {
     if (DEBUG_MODE) {
@@ -619,12 +619,16 @@ async function fetchMangaDexRating() {
         
         const apiUrl = `https://api.mangadex.org/statistics/manga/${mangaId}`;
         
-        // Daftar proxy dengan prioritas (skip direct untuk avoid CORS error di console)
+        // Daftar proxy dengan prioritas (GAS pertama = paling reliable!)
         const proxies = [
+            { 
+                name: 'GoogleAppsScript', 
+                url: 'https://script.google.com/macros/s/AKfycbwZ0-VeyloQxjvh-h65G0wtfAzxVq6VYzU5Bz9n1Rl0T4GAkGu9X7HmGh_3_0cJhCS1iA/exec?action=getRating&mangaId=',
+                isGAS: true
+            },
             { name: 'AllOrigins', url: 'https://api.allorigins.win/raw?url=' },
             { name: 'CorsProxy', url: 'https://corsproxy.io/?' },
-            { name: 'ThingProxy', url: 'https://thingproxy.freeboard.io/fetch/' },
-            { name: 'CorsAnywhere', url: 'https://cors-anywhere.herokuapp.com/' }
+            { name: 'ThingProxy', url: 'https://thingproxy.freeboard.io/fetch/' }
         ];
         
         let rating = null;
@@ -635,9 +639,14 @@ async function fetchMangaDexRating() {
             try {
                 console.log(`🔄 Trying ${proxy.name}...`);
                 
-                const fetchUrl = proxy.url 
-                    ? proxy.url + encodeURIComponent(apiUrl)
-                    : apiUrl;
+                let fetchUrl;
+                if (proxy.isGAS) {
+                    // GAS: langsung pass mangaId (tidak perlu encode full URL)
+                    fetchUrl = proxy.url + mangaId;
+                } else {
+                    // Public proxy: encode full API URL
+                    fetchUrl = proxy.url + encodeURIComponent(apiUrl);
+                }
                 
                 const response = await fetch(fetchUrl, {
                     method: 'GET',
@@ -654,12 +663,23 @@ async function fetchMangaDexRating() {
                 }
                 
                 const data = await response.json();
-                rating = data.statistics?.[mangaId]?.rating?.average;
                 
-                if (rating) {
-                    successProxy = proxy.name;
-                    console.log(`✅ Success via ${proxy.name}!`);
-                    break; // Berhasil, stop loop
+                // Handle GAS response format
+                if (proxy.isGAS) {
+                    if (data.success && data.rating) {
+                        rating = data.rating;
+                        successProxy = proxy.name;
+                        console.log(`✅ Success via ${proxy.name}!`);
+                        break;
+                    }
+                } else {
+                    // Handle standard MangaDex API format
+                    rating = data.statistics?.[mangaId]?.rating?.average;
+                    if (rating) {
+                        successProxy = proxy.name;
+                        console.log(`✅ Success via ${proxy.name}!`);
+                        break;
+                    }
                 }
                 
             } catch (error) {
