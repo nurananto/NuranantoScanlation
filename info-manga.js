@@ -615,8 +615,10 @@ async function fetchMangaDexRating() {
         const mangaId = mangaIdMatch[1];
         console.log(`📊 Fetching rating untuk manga ID: ${mangaId}`);
         
-        // Fetch dari MangaDex API
-        const response = await fetch(`https://api.mangadex.org/statistics/manga/${mangaId}`);
+        // Fetch dari MangaDex API via CORS proxy
+        const corsProxy = 'https://corsproxy.io/?';
+        const apiUrl = `https://api.mangadex.org/statistics/manga/${mangaId}`;
+        const response = await fetch(corsProxy + encodeURIComponent(apiUrl));
         
         if (!response.ok) {
             throw new Error(`HTTP error! status: ${response.status}`);
