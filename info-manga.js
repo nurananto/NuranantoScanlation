@@ -535,7 +535,7 @@ async function incrementPendingViews(repo) {
 // PROTECTION CODE
 // ============================================
 
-const DEBUG_MODE = true; // Set true untuk debugging
+const DEBUG_MODE = false; // Set true untuk debugging
 
 function initProtection() {
     if (DEBUG_MODE) {
