@@ -56,7 +56,7 @@ jobs:
       
       - name: 📤 Trigger Sync to Manga Repos
         run: |
-          repos=("10nenburi" "wakachan" "KawaiiGal" "AiwoOshiete" "YarikondaRenaiGame" "Amarichan" "SankakukeinoLoop" "MadogiwaHenshuu" "TensaiBishoujo" "SuufungonoMirai" "NegattemoNai" "Midari" "KiminoNegai" "YuumeiVTuber" "UchinoSeiso-kei" "YoukyaniNatta")
+          repos=("10nenburi" "AotoSakura" "wakachan" "KawaiiGal" "AiwoOshiete" "YarikondaRenaiGame" "Amarichan" "SankakukeinoLoop" "MadogiwaHenshuu" "TensaiBishoujo" "SuufungonoMirai" "NegattemoNai" "Midari" "KiminoNegai" "YuumeiVTuber" "UchinoSeiso-kei" "YoukyaniNatta")
           
           for repo in "${repos[@]}"; do
             echo "📤 Triggering $repo..."

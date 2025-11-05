@@ -12,6 +12,12 @@
 // ============================================
 
 MANGA_LIST = [
+    {
+    id: 'aotosakura',
+    title: 'Ao to Sakura',
+    cover: '',
+    repo: 'AotoSakura'
+  },
   {
     id: 'youkyaninatta',
     title: 'Youkya ni Natta Ore no Seishun Shijou Shugi',
