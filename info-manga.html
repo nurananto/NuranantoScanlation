@@ -45,7 +45,6 @@
         <!-- Left Section: Cover & Buttons -->
         <div class="left-section">
             <div class="cover-container">
-                <!-- FIXED: Loading placeholder instead of hardcoded cover.jpg -->
                 <img id="mangaCover" 
                      src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='450'%3E%3Crect width='300' height='450' fill='%23f5f5f5'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23999' font-size='16' font-family='Arial'%3ELoading...%3C/text%3E%3C/svg%3E" 
                      alt="Manga Cover" 
@@ -79,6 +78,15 @@
                     <span id="detailsButtonText">Show Details</span>
                 </button>
             </div>
+
+
+            <!-- Baca dari Awal Button (Mobile - Outside Details, visible when closed) -->
+            <button class="btn-read-first btn-read-outside" id="btnReadFirstOutside">
+                <svg class="btn-read-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                </svg>
+                <span>Baca dari Awal</span>
+            </button>
 
             <!-- Details Container (collapsible on mobile) -->
             <div class="details-container" id="detailsContainer">
@@ -114,6 +122,14 @@
                 <button class="sidebar-btn" id="btnRaw">
                     <img src="assets/book.png" alt="RAW" class="btn-icon">
                     <span>RAW</span>
+                </button>
+
+                <!-- Baca dari Awal Button (Inside Details, visible when open) -->
+                <button class="btn-read-first btn-read-inside" id="btnReadFirstInside">
+                    <svg class="btn-read-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/>
+                    </svg>
+                    <span>Baca dari Awal</span>
                 </button>
             </div>
         </div>
@@ -156,5 +172,16 @@
 
     <script src="manga-config.js"></script>
     <script src="info-manga.js"></script>
+
+    <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js')
+                    .then(reg => console.log('✅ Service Worker registered'))
+                    .catch(err => console.error('❌ SW registration failed:', err));
+            });
+        }
+    </script>
 </body>
 </html>
