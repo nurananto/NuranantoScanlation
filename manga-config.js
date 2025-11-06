@@ -12,10 +12,10 @@
 // ============================================
 
 MANGA_LIST = [
-    {
+  {
     id: 'aotosakura',
     title: 'Ao to Sakura',
-    cover: '',
+    cover: 'covers/aotosakura-8f1fc328-3eaf-4bd9-8631-c5c9f8029ed5.jpg',
     repo: 'AotoSakura'
   },
   {

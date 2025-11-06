@@ -101,16 +101,12 @@
 
     <script src="manga-config.js"></script>
     <script src="reader.js"></script>
-
+    
+    <!-- Service Worker -->
     <script>
-        // Register Service Worker
-        if ('serviceWorker' in navigator) {
-            window.addEventListener('load', () => {
-                navigator.serviceWorker.register('/sw.js')
-                    .then(reg => console.log('✅ Service Worker registered'))
-                    .catch(err => console.error('❌ SW registration failed:', err));
-            });
-        }
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.register('/sw.js').catch(e=>console.error(e));
+      }
     </script>
 </body>
 </html>
