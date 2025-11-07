@@ -11,6 +11,7 @@ body {
     color: #e4e6eb;
     padding: 20px;
     line-height: 1.6;
+    padding-bottom: 100px; /* Space for floating button */
 }
 
 /* Header dengan logo dan Facebook */
@@ -676,6 +677,45 @@ header {
     display: block;
 }
 
+/* ============================================
+   TRAKTEER DONATION BUTTON
+   ============================================ */
+.trakteer-button {
+    position: fixed;
+    bottom: 30px;
+    left: 1.5rem;
+    right: 1.5rem;
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #be1e2d 0%, #d32f2f 100%);
+    padding: 0.75rem 1.25rem;
+    border-radius: 16px;
+    text-decoration: none;
+    color: white;
+    font-weight: 700;
+    font-size: 0.95rem;
+    box-shadow: 0 4px 15px rgba(190, 30, 45, 0.4);
+    transition: all 0.3s ease;
+    max-width: calc(1400px - 3rem);
+    margin: 0 auto;
+}
+
+.trakteer-button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 25px rgba(190, 30, 45, 0.6);
+    background: linear-gradient(135deg, #d32f2f 0%, #e53935 100%);
+}
+
+.trakteer-icon {
+    width: 28px;
+    height: 28px;
+    object-fit: contain;
+    flex-shrink: 0;
+}
+
 /* ==================== RESPONSIVE ==================== */
 
 @media (min-width: 768px) and (max-width: 1023px) {
@@ -705,9 +745,20 @@ header {
     .facebook-link-header .facebook-text {
         font-size: 0.9rem;
     }
+
+    /* Trakteer button - tablet */
+    .trakteer-button {
+        left: 1rem;
+        right: 1rem;
+        max-width: calc(1400px - 2rem);
+    }
 }
 
 @media (max-width: 768px) {
+    body {
+        padding-bottom: 110px; /* Extra space for button on mobile */
+    }
+
     .container {
         grid-template-columns: 1fr;
         gap: 5px;
@@ -877,9 +928,27 @@ header {
         margin: 0;
         min-width: auto;
     }
+
+    /* Trakteer button - mobile (TIDAK DIUBAH, sudah benar) */
+    .trakteer-button {
+        left: 0.625rem;
+        right: 0.625rem;
+        padding: 0.65rem 1rem;
+        font-size: 0.85rem;
+        max-width: none;
+    }
+    
+    .trakteer-icon {
+        width: 24px;
+        height: 24px;
+    }
 }
 
 @media (max-width: 480px) {
+    body {
+        padding-bottom: 105px;
+    }
+
     .site-logo {
         height: 40px;
     }
@@ -910,5 +979,18 @@ header {
     .github-link-header .github-text,
     .facebook-link-header .facebook-text {
         display: none;
+    }
+
+    /* Trakteer button - small mobile (TIDAK DIUBAH) */
+    .trakteer-button {
+        left: 0.5rem;
+        right: 0.5rem;
+        font-size: 0.8rem;
+        padding: 0.6rem 0.9rem;
+    }
+    
+    .trakteer-icon {
+        width: 22px;
+        height: 22px;
     }
 }

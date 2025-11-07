@@ -10,15 +10,31 @@ async function fetchMangaData(repo) {
     
     // Get latest unlocked chapter
     let latestUnlockedChapter = null;
+    let latestUnlockedDate = null;
+    
+    // Get latest locked chapter
+    let latestLockedChapter = null;
+    let latestLockedDate = null;
+    
     if (data.chapters) {
       const chaptersArray = Object.values(data.chapters);
-      // Filter unlocked only
-      const unlockedChapters = chaptersArray.filter(ch => !ch.locked);
       
+      // Filter unlocked chapters
+      const unlockedChapters = chaptersArray.filter(ch => !ch.locked);
       if (unlockedChapters.length > 0) {
-        // Sort descending to get latest
-        unlockedChapters.sort((a, b) => parseFloat(b.folder) - parseFloat(a.folder));
+        // Sort by uploadDate (newest first)
+        unlockedChapters.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
         latestUnlockedChapter = unlockedChapters[0].folder;
+        latestUnlockedDate = unlockedChapters[0].uploadDate;
+      }
+      
+      // Filter locked chapters
+      const lockedChapters = chaptersArray.filter(ch => ch.locked);
+      if (lockedChapters.length > 0) {
+        // Sort by uploadDate (newest first)
+        lockedChapters.sort((a, b) => new Date(b.uploadDate) - new Date(a.uploadDate));
+        latestLockedChapter = lockedChapters[0].folder;
+        latestLockedDate = lockedChapters[0].uploadDate;
       }
     }
     
@@ -26,7 +42,10 @@ async function fetchMangaData(repo) {
       lastUpdated: data.lastUpdated || null,
       lastChapterUpdate: data.lastChapterUpdate || data.lastUpdated || null,
       totalChapters: Object.keys(data.chapters || {}).length,
-      latestUnlockedChapter: latestUnlockedChapter
+      latestUnlockedChapter: latestUnlockedChapter,
+      latestUnlockedDate: latestUnlockedDate,
+      latestLockedChapter: latestLockedChapter,
+      latestLockedDate: latestLockedDate
     };
   } catch (error) {
     console.error(`Error fetching manga data for ${repo}:`, error);
@@ -34,7 +53,10 @@ async function fetchMangaData(repo) {
       lastUpdated: null,
       lastChapterUpdate: null,
       totalChapters: 0,
-      latestUnlockedChapter: null
+      latestUnlockedChapter: null,
+      latestUnlockedDate: null,
+      latestLockedChapter: null,
+      latestLockedDate: null
     };
   }
 }
@@ -91,21 +113,58 @@ function getRelativeTime(lastChapterUpdateStr) {
 
 function createCard(manga, mangaData) {
   const isRecent = isRecentlyUpdated(mangaData.lastChapterUpdate);
-  const relativeTime = getRelativeTime(mangaData.lastChapterUpdate);
   
   // Format chapter number (remove leading zeros, keep decimal if exists)
   const formatChapter = (chapterNum) => {
     if (!chapterNum) return '';
+    
+    // Check if it's "oneshot" or similar
+    const chapterStr = chapterNum.toString().toLowerCase();
+    if (chapterStr.includes('oneshot') || chapterStr.includes('one-shot') || chapterStr === 'os') {
+      return 'Oneshot';
+    }
+    
+    // Try to parse as number
     const num = parseFloat(chapterNum);
+    if (isNaN(num)) {
+      // If not a number, return as-is (capitalized)
+      return chapterNum.toString();
+    }
+    
     return num % 1 === 0 ? num.toString() : num.toFixed(1);
   };
   
-  const updatedBadge = isRecent ? `
+  // Determine which chapter to show (newest one)
+  let chapterText = '';
+  
+  if (mangaData.latestUnlockedDate && mangaData.latestLockedDate) {
+    // Both exist - compare dates
+    const unlockedDate = new Date(mangaData.latestUnlockedDate);
+    const lockedDate = new Date(mangaData.latestLockedDate);
+    
+    if (lockedDate > unlockedDate) {
+      // Locked is newer
+      const lockedTime = getRelativeTime(mangaData.latestLockedDate);
+      chapterText = `🔒 Ch. ${formatChapter(mangaData.latestLockedChapter)}${lockedTime ? ` - ${lockedTime}` : ''}`;
+    } else {
+      // Unlocked is newer (or same date)
+      const unlockedTime = getRelativeTime(mangaData.latestUnlockedDate);
+      chapterText = `Ch. ${formatChapter(mangaData.latestUnlockedChapter)}${unlockedTime ? ` - ${unlockedTime}` : ''}`;
+    }
+  } else if (mangaData.latestUnlockedDate) {
+    // Only unlocked exists
+    const unlockedTime = getRelativeTime(mangaData.latestUnlockedDate);
+    chapterText = `Ch. ${formatChapter(mangaData.latestUnlockedChapter)}${unlockedTime ? ` - ${unlockedTime}` : ''}`;
+  } else if (mangaData.latestLockedDate) {
+    // Only locked exists
+    const lockedTime = getRelativeTime(mangaData.latestLockedDate);
+    chapterText = `🔒 Ch. ${formatChapter(mangaData.latestLockedChapter)}${lockedTime ? ` - ${lockedTime}` : ''}`;
+  }
+  
+  const updatedBadge = isRecent && chapterText ? `
     <div class="updated-badge">
-      <span class="badge-text">
-        ${mangaData.latestUnlockedChapter ? `Ch. ${formatChapter(mangaData.latestUnlockedChapter)}` : 'UPDATED!'}
-        ${relativeTime ? ` - ${relativeTime}` : ''}
-      </span>
+      <span class="badge-text">UPDATED!</span>
+      <span class="badge-chapter">${chapterText}</span>
     </div>
   ` : '';
   
