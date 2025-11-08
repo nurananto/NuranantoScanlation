@@ -31,6 +31,38 @@ function convertToWIB(isoString) {
 // Link Trakteer untuk chapter terkunci
 const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
 
+/**
+ * Show locked chapter modal
+ */
+function showLockedChapterModal() {
+    const modal = document.getElementById('lockedChapterModal');
+    if (!modal) return;
+    
+    modal.style.display = 'flex';
+    
+    // Setup button handlers
+    const btnYes = document.getElementById('btnLockedYes');
+    const btnNo = document.getElementById('btnLockedNo');
+    
+    const closeModal = () => {
+        modal.style.display = 'none';
+    };
+    
+    btnYes.onclick = () => {
+        closeModal();
+        window.open(TRAKTEER_LINK, '_blank');
+    };
+    
+    btnNo.onclick = closeModal;
+    
+    // Close on overlay click
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    };
+}
+
 // Google Apps Script URL untuk view counter
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ0-VeyloQxjvh-h65G0wtfAzxVq6VYzU5Bz9n1Rl0T4GAkGu9X7HmGh_3_0cJhCS1iA/exec';
 
@@ -319,8 +351,7 @@ async function trackLockedChapterView(chapter) {
             console.error('⚠️ Failed to track locked chapter view:', err);
         });
         
-        alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
-        openTrakteer();
+        showLockedChapterModal();
         
     } catch (error) {
         console.error('❌ Error tracking locked chapter:', error);

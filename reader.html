@@ -30,7 +30,8 @@
     <nav class="navbar">
         <button class="nav-btn back-btn" id="btnBackToInfo">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M19 12H5M12 19l-7-7 7-7"/>
+                <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                <polyline points="9 22 9 12 15 12 15 22"/>
             </svg>
             <span>Back to Info</span>
         </button>
@@ -47,14 +48,9 @@
         <!-- Pages will be loaded here by JS -->
     </main>
 
-    <!-- Next Chapter Button -->
-    <div class="next-chapter-container" id="nextChapterContainer">
-        <button class="next-chapter-btn" id="btnNextChapterBottom">
-            Next Chapter
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M5 12h14M12 5l7 7-7 7"/>
-            </svg>
-        </button>
+    <!-- End Chapter Actions Container -->
+    <div class="end-chapter-container" id="endChapterContainer">
+        <!-- Will be populated dynamically by JS -->
     </div>
 
     <!-- Page Navigation Handle -->
@@ -92,6 +88,24 @@
             </div>
             <div class="modal-body" id="chapterListModal">
                 <!-- Chapter list will be populated by JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Locked Chapter Modal -->
+    <div id="lockedChapterModal" class="locked-modal-overlay" style="display: none;">
+        <div class="modal-content locked-modal-content">
+            <div class="modal-header locked-modal-header">
+                <h2>🔒 Chapter Terkunci karena RAW Berbayar</h2>
+            </div>
+            <div class="modal-body locked-modal-body">
+                <p class="locked-explanation">Chapter hanya bisa dibuka setelah Anda <strong>login Trakteer</strong> dan melakukan <strong>donasi 1 permen</strong>.</p>
+                <p class="locked-benefit">✨ <strong>SEMUA</strong> chapter berbayar akan bisa dilihat di <strong>community post</strong> halaman Trakteer selama <strong>30 hari</strong> setelah melakukan donasi.</p>
+                <p class="locked-question">Apakah Anda ingin melanjutkan?</p>
+                <div class="locked-modal-buttons">
+                    <button class="locked-btn locked-btn-no" id="btnLockedNo">Tidak</button>
+                    <button class="locked-btn locked-btn-yes" id="btnLockedYes">Ya, Donasi Sekarang</button>
+                </div>
             </div>
         </div>
     </div>

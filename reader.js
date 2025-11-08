@@ -29,6 +29,226 @@ function convertToWIB(isoString) {
 const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
 const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwZ0-VeyloQxjvh-h65G0wtfAzxVq6VYzU5Bz9n1Rl0T4GAkGu9X7HmGh_3_0cJhCS1iA/exec';
 
+// ============================================
+// SMART END CHAPTER LOGIC
+// ============================================
+
+/**
+ * Predict next chapter number based on last 4 chapters pattern
+ */
+function predictNextChapter(allChapters, currentChapterFolder) {
+    const currentIndex = allChapters.findIndex(ch => ch.folder === currentChapterFolder);
+    
+    // Get last 4 chapters before current (or less if not available)
+    const recentChapters = [];
+    for (let i = currentIndex; i < Math.min(currentIndex + 4, allChapters.length); i++) {
+        if (allChapters[i]) {
+            recentChapters.push(allChapters[i].folder);
+        }
+    }
+    
+    // Parse chapter numbers
+    const parseChapter = (folder) => {
+        const match = folder.match(/(\d+\.?\d*)/);
+        return match ? parseFloat(match[1]) : null;
+    };
+    
+    const numbers = recentChapters.map(parseChapter).filter(n => n !== null);
+    
+    if (numbers.length === 0) {
+        return null;
+    }
+    
+    if (numbers.length === 1) {
+        // Only current chapter - increment by 1 or 0.1
+        const current = numbers[0];
+        return Math.floor(current) === current ? current + 1 : (parseFloat(current) + 0.1).toFixed(1);
+    }
+    
+    // Use last 2 chapters to determine pattern
+    const current = numbers[0];
+    const previous = numbers[1];
+    const lastDiff = Math.abs(current - previous);
+    
+    // Check if this is a consistent small increment pattern (0.1 or 0.5)
+    if (lastDiff <= 0.5) {
+        // Small increment - likely decimal pattern (6.1, 6.2, 6.3 or 6.5, 7.0, 7.5)
+        const next = current + lastDiff;
+        
+        // Check if it's decimal pattern
+        if (lastDiff < 1) {
+            return next.toFixed(1);
+        } else {
+            return Math.round(next);
+        }
+    }
+    
+    // Large jump detected (e.g., 6.5 → 7.1)
+    // Extract integer and decimal parts
+    const currentInt = Math.floor(current);
+    const currentDec = parseFloat((current - currentInt).toFixed(1));
+    
+    if (currentDec > 0) {
+        // Current is decimal (e.g., 7.1)
+        // Next should be same integer with incremented decimal (7.2)
+        const nextDec = parseFloat((currentDec + 0.1).toFixed(1));
+        
+        if (nextDec < 1) {
+            return parseFloat((currentInt + nextDec).toFixed(1));
+        } else {
+            // Decimal rolled over (e.g., 7.9 → 8.0)
+            return currentInt + 1;
+        }
+    } else {
+        // Current is integer (e.g., 7)
+        // Next is integer + 1
+        return currentInt + 1;
+    }
+}
+
+/**
+ * Check if chapter is oneshot
+ */
+function isOneshotChapter(chapterFolder) {
+    const lower = chapterFolder.toLowerCase();
+    return lower.includes('oneshot') || lower.includes('one-shot') || lower === 'os';
+}
+
+/**
+ * Show locked chapter modal
+ */
+function showLockedChapterModal() {
+    console.log('🔒 showLockedChapterModal called');
+    const modal = document.getElementById('lockedChapterModal');
+    console.log('🔒 Modal element:', modal);
+    
+    if (!modal) {
+        console.error('❌ lockedChapterModal element not found!');
+        return;
+    }
+    
+    // Add active class for z-index override
+    modal.classList.add('active');
+    // Override both display and opacity/visibility
+    modal.style.display = 'flex';
+    modal.style.opacity = '1';
+    modal.style.visibility = 'visible';
+    console.log('🔒 Modal shown with flex + opacity + visibility + active class');
+    
+    // Setup button handlers
+    const btnYes = document.getElementById('btnLockedYes');
+    const btnNo = document.getElementById('btnLockedNo');
+    
+    console.log('🔒 Buttons:', { btnYes, btnNo });
+    
+    const closeModal = () => {
+        modal.classList.remove('active');
+        modal.style.opacity = '0';
+        modal.style.visibility = 'hidden';
+        setTimeout(() => {
+            modal.style.display = 'none';
+        }, 300); // Wait for transition
+    };
+    
+    btnYes.onclick = () => {
+        closeModal();
+        window.open(TRAKTEER_LINK, '_blank');
+    };
+    
+    btnNo.onclick = closeModal;
+    
+    // Close on overlay click
+    modal.onclick = (e) => {
+        if (e.target === modal) {
+            closeModal();
+        }
+    };
+}
+
+/**
+ * Render end chapter buttons based on conditions
+ */
+function renderEndChapterButtons() {
+    const container = document.getElementById('endChapterContainer');
+    if (!container) return;
+    
+    const currentIndex = allChapters.findIndex(ch => ch.folder === currentChapterFolder);
+    const isLastChapter = currentIndex === 0;
+    const isOneshot = isOneshotChapter(currentChapterFolder);
+    
+    if (!isLastChapter) {
+        // Not last chapter - show normal Next Chapter button
+        container.innerHTML = `
+            <button class="next-chapter-btn" id="btnNextChapterDynamic">
+                Next Chapter
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        `;
+        
+        const btn = document.getElementById('btnNextChapterDynamic');
+        btn.onclick = () => navigateChapter('next');
+        return;
+    }
+    
+    // Last chapter - check conditions
+    const nextChapter = allChapters[currentIndex - 1];
+    const nextIsLocked = nextChapter && nextChapter.locked;
+    
+    if (nextIsLocked) {
+        // Condition 1: Next is locked - show Next Chapter button with trakteer alert
+        container.innerHTML = `
+            <button class="next-chapter-btn" id="btnNextChapterLocked">
+                Next Chapter
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M5 12h14M12 5l7 7-7 7"/>
+                </svg>
+            </button>
+        `;
+        
+        const btn = document.getElementById('btnNextChapterLocked');
+        btn.onclick = () => {
+            showLockedChapterModal();
+        };
+        return;
+    }
+    
+    if (isOneshot) {
+        // Condition 2: Oneshot - show Back to Info only
+        container.innerHTML = `
+            <button class="back-to-info-btn-large" onclick="window.location.href='info-manga.html?repo=${repoParam}'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span>Back to Info</span>
+            </button>
+        `;
+        return;
+    }
+    
+    // Condition 3: Final chapter (no locked ahead) - show 2 buttons
+    const predictedNext = predictNextChapter(allChapters, currentChapterFolder);
+    
+    container.innerHTML = `
+        <div class="dual-buttons-container">
+            <button class="back-to-info-btn-half" onclick="window.location.href='info-manga.html?repo=${repoParam}'">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
+                    <polyline points="9 22 9 12 15 12 15 22"/>
+                </svg>
+                <span>Back to Info</span>
+            </button>
+            <button class="trakteer-btn-half" onclick="window.open('${TRAKTEER_LINK}', '_blank')">
+                <img src="assets/trakteer-icon.png" alt="Trakteer" class="trakteer-icon-small">
+                <span>Bantu Beli Chapter ${predictedNext || 'Selanjutnya'}</span>
+            </button>
+        </div>
+    `;
+}
+
+
 // Debug mode - set to true to allow console access
 const DEBUG_MODE = false; // Change to true for debugging
 
@@ -38,7 +258,7 @@ let currentChapterFolder = null;
 let currentChapter = null;
 let allChapters = [];
 let repoParam = null;
-let readMode = localStorage.getItem('readMode') || 'webtoon'; // Default webtoon, load from localStorage
+let readMode = 'webtoon'; // Force webtoon mode only
 let currentPage = 1;
 let totalPages = 0;
 
@@ -48,7 +268,7 @@ const pageNav = document.getElementById('pageNav');
 const pageList = document.getElementById('pageList');
 const prevPageBtn = document.getElementById('prevPageBtn');
 const nextPageBtn = document.getElementById('nextPageBtn');
-const btnNextChapterBottom = document.getElementById('btnNextChapterBottom');
+// btnNextChapterBottom - removed, now dynamic
 
 // Load saat halaman dimuat
 document.addEventListener('DOMContentLoaded', async () => {
@@ -122,8 +342,7 @@ async function initializeReader() {
         // Check if chapter is locked
         if (chapterData.locked) {
             console.log('🔒 Chapter terkunci, redirect ke Trakteer...');
-            alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
-            window.location.href = TRAKTEER_LINK;
+            showLockedChapterModal();
             return;
         }
         
@@ -295,10 +514,7 @@ function setupUI() {
         openChapterListModal();
     };
     
-    // Setup bottom next chapter button
-    btnNextChapterBottom.onclick = () => navigateChapter('next');
-    
-    // Update navigation button states
+    // Update navigation button states (will render dynamic buttons)
     updateNavigationButtons();
     
     // Setup modal close
@@ -407,7 +623,7 @@ async function loadChapterPages() {
         setupPageTracking();
         
         // Setup manga scroll tracking
-        setupMangaScrollTracking();
+        setupWebtoonScrollTracking();
         
         // Generate page thumbnails
         renderPageThumbnails();
@@ -420,14 +636,9 @@ async function loadChapterPages() {
         // Load last page if available
         currentPage = loadLastPage();
         
-        // Set reader container class based on mode
-        if (readMode === 'manga') {
-            readerContainer.classList.add('manga-mode');
-            readerContainer.classList.remove('webtoon-mode');
-        } else {
-            readerContainer.classList.add('webtoon-mode');
-            readerContainer.classList.remove('manga-mode');
-        }
+        // Set reader container to webtoon mode only
+        readerContainer.classList.add('webtoon-mode');
+        readerContainer.classList.remove('manga-mode');
         
         // Navigate to last page if not first page
         if (currentPage > 1) {
@@ -473,46 +684,12 @@ function setupPageTracking() {
 }
 
 // Add scroll listener for manga mode horizontal tracking
-function setupMangaScrollTracking() {
-    const nextChapterContainer = document.getElementById('nextChapterContainer');
+function setupWebtoonScrollTracking() {
+    const endChapterContainer = document.getElementById('endChapterContainer');
     
-    if (readMode === 'manga') {
-        // Hide next chapter button initially in manga mode
-        if (nextChapterContainer) {
-            nextChapterContainer.style.display = 'none';
-        }
-        readerContainer.classList.remove('show-next-chapter');
-        
-        readerContainer.addEventListener('scroll', () => {
-            const containerWidth = readerContainer.offsetWidth;
-            const scrollLeft = readerContainer.scrollLeft;
-            const pageIndex = Math.round(scrollLeft / containerWidth);
-            const newPage = pageIndex + 1;
-            
-            if (newPage !== currentPage && newPage >= 1 && newPage <= totalPages) {
-                currentPage = newPage;
-                updatePageNavigation();
-                saveLastPage(); // Save when page changes
-            }
-            
-            // Show next chapter button only on last page in manga mode
-            if (newPage === totalPages) {
-                readerContainer.classList.add('show-next-chapter');
-                if (nextChapterContainer) {
-                    nextChapterContainer.style.display = 'block';
-                }
-            } else {
-                readerContainer.classList.remove('show-next-chapter');
-                if (nextChapterContainer) {
-                    nextChapterContainer.style.display = 'none';
-                }
-            }
-        });
-    } else {
-        // In webtoon mode, always show next chapter button
-        if (nextChapterContainer) {
-            nextChapterContainer.style.display = 'block';
-        }
+    // In webtoon mode, hide initially (will show on scroll to bottom)
+    if (endChapterContainer) {
+        endChapterContainer.style.display = 'none';
     }
 }
 
@@ -525,20 +702,10 @@ function goToPage(pageNum) {
     currentPage = pageNum;
     saveLastPage();
     
-    if (readMode === 'manga') {
-        // Horizontal scroll to page
-        const containerWidth = readerContainer.offsetWidth;
-        const targetScroll = (pageNum - 1) * containerWidth;
-        readerContainer.scrollTo({
-            left: targetScroll,
-            behavior: 'smooth'
-        });
-    } else {
-        // Vertical scroll to page
-        const pages = document.querySelectorAll('.reader-page');
-        if (pages[pageNum - 1]) {
-            pages[pageNum - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+    // Vertical scroll to page (webtoon mode only)
+    const pages = document.querySelectorAll('.reader-page');
+    if (pages[pageNum - 1]) {
+        pages[pageNum - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
     updatePageNavigation();
@@ -625,13 +792,8 @@ function goToPage(pageNumber) {
     const pages = document.querySelectorAll('.reader-page');
     
     if (pages[pageNumber - 1]) {
-        if (readMode === 'manga') {
-            // Horizontal scroll for manga mode
-            pages[pageNumber - 1].scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'start' });
-        } else {
-            // Vertical scroll for webtoon mode
-            pages[pageNumber - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
+        // Vertical scroll for webtoon mode only
+        pages[pageNumber - 1].scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
     
     updatePageNavigation();
@@ -672,16 +834,8 @@ function updateProgressBar() {
  * Update navigation button states
  */
 function updateNavigationButtons() {
-    const currentIndex = allChapters.findIndex(ch => ch.folder === currentChapterFolder);
-    
-    // Next button (karena sort descending, next = index - 1)
-    if (currentIndex <= 0) {
-        btnNextChapterBottom.disabled = true;
-        btnNextChapterBottom.style.opacity = '0.5';
-    } else {
-        btnNextChapterBottom.disabled = false;
-        btnNextChapterBottom.style.opacity = '1';
-    }
+    // Render smart end chapter buttons
+    renderEndChapterButtons();
 }
 
 /**
@@ -705,8 +859,7 @@ function navigateChapter(direction) {
     
     // Check if locked
     if (targetChapter.locked) {
-        alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
-        window.open(TRAKTEER_LINK, '_blank');
+        showLockedChapterModal();
         return;
     }
     
@@ -745,8 +898,10 @@ function openChapterListModal() {
         
         item.onclick = () => {
             if (chapter.locked) {
-                alert('Chapter ini terkunci. Silakan donasi untuk membuka chapter ini!');
-                window.open(TRAKTEER_LINK, '_blank');
+                closeChapterListModal(); // Close chapter list first
+                setTimeout(() => {
+                    showLockedChapterModal();
+                }, 100); // Small delay for smooth transition
             } else if (chapter.folder !== currentChapterFolder) {
                 window.location.href = `reader.html?repo=${repoParam}&chapter=${chapter.folder}`;
             }
@@ -1001,29 +1156,13 @@ function setupEnhancedEventListeners() {
         if (e.ctrlKey || e.shiftKey) return;
         
         switch(e.key) {
-            case 'ArrowLeft':
-                if (readMode === 'manga') {
-                    e.preventDefault();
-                    goToPage(currentPage - 1);
-                }
-                break;
-            case 'ArrowRight':
-                if (readMode === 'manga') {
-                    e.preventDefault();
-                    goToPage(currentPage + 1);
-                }
-                break;
             case 'ArrowUp':
-                if (readMode === 'webtoon') {
-                    e.preventDefault();
-                    window.scrollBy({ top: -300, behavior: 'smooth' });
-                }
+                e.preventDefault();
+                window.scrollBy({ top: -300, behavior: 'smooth' });
                 break;
             case 'ArrowDown':
-                if (readMode === 'webtoon') {
-                    e.preventDefault();
-                    window.scrollBy({ top: 300, behavior: 'smooth' });
-                }
+                e.preventDefault();
+                window.scrollBy({ top: 300, behavior: 'smooth' });
                 break;
         }
     });
@@ -1078,6 +1217,23 @@ window.addEventListener('scroll', () => {
         // Scroll up - show navbar
         navbar.style.transform = 'translateY(0)';
         navbar.style.opacity = '1';
+    }
+    
+    // Check if at last page in webtoon mode
+    if (readMode === 'webtoon') {
+        const endChapterContainer = document.getElementById('endChapterContainer');
+        if (endChapterContainer) {
+            const windowHeight = window.innerHeight;
+            const documentHeight = document.documentElement.scrollHeight;
+            const scrollBottom = scrollTop + windowHeight;
+            
+            // Show buttons when near bottom (within 200px)
+            if (scrollBottom >= documentHeight - 200) {
+                endChapterContainer.style.display = 'block';
+            } else {
+                endChapterContainer.style.display = 'none';
+            }
+        }
     }
     
     lastScrollTop = scrollTop;
