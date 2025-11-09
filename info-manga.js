@@ -34,9 +34,17 @@ const TRAKTEER_LINK = 'https://trakteer.id/NuranantoScanlation';
 /**
  * Show locked chapter modal
  */
-function showLockedChapterModal() {
+function showLockedChapterModal(chapterNumber = null) {
     const modal = document.getElementById('lockedChapterModal');
     if (!modal) return;
+    
+    // Update modal title with chapter number
+    const modalHeader = modal.querySelector('.locked-modal-header h2');
+    if (modalHeader && chapterNumber) {
+        modalHeader.textContent = `🔒 Chapter ${chapterNumber} Terkunci karena RAW Berbayar`;
+    } else if (modalHeader) {
+        modalHeader.textContent = `🔒 Chapter Terkunci karena RAW Berbayar`;
+    }
     
     modal.style.display = 'flex';
     
@@ -351,7 +359,8 @@ async function trackLockedChapterView(chapter) {
             console.error('⚠️ Failed to track locked chapter view:', err);
         });
         
-        showLockedChapterModal();
+        const chapterTitle = chapter.title || chapter.folder;
+        showLockedChapterModal(chapterTitle);
         
     } catch (error) {
         console.error('❌ Error tracking locked chapter:', error);

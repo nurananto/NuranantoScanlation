@@ -117,14 +117,22 @@ function isOneshotChapter(chapterFolder) {
 /**
  * Show locked chapter modal
  */
-function showLockedChapterModal() {
-    console.log('🔒 showLockedChapterModal called');
+function showLockedChapterModal(chapterNumber = null) {
+    console.log('🔒 showLockedChapterModal called with chapter:', chapterNumber);
     const modal = document.getElementById('lockedChapterModal');
     console.log('🔒 Modal element:', modal);
     
     if (!modal) {
         console.error('❌ lockedChapterModal element not found!');
         return;
+    }
+    
+    // Update modal title with chapter number
+    const modalHeader = modal.querySelector('.locked-modal-header h2');
+    if (modalHeader && chapterNumber) {
+        modalHeader.textContent = `🔒 Chapter ${chapterNumber} Terkunci karena RAW Berbayar`;
+    } else if (modalHeader) {
+        modalHeader.textContent = `🔒 Chapter Terkunci karena RAW Berbayar`;
     }
     
     // Add active class for z-index override
@@ -209,7 +217,8 @@ function renderEndChapterButtons() {
         
         const btn = document.getElementById('btnNextChapterLocked');
         btn.onclick = () => {
-            showLockedChapterModal();
+            const chapterTitle = nextChapter.title || nextChapter.folder;
+            showLockedChapterModal(chapterTitle);
         };
         return;
     }
@@ -342,7 +351,8 @@ async function initializeReader() {
         // Check if chapter is locked
         if (chapterData.locked) {
             console.log('🔒 Chapter terkunci, redirect ke Trakteer...');
-            showLockedChapterModal();
+            const chapterTitle = chapterData.title || chapterParam;
+            showLockedChapterModal(chapterTitle);
             return;
         }
         
@@ -859,7 +869,8 @@ function navigateChapter(direction) {
     
     // Check if locked
     if (targetChapter.locked) {
-        showLockedChapterModal();
+        const chapterTitle = targetChapter.title || targetChapter.folder;
+        showLockedChapterModal(chapterTitle);
         return;
     }
     
@@ -900,7 +911,8 @@ function openChapterListModal() {
             if (chapter.locked) {
                 closeChapterListModal(); // Close chapter list first
                 setTimeout(() => {
-                    showLockedChapterModal();
+                    const chapterTitle = chapter.title || chapter.folder;
+                    showLockedChapterModal(chapterTitle);
                 }, 100); // Small delay for smooth transition
             } else if (chapter.folder !== currentChapterFolder) {
                 window.location.href = `reader.html?repo=${repoParam}&chapter=${chapter.folder}`;

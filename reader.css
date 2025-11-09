@@ -1166,3 +1166,32 @@ body.show-page-nav .page-thumb {
     margin: 0 auto;
     text-align: center;
 }
+
+/* Remove blue border from thumbnail and modal */
+.page-thumb {
+    border: 2px solid transparent !important;
+}
+
+.page-thumb.active {
+    border-color: #ffffff !important;
+    box-shadow: 0 0 8px rgba(255, 255, 255, 0.4) !important;
+}
+
+#lockedChapterModal {
+    border: none !important;
+}
+
+.locked-modal-content {
+    border: none !important;
+    outline: none !important;
+}
+
+/* Squircle border-radius for locked modal */
+.locked-modal-content {
+    border-radius: 16px !important;
+    overflow: hidden;
+}
+
+.locked-modal-header {
+    border-radius: 16px 16px 0 0 !important;
+}
