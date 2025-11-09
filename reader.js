@@ -130,7 +130,10 @@ function showLockedChapterModal(chapterNumber = null) {
     // Update modal title with chapter number
     const modalHeader = modal.querySelector('.locked-modal-header h2');
     if (modalHeader && chapterNumber) {
-        modalHeader.textContent = `🔒 Chapter ${chapterNumber} Terkunci karena RAW Berbayar`;
+        // Check if chapterNumber already contains "Chapter"
+        const hasChapter = /^chapter\s+/i.test(chapterNumber);
+        const titleText = hasChapter ? chapterNumber : `Chapter ${chapterNumber}`;
+        modalHeader.textContent = `🔒 ${titleText} Terkunci karena RAW Berbayar`;
     } else if (modalHeader) {
         modalHeader.textContent = `🔒 Chapter Terkunci karena RAW Berbayar`;
     }
