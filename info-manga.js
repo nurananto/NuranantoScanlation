@@ -393,7 +393,7 @@ function createChapterElement(chapter) {
     div.innerHTML = `
         <div class="chapter-info">
             <div class="chapter-title-row">
-                <div class="chapter-title-text">${lockIcon}${chapter.title}</div>
+                <span class="chapter-title-text">${lockIcon}${chapter.title}</span>
                 ${updatedBadge}
             </div>
             ${uploadDate ? `<div class="chapter-upload-date">${uploadDate}</div>` : ''}
