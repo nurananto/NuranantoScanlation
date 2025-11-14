@@ -533,10 +533,41 @@ header {
     gap: 5px;
 }
 
+.chapter-title-row {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
 .chapter-title-text {
     font-size: 16px;
     font-weight: 600;
     color: #e4e6eb;
+    flex: 1;
+    min-width: 0;
+}
+
+.chapter-updated-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #1877f2 0%, #0a5bd6 100%);
+    color: white;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    box-shadow: 0 2px 6px rgba(24, 119, 242, 0.3);
+}
+
+.chapter-upload-date {
+    font-size: 12px;
+    color: #888888;
+    margin-top: 2px;
+    font-weight: 400;
 }
 
 .chapter-meta {
@@ -901,6 +932,15 @@ header {
     .chapter-title-text {
         font-size: 15px;
         word-wrap: break-word;
+    }
+    
+    .chapter-updated-badge {
+        font-size: 9px;
+        padding: 2px 6px;
+    }
+    
+    .chapter-upload-date {
+        font-size: 11px;
     }
     
     .chapter-views {
