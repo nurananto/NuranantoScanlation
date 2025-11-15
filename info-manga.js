@@ -263,6 +263,72 @@ function displayGenres(genres) {
 }
 
 /**
+ * Get relative time or full date
+ * - < 1 day: "X jam yang lalu"
+ * - 1 day: "1 hari yang lalu"
+ * - 2 days: "2 hari yang lalu"
+ * - 3 days: "3 hari yang lalu"
+ * - > 3 days: "14 Nov 2024"
+ */
+function getRelativeTime(uploadDateStr) {
+    if (!uploadDateStr) return '';
+    
+    const uploadDate = new Date(uploadDateStr);
+    const now = new Date();
+    
+    // Check if valid date
+    if (isNaN(uploadDate.getTime())) {
+        return '';
+    }
+    
+    const diffMs = now - uploadDate;
+    const diffHours = Math.floor(diffMs / (1000 * 60 * 60));
+    const diffDays = Math.floor(diffMs / (1000 * 60 * 60 * 24));
+    
+    // Less than 24 hours
+    if (diffHours < 24) {
+        if (diffHours < 1) {
+            const diffMins = Math.floor(diffMs / (1000 * 60));
+            return diffMins <= 1 ? 'Baru saja' : `${diffMins} menit yang lalu`;
+        }
+        return `${diffHours} jam yang lalu`;
+    }
+    
+    // 1-3 days
+    if (diffDays === 1) return '1 hari yang lalu';
+    if (diffDays === 2) return '2 hari yang lalu';
+    if (diffDays === 3) return '3 hari yang lalu';
+    
+    // More than 3 days - show full date
+    return uploadDate.toLocaleDateString('id-ID', { 
+        day: 'numeric', 
+        month: 'short', 
+        year: 'numeric',
+        timeZone: 'Asia/Jakarta'
+    });
+}
+
+/**
+ * Check if chapter was uploaded within 2 days (for UPDATED badge)
+ */
+function isRecentlyUploaded(uploadDateStr) {
+    if (!uploadDateStr) return false;
+    
+    const uploadDate = new Date(uploadDateStr);
+    const now = new Date();
+    
+    // Check if valid date
+    if (isNaN(uploadDate.getTime())) {
+        return false;
+    }
+    
+    const diffDays = (now - uploadDate) / (1000 * 60 * 60 * 24);
+    
+    // Show badge for chapters uploaded within 2 days
+    return diffDays <= 2;
+}
+
+/**
  * Display chapters
  */
 function displayChapters() {
@@ -318,10 +384,19 @@ function createChapterElement(chapter) {
     }
     
     const lockIcon = chapter.locked ? '🔒 ' : '';
+    const uploadDate = getRelativeTime(chapter.uploadDate);
+    
+    // Check if chapter is recently uploaded (within 2 days)
+    const isRecent = isRecentlyUploaded(chapter.uploadDate);
+    const updatedBadge = isRecent ? '<span class="chapter-updated-badge">UPDATED</span>' : '';
     
     div.innerHTML = `
         <div class="chapter-info">
-            <div class="chapter-title-text">${lockIcon}${chapter.title}</div>
+            <div class="chapter-title-row">
+                <span class="chapter-title-text">${lockIcon}${chapter.title}</span>
+                ${updatedBadge}
+            </div>
+            ${uploadDate ? `<div class="chapter-upload-date">${uploadDate}</div>` : ''}
         </div>
         <div class="chapter-views">
             <span>👁️ ${chapter.views}</span>

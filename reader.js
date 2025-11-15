@@ -4,6 +4,17 @@
  */
 
 // ============================================
+// UTILITY FUNCTIONS
+// ============================================
+
+/**
+ * Pad number with leading zeros
+ */
+function padNumber(num, length) {
+    return String(num).padStart(length, '0');
+}
+
+// ============================================
 // WIB TIMEZONE HELPER (GMT+7)
 // ============================================
 
@@ -600,7 +611,14 @@ async function loadChapterPages() {
             img.className = 'reader-page';
             img.src = imageUrl;
             img.alt = `Page ${i}`;
-            img.loading = 'lazy';
+            
+            // Eager load first 3 pages for instant display, lazy load the rest
+            if (i <= 3) {
+                img.loading = 'eager';  // Load immediately
+                console.log(`⚡ Page ${i}: eager loading (priority)`);
+            } else {
+                img.loading = 'lazy';   // Load when near viewport
+            }
             
             // Update page indicator on scroll
             img.setAttribute('data-page', i);
@@ -637,6 +655,15 @@ async function loadChapterPages() {
         
         // Setup manga scroll tracking
         setupWebtoonScrollTracking();
+        
+        // Preload first page for instant display (browser hint)
+        const firstPageUrl = `${repoUrl}/${currentChapterFolder}/${imagePrefix}${padNumber(1, 3)}.${imageFormat}`;
+        const preloadLink = document.createElement('link');
+        preloadLink.rel = 'preload';
+        preloadLink.as = 'image';
+        preloadLink.href = firstPageUrl;
+        document.head.appendChild(preloadLink);
+        console.log(`🚀 Preloading first page: ${firstPageUrl}`);
         
         // Generate page thumbnails
         renderPageThumbnails();

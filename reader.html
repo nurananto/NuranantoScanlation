@@ -7,26 +7,81 @@
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="theme-color" content="#0a0a0a">
     <title>📖 Loading...</title>
-    
-    <!-- Favicon -->
     <link rel="icon" type="image/png" href="assets/Logo 2.png">
     <link rel="shortcut icon" type="image/png" href="assets/Logo 2.png">
     <link rel="apple-touch-icon" href="assets/Logo 2.png">
     <link rel="stylesheet" href="reader.css">
+    <style>
+        /* INLINE FIX - HIGHEST PRIORITY */
+        
+        /* Desktop */
+        @media (min-width: 1025px) {
+            .navbar {
+                display: flex !important;
+                justify-content: space-between !important;
+            }
+            .navbar .back-btn {
+                flex: 0 0 auto !important;
+                max-width: 200px !important;
+            }
+            .navbar .chapter-btn {
+                flex: 0 0 auto !important;
+                max-width: 300px !important;
+            }
+        }
+        
+        /* Tablet */
+        @media (min-width: 768px) and (max-width: 1024px) {
+            .navbar {
+                display: flex !important;
+                justify-content: space-between !important;
+            }
+            .navbar .back-btn {
+                flex: 0 0 auto !important;
+                max-width: 180px !important;
+            }
+            .navbar .chapter-btn {
+                flex: 0 0 auto !important;
+                max-width: 250px !important;
+            }
+        }
+        
+        /* Mobile - Equal width */
+        @media (max-width: 767px) {
+            .navbar .back-btn,
+            .navbar .chapter-btn {
+                flex: 1 !important;
+            }
+        }
+    </style>
+    <style>
+        /* INLINE FIX - HIGHEST PRIORITY */
+        @media (min-width: 1025px) {
+            .navbar {
+                display: flex !important;
+                justify-content: space-between !important;
+            }
+            .navbar .back-btn {
+                flex: 0 0 auto !important;
+                max-width: 200px !important;
+            }
+            .navbar .chapter-btn {
+                flex: 0 0 auto !important;
+                max-width: 300px !important;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Loading Overlay -->
     <div id="loadingOverlay" class="loading-overlay">
         <div class="loading-spinner"></div>
         <p>Loading Chapter...</p>
     </div>
 
-    <!-- Header -->
     <header class="header">
         <h1 class="manga-title" id="mangaTitle">Judul Manga</h1>
     </header>
 
-    <!-- Navigation Bar -->
     <nav class="navbar">
         <button class="nav-btn back-btn" id="btnBackToInfo">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -36,27 +91,15 @@
             <span>Back to Info</span>
         </button>
         
-        <div class="chapter-selector">
-            <button class="nav-btn chapter-btn" id="btnChapterList">
-                <span id="chapterTitle">Chapter 1</span>
-            </button>
-        </div>
+        <button class="nav-btn chapter-btn" id="btnChapterList">
+            <span id="chapterTitle">Chapter 1</span>
+        </button>
     </nav>
 
-    <!-- Reader Container -->
-    <main class="reader-container webtoon-mode" id="readerContainer">
-        <!-- Pages will be loaded here by JS -->
-    </main>
-
-    <!-- End Chapter Actions Container -->
-    <div class="end-chapter-container" id="endChapterContainer">
-        <!-- Will be populated dynamically by JS -->
-    </div>
-
-    <!-- Page Navigation Handle -->
+    <main class="reader-container webtoon-mode" id="readerContainer"></main>
+    <div class="end-chapter-container" id="endChapterContainer"></div>
     <div class="page-nav-handle" id="pageNavHandle"></div>
 
-    <!-- Page Navigation (Bottom) -->
     <div class="page-nav" id="pageNav">
         <div class="page-nav-content">
             <button class="page-nav-btn" id="prevPageBtn">
@@ -64,9 +107,7 @@
                     <path d="M15 18l-6-6 6-6"/>
                 </svg>
             </button>
-            <div class="page-list" id="pageList">
-                <!-- Page thumbnails will be populated by JS -->
-            </div>
+            <div class="page-list" id="pageList"></div>
             <button class="page-nav-btn" id="nextPageBtn">
                 <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9 18l6-6-6-6"/>
@@ -75,7 +116,6 @@
         </div>
     </div>
 
-    <!-- Chapter List Modal -->
     <div id="modalOverlay" class="modal-overlay">
         <div class="modal-content">
             <div class="modal-header">
@@ -86,13 +126,10 @@
                     </svg>
                 </button>
             </div>
-            <div class="modal-body" id="chapterListModal">
-                <!-- Chapter list will be populated by JS -->
-            </div>
+            <div class="modal-body" id="chapterListModal"></div>
         </div>
     </div>
 
-    <!-- Locked Chapter Modal -->
     <div id="lockedChapterModal" class="locked-modal-overlay" style="display: none;">
         <div class="modal-content locked-modal-content">
             <div class="modal-header locked-modal-header">
@@ -110,13 +147,10 @@
         </div>
     </div>
 
-    <!-- Overlay untuk mencegah klik kanan -->
     <div class="protection-overlay"></div>
 
     <script src="manga-config.js"></script>
     <script src="reader.js"></script>
-    
-    <!-- Service Worker -->
     <script>
       if ('serviceWorker' in navigator) {
         navigator.serviceWorker.register('/sw.js').catch(e=>console.error(e));
